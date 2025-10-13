@@ -1,0 +1,49 @@
+# Environnements virtuels Python
+mon_env/
+venv/
+env/
+ENV/
+.venv
+
+# Fichiers Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# IDE et éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Fichiers de configuration locaux
+*.local
+.env
+
+# Fichiers temporaires
+*.tmp
+*.bak
+*.log
+
+# Fichiers de test
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Fichiers spécifiques au projet (à ajuster selon tes besoins)
+# tags.txt
+# *.jpeg
+# *.jpg
+# *.png
+
+# Fichiers système
+Thumbs.db
+.directory
