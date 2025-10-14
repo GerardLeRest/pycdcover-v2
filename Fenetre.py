@@ -20,7 +20,7 @@ class Fenetre(QMainWindow): #QMainWindow plus évolué - plus d'éléments que Q
         self.addToolBar(toolbar)
         # créer une action avec une icone et un texte 
         act_titre   = QAction(QIcon("icones/titre.svg"), "Titre", self)
-        act_recup   = QAction(QIcon("icones/recup_tags.svg"), "Récupérer tags", self)
+        act_recup   = QAction(QIcon("icones/recup_infos.svg"), "Récupérer tags et images", self)
         act_tags_rw = QAction(QIcon("icones/tags_rw.svg"), "Lire/écrire tags", self)
         act_faces   = QAction(QIcon("icones/deux_faces.svg"), "Générer 2 faces", self)
         act_pdf     = QAction(QIcon("icones/pdf.svg"), "PDF", self)
@@ -32,10 +32,10 @@ class Fenetre(QMainWindow): #QMainWindow plus évolué - plus d'éléments que Q
         # connection entre les icones et les définitions + tooltips
         act_titre.triggered.connect(self.action_titre)
         act_titre.setToolTip("Créer le titre")
-        act_recup.triggered.connect(self.action_recuperer_tags)
-        act_recup.setToolTip("récupérer les tags du cd")
+        act_recup.triggered.connect(self.action_recuperer_tags_images)
+        act_recup.setToolTip("récupérer les tags et les images")
         act_tags_rw.triggered.connect(self.action_lire_ecrire_tags)
-        act_tags_rw.setToolTip("Ouvrir/éditer tags.txt>") # tooltip
+        act_tags_rw.setToolTip("Lire/modifier le fichier des tags") # tooltip
         act_faces.triggered.connect(self.action_generer_deux_faces)  # FaceAvant puis FaceArriere
         act_faces.setToolTip("générer les images des deux faces")
         act_pdf.triggered.connect(self.action_pdf)
@@ -142,7 +142,7 @@ class Fenetre(QMainWindow): #QMainWindow plus évolué - plus d'éléments que Q
         """enchaîner FaceAvant puis FaceArriere"""
         print("générer les faces avant et arrière de la jaquette")
 
-    def action_recuperer_tags(self)->None:
+    def action_recuperer_tags_images(self)->None:
         """importer/extraire les tags et rafraîchir self.liste"""
         print("importer les tags")
 
