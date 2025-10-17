@@ -28,9 +28,10 @@ class Haut_milieu(QWidget):
 
         # Artiste 
         self.label_artiste = QLabel(self.nom_artiste, self)
-        self.label_artiste.setAlignment(Qt.AlignCenter)
+        self.label_artiste.setAlignment(Qt.AlignCenter)# centrage horizontal + vertical du texte à l'intérieur du label
         self.label_artiste.setStyleSheet("font-size: 28px; color: #4e3728; font-weight: 600;")
-        layout.addWidget(self.label_artiste, alignment=Qt.AlignHCenter)
+        # ajout du widget et centrage Horizontale et centrage horizontal du label dans le layout
+        layout.addWidget(self.label_artiste, alignment=Qt.AlignHCenter) 
 
         # Album 
         self.label_album = QLabel(self.nom_album, self)

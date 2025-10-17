@@ -6,6 +6,7 @@ from Haut_gauche import Haut_gauche
 from Haut_milieu import Haut_milieu
 from Haut_droit import Haut_droit
 from Bas import Bas
+from Fen_Titre import Fen_Titre
 
 
 class Fenetre(QMainWindow): #QMainWindow plus évolué - plus d'éléments que QWidget
@@ -109,7 +110,6 @@ class Fenetre(QMainWindow): #QMainWindow plus évolué - plus d'éléments que Q
         self.recup_donnees.album_selectionne.connect(haut_milieu.MAJ_haut_milieu)
         self.recup_donnees.album_selectionne.connect(haut_droit.MAJ_haut_droit)
         self.recup_donnees.album_selectionne.connect(bas.MAJ_bas)
-
         
     def on_item_clicked(self, item: QListWidgetItem)->None:
         """méthode lancée suite à un clic sur un élément de la liste"""
@@ -149,6 +149,13 @@ class Fenetre(QMainWindow): #QMainWindow plus évolué - plus d'éléments que Q
     def action_titre(self)->None:
         """ouvrir l'éditeur de titre"""
         print("créer le titre")
+        fen_titre = Fen_Titre()  # ou Fen_Titre() si ta classe n'accepte pas parent
+        if fen_titre.exec():  # ← affiche le QDialog et attend la réponse
+            valeur = fen_titre.recup_titre()
+            print(f"titre: {valeur}")
+        else:
+            print("Annulé.")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

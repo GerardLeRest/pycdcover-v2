@@ -1,4 +1,5 @@
 from PySide6.QtCore import QObject, Signal
+from pathlib import Path
 
 
 class Haut_gauche(QObject): #QObject -> Signal
@@ -9,10 +10,15 @@ class Haut_gauche(QObject): #QObject -> Signal
         super().__init__()
         self.tableau = [] #album de cle  
         self.albums = {}  # on mémorise le dict des albums
+        # Chemin absolu vers le fichier tags.txt (depuis la racine du projet)
+        self.fichier_tags = Path(__file__).resolve().parent.parent / "tags.txt"
 
     def charger_depuis_fichier(self, fichier_txt: str) -> dict:
         albums = {}
-        with open(fichier_txt, encoding="utf-8") as f:
+        if not self.fichier_tags.exists():
+            print("Fichier tags.txt introuvable.")
+            return []
+        with open(self.fichier_tags, encoding="utf-8") as f:
             lignes = [l.strip() for l in f.readlines()]
 
         artiste = album = None
