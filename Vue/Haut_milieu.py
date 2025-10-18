@@ -2,8 +2,9 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFileDialog
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
-import os
+from pathlib import Path
 from typing import Any
+import os
 
 
 class Haut_milieu(QWidget):
@@ -14,6 +15,7 @@ class Haut_milieu(QWidget):
         self.nom_artiste = nom_artiste
         self.nom_album = nom_album
         self.chemin_photo_artiste = chemin_photo_artiste
+        # dossier 'thumbnail' (une seule fois)
         self.label_album=QLabel()
         self.label_artiste=QLabel()
         self.label_image=QLabel()
@@ -75,18 +77,19 @@ class Haut_milieu(QWidget):
         self.bouton_changer.clicked.connect(self.changer_image)
         layout.addWidget(self.bouton_changer, alignment=Qt.AlignHCenter)
 
-    def charger_photo(self, chemin: str) -> None:
-        """Charge l'image en s'adaptant à la zone 200x200 (en gardant le ratio)."""
-        if not chemin:
-            self.label_image.clear()
-            return
-        pm = QPixmap(chemin).scaled(
+    def charger_photo(self, nom_fichier: str) -> None:
+        """Charge et affiche la photo depuis 'thumbnails', redimensionnée à 200x200."""
+        dossier = Path(__file__).resolve().parent.parent / "thumbnails"
+        chemin = dossier / nom_fichier
+
+        # Charger et redimensionner l'image (en gardant le ratio)
+        pixmap = QPixmap(str(chemin)).scaled(
             200, 200,
             Qt.KeepAspectRatio,
             Qt.SmoothTransformation
         )
-        self.label_image.setPixmap(pm)
-        self.chemin_photo_artiste = chemin
+        # charger l'image dans le label
+        self.label_image.setPixmap(pixmap)
 
     def changer_image(self)->None:
         """changer l'image"""
@@ -103,6 +106,5 @@ class Haut_milieu(QWidget):
         """Mise à jour les labels"""
         self.label_artiste.setText(infos.get('artiste') or "")
         self.label_album.setText(infos.get('album') or "")
-        os.chdir("/home/gerard/PyCDCover/thumbnails/") # LIGNE A SUPPRIMER PLUS TARD
         couverture = infos.get('couverture') or ""
         self.charger_photo(couverture)

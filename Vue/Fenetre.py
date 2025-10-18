@@ -1,12 +1,13 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QListWidget, QListWidgetItem, QVBoxLayout, QToolBar, QWidget
 import sys
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, Slot
 from PySide6.QtGui import QIcon, QAction
 from Haut_gauche import Haut_gauche
 from Haut_milieu import Haut_milieu
 from Haut_droit import Haut_droit
 from Bas import Bas
 from Fen_Titre import Fen_Titre
+from pathlib import Path
 
 
 class Fenetre(QMainWindow): #QMainWindow plus évolué - plus d'éléments que QWidget
@@ -20,11 +21,12 @@ class Fenetre(QMainWindow): #QMainWindow plus évolué - plus d'éléments que Q
         # sert à attacher la barre d’outils à la zone supérieure
         self.addToolBar(toolbar)
         # créer une action avec une icone et un texte 
-        act_titre   = QAction(QIcon("icones/titre.svg"), "Titre", self)
-        act_recup   = QAction(QIcon("icones/recup_infos.svg"), "Récupérer tags et images", self)
-        act_tags_rw = QAction(QIcon("icones/tags_rw.svg"), "Lire/écrire tags", self)
-        act_faces   = QAction(QIcon("icones/deux_faces.svg"), "Générer 2 faces", self)
-        act_pdf     = QAction(QIcon("icones/pdf.svg"), "PDF", self)
+        self.dossier_icones = Path(__file__).resolve().parent.parent/"icones"
+        act_titre   = QAction(QIcon(str(self.dossier_icones / "titre.svg")), "Titre", self)
+        act_recup   = QAction(QIcon(str(self.dossier_icones / "recup_infos.svg")), "Récupérer tags et images", self)
+        act_tags_rw = QAction(QIcon(str(self.dossier_icones / "tags_rw.svg")), "Lire/écrire tags", self)
+        act_faces   = QAction(QIcon(str(self.dossier_icones / "deux_faces.svg")), "Générer 2 faces", self)
+        act_pdf     = QAction(QIcon(str(self.dossier_icones / "pdf.svg")), "PDF", self)
         
         # ajout à la barre d'outil sous forme de bouton cliquable       
         for a in (act_titre, act_recup, act_tags_rw, act_faces, act_pdf):
@@ -111,17 +113,19 @@ class Fenetre(QMainWindow): #QMainWindow plus évolué - plus d'éléments que Q
         self.recup_donnees.album_selectionne.connect(haut_droit.MAJ_haut_droit)
         self.recup_donnees.album_selectionne.connect(bas.MAJ_bas)
         
-    def on_item_clicked(self, item: QListWidgetItem)->None:
-        """méthode lancée suite à un clic sur un élément de la liste"""
+    @Slot(QListWidgetItem)
+    def on_item_clicked(self, item: QListWidgetItem) -> None:
         cle = item.text()
-        print("Clic sur :", cle)
-        # récupération des infos
-        infos = self.recup_donnees.albums.get(cle)
-        if not infos:        
-            return
-        self.recup_donnees.album_selectionne.emit(infos)  # émémission de infos
 
-        # affichage des différentes données
+        # Récupération locale
+        infos = self.recup_donnees.albums.get(cle)
+        if not infos:
+            return
+
+        # Émettre pour prévenir les autres panneaux
+        self.recup_donnees.selectionner_album(cle)
+
+        # Affichage debug
         print("   artiste   :", infos.get("artiste"))
         print("   album     :", infos.get("album"))
         print("   annee     :", infos.get("annee"))

@@ -1,5 +1,6 @@
 from PySide6.QtCore import QObject, Signal
 from pathlib import Path
+from PySide6.QtCore import Slot
 
 
 class Haut_gauche(QObject): #QObject -> Signal
@@ -13,7 +14,7 @@ class Haut_gauche(QObject): #QObject -> Signal
         # Chemin absolu vers le fichier tags.txt (depuis la racine du projet)
         self.fichier_tags = Path(__file__).resolve().parent.parent / "tags.txt"
 
-    def charger_depuis_fichier(self, fichier_txt: str) -> dict:
+    def charger_depuis_fichier(self,fichier_tags) -> dict:
         albums = {}
         if not self.fichier_tags.exists():
             print("Fichier tags.txt introuvable.")
@@ -68,7 +69,6 @@ class Haut_gauche(QObject): #QObject -> Signal
                 artiste = album = None
                 annee = genre = couverture = None
                 chansons = []
-
         self.albums = albums  # utile pour l’UI
         return albums
 
@@ -80,6 +80,12 @@ class Haut_gauche(QObject): #QObject -> Signal
                 print("   ", t["numero"], "-", t["titre"])
             print(infos["couverture"])
 
+    @Slot(str)
+    def selectionner_album(self, cle: str) -> None:
+        """sélectionné l"""
+        infos_album = self.albums.get(cle)
+        if infos_album:
+            self.album_selectionne.emit(infos_album)
 
 if __name__ == "__main__":
     recup = Haut_gauche()
