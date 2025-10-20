@@ -19,11 +19,12 @@ from .Haut_gauche import Haut_gauche
 from .Haut_milieu import Haut_milieu
 from .Haut_droit import Haut_droit
 from .Bas import Bas
+from .Fen_Titre import Fen_Titre
 
 
 class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que QWidget
 
-    titre_selectionne = Signal(bool)  # Le signal enverra un booleen
+    demande_saisie_titre = Signal(bool)  # Le signal enverra un booleen
 
     def __init__(self):
         super().__init__()
@@ -46,7 +47,7 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
         for a in (act_titre, act_recup, act_tags_rw, act_faces, act_pdf):
             toolbar.addAction(a)
 
-        # connection entre les icones et les définitions + tooltips
+        # connection entre les icones et les méthodes + tooltips
         act_titre.triggered.connect(self.action_titre)
         act_titre.setToolTip("Créer le titre")
         act_recup.triggered.connect(self.action_recuperer_tags_images)
@@ -144,8 +145,16 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
             print("   ", t["numero"], "-", t["titre"])
 
     @Slot(bool)
-    def action_titre(self) -> None:
-        self.titre_selectionne.emit(True)
+    def action_titre(self, checked: bool = False) -> None:  
+        fen_titre = Fen_Titre()
+        fen_titre.titre_selectionne.connect(self.titre_valide)
+        fen_titre.exec()
+
+    @Slot(str)
+    def titre_valide(self, titre: str) -> None:
+        """Réagit au titre saisi et validé dans Fen_Titre."""
+        print(f"Titre validé : {titre}")
+        # titre = Titre()
 
     def action_lire_ecrire_tags(self) -> None:
         """ouvrir/éditer le fichier tags.txt (dialogue + lecture/écriture)"""

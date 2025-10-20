@@ -11,7 +11,7 @@ class Application(QWidget):
         """initialisation"""
         super().__init__()
         self.fenetre = Fenetre()
-        self.fenetre.titre_selectionne.connect(self.activer_titre)
+        self.fenetre.demande_saisie_titre.connect(self.activer_titre)
 
     @Slot(bool)
     def activer_titre(self, titre_selec: bool):

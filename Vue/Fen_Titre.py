@@ -48,13 +48,13 @@ class Fen_Titre(QDialog):
         # fixe le code de retour à QDialog.Accepted
         # fait sortir la boucle d’événement de exec()
         # accept -> if dialog.exec vaut True
-        bouton.clicked.connect(self.verification_titre)
+        bouton.clicked.connect(self.emission_titre)
         layoutH.addWidget(bouton)
         layoutV.addLayout(layoutH)
 
         self.setLayout(layoutV)
 
-    def verification_titre (self):
+    def emission_titre (self):
         """vérifie la validité du champ"""
         if not self.champ.text():
             QMessageBox.warning(self, "Erreur", "Le champ est vide.")
@@ -66,11 +66,6 @@ class Fen_Titre(QDialog):
             # on doit émettre avant la fermeture de la fenetre
             self.titre_selectionne.emit(self.champ.text())
             self.accept()
-
-     # pour un getter (ext) pour __main__ 
-    def recup_titre(self) -> str:
-        """renvoie la valeur du champ"""
-        return self.champ.text()
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)
