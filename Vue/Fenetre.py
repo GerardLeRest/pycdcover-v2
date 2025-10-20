@@ -30,6 +30,25 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
         super().__init__()
         """initialisation"""
         self.setWindowTitle("PyCDCover")
+        
+        # layouts
+        # --- IMPORTANT : widget central - on a changé de parent de la fenêtre de QWidget à QMainWindow
+        # donc on doit rajouter central
+        self.central = QWidget()
+        self.setCentralWidget(self.central)
+        self.layout = QVBoxLayout()       # layout de la fenêtre
+        self.layout_haut = QHBoxLayout()  # layout des panneaux du haut
+        self.layout_bas  = QVBoxLayout()  # layout du panneau du bas (chansons)
+        self.barre_d_outils()
+        self.panneau_gauche()
+        self.panneau_milieu()
+        self.panneau_droit()
+        self.panneau_bas()
+        self.connexions()
+
+
+    def barre_d_outils(self)->None:
+        """construire la barre d'outils"""
         # icones
         toolbar = QToolBar("Icones")
         toolbar.setIconSize(QSize(32, 32))
@@ -58,16 +77,10 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
         act_faces.setToolTip("générer les images des deux faces")
         act_pdf.triggered.connect(self.action_pdf)
         act_pdf.setToolTip("générer le pdf")
-
-        # --- IMPORTANT : widget central - on a changé de parent de la fenêtre de QWidget à QMainWindow
-        central = QWidget()
-        self.setCentralWidget(central)
-
-        layout = QVBoxLayout()       # layout de la fenêtre
-        layout_haut = QHBoxLayout()  # layout des panneaux du haut
-        layout_bas  = QVBoxLayout()  # layout du panneau du bas (chansons)
-
-        # panneau du haut
+    
+    # PANNEAUX DU HAUT
+    def panneau_gauche(self)->None:
+        """construction du panneau gauche"""
         # partie haut gauche
         # 1) Instancier le récupérateur ET charger les données AVANT d'ajouter les items
         self.recup_donnees = Haut_gauche()
@@ -91,19 +104,24 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
         self.liste.setFixedWidth(300)
         self.liste.addItems(self.recup_donnees.tableau)  # ajouter après chargement
         self.liste.itemClicked.connect(self.on_item_clicked)
-        layout_haut.addWidget(self.liste)
+        self.layout_haut.addWidget(self.liste)
 
+    def panneau_milieu(self)->None:
+        """construction du panneau milieu"""
         # milieu (on garde une référence pour pouvoir le mettre à jour plus tard)
-        haut_milieu = Haut_milieu("Albert Hammond", "Wonderful, Glourious", "index3.jpeg")
-        layout_haut.addWidget(haut_milieu)
+        self.haut_milieu = Haut_milieu("Albert Hammond", "Wonderful, Glourious", "index3.jpeg")
+        self.layout_haut.addWidget(self.haut_milieu)
 
+    def panneau_droit(self)->None:
+        """construction du panneau droit"""
         # partie droite haute (idem : garder la référence)
-        haut_droit = Haut_droit("Albert Hammond", "Wonderful, Glorious", "2012", "Rock")
-        layout_haut.addWidget(haut_droit, alignment=Qt.AlignTop)
+        self.haut_droit = Haut_droit("Albert Hammond", "Wonderful, Glorious", "2012", "Rock")
+        self.layout_haut.addWidget(self.haut_droit, alignment=Qt.AlignTop)
 
-        layout.addLayout(layout_haut)
-        layout.addSpacing(8)
+        self.layout.addLayout(self.layout_haut)
+        self.layout.addSpacing(8)
 
+    def panneau_bas(self)->None:
         # panneau du bas
         chansons = [
             {"numero": 1, "titre": "Tunnel of Love"},
@@ -112,17 +130,18 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
             {"numero": 4, "titre": "Expresso Love"},
             {"numero": 5, "titre": "Hand in Hand"}
         ]
-        bas = Bas(chansons, "Wonderful", "Dire Straits", "2012")
-        layout_bas.addWidget(bas, alignment=Qt.AlignTop)
-        layout.addLayout(layout_bas)
+        self.bas = Bas(chansons, "Wonderful", "Dire Straits", "2012")
+        self.layout_bas.addWidget(self.bas, alignment=Qt.AlignTop)
+        self.layout.addLayout(self.layout_bas)
 
         # lier le layout global à la fenêtre
-        central.setLayout(layout)
-
+        self.central.setLayout(self.layout)
+    
+    def connexions(self)->None:
         # connection entre le signal et les slots
-        self.recup_donnees.album_selectionne.connect(haut_milieu.MAJ_haut_milieu)
-        self.recup_donnees.album_selectionne.connect(haut_droit.MAJ_haut_droit)
-        self.recup_donnees.album_selectionne.connect(bas.MAJ_bas)
+        self.recup_donnees.album_selectionne.connect(self.haut_milieu.MAJ_haut_milieu)
+        self.recup_donnees.album_selectionne.connect(self.haut_droit.MAJ_haut_droit)
+        self.recup_donnees.album_selectionne.connect(self.bas.MAJ_bas)
 
     @Slot(QListWidgetItem)
     def on_item_clicked(self, item: QListWidgetItem) -> None:
