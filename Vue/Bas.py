@@ -8,6 +8,7 @@ from PySide6.QtGui import QFont
 
 
 class Bas(QWidget):
+    
     def __init__(self, chansons: list, album: str, artiste: str, annee: int):
         """initialisation"""
         super().__init__()
@@ -84,6 +85,9 @@ class Bas(QWidget):
 
     def MAJ_bas(self, infos: dict[str, Any]) -> None:
         """Mettre à jour le tableau avec un nouvel album."""
+        if not isinstance(infos, dict):
+            print("⚠️ infos reçues par MAJ_bas n'est pas un dict :", type(infos))
+            return  # on sort proprement
         self.album = infos.get("album", "")
         self.artiste = infos.get("artiste", "")
         self.annee = str(infos.get("annee", ""))

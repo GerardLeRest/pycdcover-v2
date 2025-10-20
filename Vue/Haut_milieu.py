@@ -4,7 +4,6 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from pathlib import Path
 from typing import Any
-import os
 
 
 class Haut_milieu(QWidget):

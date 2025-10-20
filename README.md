@@ -78,9 +78,17 @@ Puis suivre les instructions ci-dessus.
 
 ---
 
-## Auteur et Licence
+## Information et Licence
 
-**auteur: Gérard LE REST**
+**informations sur le logiciel**
+
+PyCDCover – Générateur de jaquettes de CD audio
+Auteur : Gérard LE REST
+Licence : GNU GPL v3
+© Gérard LE REST
+email: gerard.lerest@orange.fr
+Créé en : 01-04-2010
+Dernière mise à jour : 2025-10-18
 
 **Licence : GNU GPL v3 (ou version ultérieure)**
 

@@ -1,7 +1,13 @@
-from PySide6.QtWidgets import QLabel, QVBoxLayout, QWidget, QApplication, QPushButton, QHBoxLayout, QLineEdit, QDialog,QMessageBox
+from PySide6.QtWidgets import (
+    QLabel, QVBoxLayout, QApplication, QPushButton,
+    QHBoxLayout, QLineEdit, QDialog,QMessageBox )
 import sys
+from PySide6.QtCore import Signal
+
 
 class Fen_Titre(QDialog):
+
+    titre_selectionne = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -54,21 +60,25 @@ class Fen_Titre(QDialog):
             QMessageBox.warning(self, "Erreur", "Le champ est vide.")
             return
         elif len(self.champ.text())>15:
-            QMessageBox.warning(self, "Erreur", "Le titre est trop long.")
+            QMessageBox.warning(self, "Erreur", "Le titre est trop long (<16c).")
             return
         else:
+            # on doit émettre avant la fermeture de la fenetre
+            self.titre_selectionne.emit(self.champ.text())
             self.accept()
 
-    def recup_titre(self)->str:
-        """renoie la valeur du champ"""
+     # pour un getter (ext) pour __main__ 
+    def recup_titre(self) -> str:
+        """renvoie la valeur du champ"""
         return self.champ.text()
 
-        
 if __name__ == "__main__":
     application = QApplication(sys.argv)
-    dialog = Fen_Titre()
+    dialog = Fen_Titre() # dialog: convention Qt pour une fenetre
     if dialog.exec():  # fenêtre modale
-        print("Titre saisi :", dialog.recup_titre())
-    else:   
+        print("Titre saisi :", dialog.recup_titre())  # OK : maintenant ça retourne une str
+    else:
         print("Annulé.")
-    application.exec()
+    # on peut quitter proprement (évite de bloquer sur application.exec())
+    sys.exit(0)
+
