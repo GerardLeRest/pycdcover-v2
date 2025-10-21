@@ -67,6 +67,10 @@ class Fen_Titre(QDialog):
             self.titre_selectionne.emit(self.champ.text())
             self.accept()
 
+    def recup_titre(self):
+        """Renvoie le titre saisi"""
+        return self.titre
+
 if __name__ == "__main__":
     application = QApplication(sys.argv)
     dialog = Fen_Titre() # dialog: convention Qt pour une fenetre

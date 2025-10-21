@@ -18,6 +18,9 @@ from urllib.parse import quote_plus
 
 class Jaquette:
     """
+    Cette classe a été générée par ChatGPT. Je la traite comme un module autonome
+    que je n’ai pas encore analysé en profondeur.
+    Elle pourrait être utilisée comme un module autonome dans d’autres projets.
     Récupère une jaquette (MusicBrainz/Cover Art Archive), crée un fallback si non trouvée,
     rend l'image carrée, redimensionne et enregistre dans ./thumbnails.
 
@@ -34,6 +37,8 @@ class Jaquette:
         r"\s*[\[(](?:remaster(?:ed)?|remix(?:ed)?|deluxe|expanded|anniversary|special\s+edition|super\s+deluxe|bonus\s+tracks?|mono|stereo|mix|edition|version|reissue|legacy|collector|live(?:\s+at.*?)?|201\d|200\d|19\d{2})[\])]\s*$",
         r"\s*-\s*(?:remaster(?:ed)?|remix(?:ed)?|deluxe|expanded|anniversary|special\s+edition|super\s+deluxe|bonus\s+tracks?|mono|stereo|mix|edition|version|reissue|legacy|collector)\s*$",
     )
+
+    dossier_thumbnails = os.path.expanduser("~/PyCDCover/thumbnails")
 
     def __init__(self, auteur: str, album: str, taille: int = 512, dossier_vignettes: str = "thumbnails"):
         # Garder les champs tels quels (pas de strip/upper/lower)

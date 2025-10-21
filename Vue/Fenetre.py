@@ -20,6 +20,7 @@ from .Haut_milieu import Haut_milieu
 from .Haut_droit import Haut_droit
 from .Bas import Bas
 from .Fen_Titre import Fen_Titre
+from .A_propos import FenetreAPropos
 
 
 class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que QWidget
@@ -39,6 +40,7 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
         self.layout = QVBoxLayout()       # layout de la fenêtre
         self.layout_haut = QHBoxLayout()  # layout des panneaux du haut
         self.layout_bas  = QVBoxLayout()  # layout du panneau du bas (chansons)
+        self.menu()
         self.barre_d_outils()
         self.panneau_gauche()
         self.panneau_milieu()
@@ -46,6 +48,13 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
         self.panneau_bas()
         self.connexions()
 
+    def menu(self)->None:
+        # Menu principal
+        barre = self.menuBar()
+        menu_aide = barre.addMenu("Aide")
+        action_a_propos = QAction("A propos", self)
+        action_a_propos.triggered.connect(self.information)
+        menu_aide.addAction(action_a_propos)
 
     def barre_d_outils(self)->None:
         """construire la barre d'outils"""
@@ -57,21 +66,25 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
         # créer une action avec une icone et un texte
         self.dossier_icones = Path(__file__).resolve().parent.parent / "icones"
         act_titre   = QAction(QIcon(str(self.dossier_icones / "titre.svg")), "Titre", self)
-        act_recup   = QAction(QIcon(str(self.dossier_icones / "recup_infos.svg")), "Récupérer tags et images", self)
+        act_recup_tags   = QAction(QIcon(str(self.dossier_icones / "recup_tags.svg")), "Récupérer les tags", self)
         act_tags_rw = QAction(QIcon(str(self.dossier_icones / "tags_rw.svg")), "Lire/écrire tags", self)
+        act_recup_images = QAction(QIcon(str(self.dossier_icones / "recup_images.svg")), "Récupérer les images", self)
         act_faces   = QAction(QIcon(str(self.dossier_icones / "deux_faces.svg")), "Générer 2 faces", self)
         act_pdf     = QAction(QIcon(str(self.dossier_icones / "pdf.svg")), "PDF", self)
 
         # ajout à la barre d'outil sous forme de bouton cliquable
-        for a in (act_titre, act_recup, act_tags_rw, act_faces, act_pdf):
+        for a in (act_titre, act_recup_tags, act_tags_rw, act_recup_images, act_faces, act_pdf):
             toolbar.addAction(a)
 
         # connection entre les icones et les méthodes + tooltips
         act_titre.triggered.connect(self.action_titre)
         act_titre.setToolTip("Créer le titre")
-        act_recup.triggered.connect(self.action_recuperer_tags_images)
-        act_recup.setToolTip("récupérer les tags et les images")
+        act_recup_tags.triggered.connect(self.action_recuperer_tags)
+        act_recup_tags.setToolTip("récupérer les tags et les images")
         act_tags_rw.triggered.connect(self.action_lire_ecrire_tags)
+        act_tags_rw.setToolTip("lire/modifier les tags")
+        act_recup_images.triggered.connect(self.action_recuperer_images)
+        act_recup_images.setToolTip("Télécharger les images")
         act_tags_rw.setToolTip("Lire/modifier le fichier des tags")  # tooltip
         act_faces.triggered.connect(self.action_generer_deux_faces)   # FaceAvant puis FaceArriere
         act_faces.setToolTip("générer les images des deux faces")
@@ -175,26 +188,35 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
         print(f"Titre validé : {titre}")
         # titre = Titre()
 
+    # Menu
+    def information(self)->None:
+        """ouvrir la fnetre A propos"""
+        fen_a_propos = FenetreAPropos()
+        fen_a_propos.exec()
+
+    # barre d'outils
+    def action_recuperer_tags(self) -> None:
+        """récupérer les tags"""
+        print("importer les tags")
+
     def action_lire_ecrire_tags(self) -> None:
         """ouvrir/éditer le fichier tags.txt (dialogue + lecture/écriture)"""
         print("lire et écrire tags")
 
+    def action_recuperer_images(self) -> None:
+        """récupérer les tags"""
+        print("télécharger les images")
+
+    def action_generer_deux_faces(self) -> None:
+        """générer FaceAvant puis FaceArriere"""
+        print("générer les faces avant et arrière de la jaquette")
+
     def action_pdf(self) -> None:
         """générer le PDF final"""
         print("générer pdf")
-
-    def action_generer_deux_faces(self) -> None:
-        """enchaîner FaceAvant puis FaceArriere"""
-        print("générer les faces avant et arrière de la jaquette")
-
-    def action_recuperer_tags_images(self) -> None:
-        """importer/extraire les tags et rafraîchir self.liste"""
-        print("importer les tags")
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     fenetre = Fenetre()
     fenetre.show()
     app.exec()
-
