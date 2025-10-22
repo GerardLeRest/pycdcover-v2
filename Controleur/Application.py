@@ -1,10 +1,18 @@
+#!/usr/bin/env python3
+"""
+Application.py — Récupère les tags MP3 d’un CD et les enregistre dans ~/PyCDCover/tags.txt
+Auteur : Gérard Le Rest (2025)
+"""
+
 from PySide6.QtWidgets import QWidget, QApplication
 from PySide6.QtCore import Slot
 import sys, os
 from Vue.Fenetre import Fenetre
 from Vue.Fen_Titre import Fen_Titre
 from Modele.Titres import Titres
-import shutil
+import shutil  
+from pathlib import Path
+from Modele.Tags import Tags
 
 class Application(QWidget):
 
@@ -33,13 +41,28 @@ class Application(QWidget):
             self.fen_titre.exec()   # ouverture de la fenetre
 
     @Slot(str)
-    def recuperer_titre(self, titre_str: str):
-        print(f"Titre reçu : {titre_str}")
-        t = Titres(1200, 1380, titre_str)
+    def recuperer_titre(self, titre_saisi: str):
+        print(f"Titre reçu : {titre_saisi}")
+        t = Titres(1200, 1380, titre_saisi)
+        print("Instance Titres créée")
         self.titre_horizontal = t.titre_horizontal()
+        print("titre_horizontal exécutée")
         self.encadrements = t.encadrements_titre()
+        print("encadrements_titre exécutée")
         self.titre_vertical1 = t.titre_vertical1()
+        print("titre_vertical1 exécutée")
         self.titre_vertical2 = t.titre_vertical2()
+        print("titre_vertical2 exécutée")
+
+    @Slot()
+    def action_recuperer_tags(self):
+        """Récupère les tags depuis le CD et crée tags.txt."""
+        lecteur = Path("/media/jerome/CDROM")  # ou "D:/"
+        dossier = Path.home() / "PyCDCover"
+        self.tags = Tags(lecteur, dossier)
+        self.tags.recuperer_tags_cd()
+        print("Fichier tags.txt créé dans", dossier)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

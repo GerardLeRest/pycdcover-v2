@@ -1,17 +1,7 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-PyCDCover – Générateur de jaquettes de CD audio
-Auteur : Gérard LE REST
-Licence : GNU GPL v3
-© Gérard LE REST
-email: gerard.lerest@orange.fr
-Créé en : 01-04-2010
-Dernière mise à jour : 2025-10-18
-"""
-
-from PySide6.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QListWidget, QListWidgetItem, QVBoxLayout, QToolBar, QWidget
-import sys
+from PySide6.QtWidgets import (
+    QMainWindow, QToolBar, QWidget, QVBoxLayout, QHBoxLayout,
+    QListWidget, QListWidgetItem
+)
 from PySide6.QtCore import Qt, QSize, Slot, Signal
 from PySide6.QtGui import QIcon, QAction
 from pathlib import Path
@@ -19,27 +9,28 @@ from .Haut_gauche import Haut_gauche
 from .Haut_milieu import Haut_milieu
 from .Haut_droit import Haut_droit
 from .Bas import Bas
-from .Fen_Titre import Fen_Titre
 from .A_propos import FenetreAPropos
 
 
-class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que QWidget
+class Fenetre(QMainWindow):
+    """Fenêtre principale de l'application"""
 
-    demande_saisie_titre = Signal(bool)  # Le signal enverra un booleen
+    # Signal émis quand l’utilisateur clique sur “Titre”
+    demande_saisie_titre = Signal(bool)
 
     def __init__(self):
+        """Initialisation de la fenêtre principale."""
         super().__init__()
-        """initialisation"""
         self.setWindowTitle("PyCDCover")
-        
-        # layouts
-        # --- IMPORTANT : widget central - on a changé de parent de la fenêtre de QWidget à QMainWindow
-        # donc on doit rajouter central
+
+        # --- Layouts
         self.central = QWidget()
         self.setCentralWidget(self.central)
-        self.layout = QVBoxLayout()       # layout de la fenêtre
-        self.layout_haut = QHBoxLayout()  # layout des panneaux du haut
-        self.layout_bas  = QVBoxLayout()  # layout du panneau du bas (chansons)
+        self.layout = QVBoxLayout()       # layout global
+        self.layout_haut = QHBoxLayout()  # partie supérieure
+        self.layout_bas = QVBoxLayout()   # partie inférieure
+
+        # --- Construction de la fenêtre
         self.menu()
         self.barre_d_outils()
         self.panneau_gauche()
@@ -48,60 +39,51 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
         self.panneau_bas()
         self.connexions()
 
-    def menu(self)->None:
-        # Menu principal
+    def menu(self) -> None:
+        """Construit le menu principal."""
         barre = self.menuBar()
         menu_aide = barre.addMenu("Aide")
-        action_a_propos = QAction("A propos", self)
+        action_a_propos = QAction("À propos", self)
         action_a_propos.triggered.connect(self.information)
         menu_aide.addAction(action_a_propos)
 
-    def barre_d_outils(self)->None:
-        """construire la barre d'outils"""
-        # icones
-        toolbar = QToolBar("Icones")
+    def barre_d_outils(self) -> None:
+        """Construit la barre d’outils principale avec ses icônes et ses actions."""
+        toolbar = QToolBar("Icônes")
         toolbar.setIconSize(QSize(32, 32))
-        # sert à attacher la barre d’outils à la zone supérieure
         self.addToolBar(toolbar)
-        # créer une action avec une icone et un texte
+
+        # --- Icônes et actions
         self.dossier_icones = Path(__file__).resolve().parent.parent / "icones"
-        act_titre   = QAction(QIcon(str(self.dossier_icones / "titre.svg")), "Titre", self)
-        act_recup_tags   = QAction(QIcon(str(self.dossier_icones / "recup_tags.svg")), "Récupérer les tags", self)
+        act_titre = QAction(QIcon(str(self.dossier_icones / "titre.svg")), "Titre", self)
+        act_recup_tags = QAction(QIcon(str(self.dossier_icones / "recup_tags.svg")), "Récupérer les tags", self)
         act_tags_rw = QAction(QIcon(str(self.dossier_icones / "tags_rw.svg")), "Lire/écrire tags", self)
         act_recup_images = QAction(QIcon(str(self.dossier_icones / "recup_images.svg")), "Récupérer les images", self)
-        act_faces   = QAction(QIcon(str(self.dossier_icones / "deux_faces.svg")), "Générer 2 faces", self)
-        act_pdf     = QAction(QIcon(str(self.dossier_icones / "pdf.svg")), "PDF", self)
+        act_faces = QAction(QIcon(str(self.dossier_icones / "deux_faces.svg")), "Générer 2 faces", self)
+        act_pdf = QAction(QIcon(str(self.dossier_icones / "pdf.svg")), "PDF", self)
 
-        # ajout à la barre d'outil sous forme de bouton cliquable
+        # --- Ajout à la barre d’outils
         for a in (act_titre, act_recup_tags, act_tags_rw, act_recup_images, act_faces, act_pdf):
             toolbar.addAction(a)
 
-        # connection entre les icones et les méthodes + tooltips
+        # --- Connexion
+         # icone enclenchée lance la méthode action_titre grâce au signal
         act_titre.triggered.connect(self.action_titre)
         act_titre.setToolTip("Créer le titre")
+
         act_recup_tags.triggered.connect(self.action_recuperer_tags)
-        act_recup_tags.setToolTip("récupérer les tags et les images")
         act_tags_rw.triggered.connect(self.action_lire_ecrire_tags)
-        act_tags_rw.setToolTip("lire/modifier les tags")
         act_recup_images.triggered.connect(self.action_recuperer_images)
-        act_recup_images.setToolTip("Télécharger les images")
-        act_tags_rw.setToolTip("Lire/modifier le fichier des tags")  # tooltip
-        act_faces.triggered.connect(self.action_generer_deux_faces)   # FaceAvant puis FaceArriere
-        act_faces.setToolTip("générer les images des deux faces")
+        act_faces.triggered.connect(self.action_generer_deux_faces)
         act_pdf.triggered.connect(self.action_pdf)
-        act_pdf.setToolTip("générer le pdf")
-    
-    # PANNEAUX DU HAUT
-    def panneau_gauche(self)->None:
-        """construction du panneau gauche"""
-        # partie haut gauche
-        # 1) Instancier le récupérateur ET charger les données AVANT d'ajouter les items
+
+    def panneau_gauche(self) -> None:
+        """Construit le panneau gauche (liste des albums)."""
         self.recup_donnees = Haut_gauche()
         self.recup_donnees.charger_depuis_fichier("tags.txt")
         print("tableau chargé:", self.recup_donnees.tableau)
 
-        # 2) Liste des albums
-        self.liste = QListWidget()  # liste des albums
+        self.liste = QListWidget()
         self.liste.setStyleSheet("""
             QListWidget {
                 font-size: 16px;
@@ -113,29 +95,26 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
                 margin: 4px 6px;
             }
         """)
-        # 3) Figer la largeur pour le panneau gauche (stoppe toute variation de layout)
         self.liste.setFixedWidth(300)
-        self.liste.addItems(self.recup_donnees.tableau)  # ajouter après chargement
+        self.liste.addItems(self.recup_donnees.tableau)
         self.liste.itemClicked.connect(self.on_item_clicked)
         self.layout_haut.addWidget(self.liste)
 
-    def panneau_milieu(self)->None:
-        """construction du panneau milieu"""
-        # milieu (on garde une référence pour pouvoir le mettre à jour plus tard)
+    def panneau_milieu(self) -> None:
+        """Construit le panneau central (visuel de l’album)."""
         self.haut_milieu = Haut_milieu("Albert Hammond", "Wonderful, Glourious", "index3.jpeg")
         self.layout_haut.addWidget(self.haut_milieu)
 
-    def panneau_droit(self)->None:
-        """construction du panneau droit"""
-        # partie droite haute (idem : garder la référence)
+    def panneau_droit(self) -> None:
+        """Construit le panneau droit (informations de l’album)."""
         self.haut_droit = Haut_droit("Albert Hammond", "Wonderful, Glorious", "2012", "Rock")
         self.layout_haut.addWidget(self.haut_droit, alignment=Qt.AlignTop)
 
         self.layout.addLayout(self.layout_haut)
         self.layout.addSpacing(8)
 
-    def panneau_bas(self)->None:
-        # panneau du bas
+    def panneau_bas(self) -> None:
+        """Construit le panneau inférieur (liste des chansons)."""
         chansons = [
             {"numero": 1, "titre": "Tunnel of Love"},
             {"numero": 2, "titre": "Romeo and Juliet"},
@@ -146,28 +125,23 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
         self.bas = Bas(chansons, "Wonderful", "Dire Straits", "2012")
         self.layout_bas.addWidget(self.bas, alignment=Qt.AlignTop)
         self.layout.addLayout(self.layout_bas)
-
-        # lier le layout global à la fenêtre
         self.central.setLayout(self.layout)
-    
-    def connexions(self)->None:
-        # connection entre le signal et les slots
+
+    def connexions(self) -> None:
+        """Connecte les signaux entre les différents panneaux."""
         self.recup_donnees.album_selectionne.connect(self.haut_milieu.MAJ_haut_milieu)
         self.recup_donnees.album_selectionne.connect(self.haut_droit.MAJ_haut_droit)
         self.recup_donnees.album_selectionne.connect(self.bas.MAJ_bas)
 
     @Slot(QListWidgetItem)
     def on_item_clicked(self, item: QListWidgetItem) -> None:
-        """Quand un album est cliqué dans la liste."""
+        """Met à jour les panneaux quand un album est sélectionné."""
         cle = item.text()
         infos = self.recup_donnees.albums.get(cle)
         if not infos:
             return
 
-        # Version stable : appel direct vers le store (Haut_gauche)
         self.recup_donnees.selectionner_album(cle)
-
-        # Affichage debug
         print("   artiste   :", infos.get("artiste"))
         print("   album     :", infos.get("album"))
         print("   annee     :", infos.get("annee"))
@@ -177,46 +151,32 @@ class Fenetre(QMainWindow):  # QMainWindow plus évolué - plus d'éléments que
             print("   ", t["numero"], "-", t["titre"])
 
     @Slot(bool)
-    def action_titre(self, checked: bool = False) -> None:  
-        fen_titre = Fen_Titre()
-        fen_titre.titre_selectionne.connect(self.titre_valide)
-        fen_titre.exec()
+    def action_titre(self, checked: bool = False) -> None:
+        """Émet le signal de demande de saisie du titre."""
+        print("Signal 'demande_saisie_titre' émis depuis Fenetre")
+        self.demande_saisie_titre.emit(True) # le signal émet True
 
-    @Slot(str)
-    def titre_valide(self, titre: str) -> None:
-        """Réagit au titre saisi et validé dans Fen_Titre."""
-        print(f"Titre validé : {titre}")
-        # titre = Titre()
-
-    # Menu
-    def information(self)->None:
-        """ouvrir la fnetre A propos"""
+    def information(self) -> None:
+        """Ouvre la fenêtre 'À propos'."""
         fen_a_propos = FenetreAPropos()
         fen_a_propos.exec()
 
-    # barre d'outils
     def action_recuperer_tags(self) -> None:
-        """récupérer les tags"""
+        """Récupère les tags à partir du fichier des métadonnées."""
         print("importer les tags")
 
     def action_lire_ecrire_tags(self) -> None:
-        """ouvrir/éditer le fichier tags.txt (dialogue + lecture/écriture)"""
+        """Lit ou modifie le fichier tags.txt (dialogue + lecture/écriture)."""
         print("lire et écrire tags")
 
     def action_recuperer_images(self) -> None:
-        """récupérer les tags"""
+        """Télécharge les images d’albums."""
         print("télécharger les images")
 
     def action_generer_deux_faces(self) -> None:
-        """générer FaceAvant puis FaceArriere"""
+        """Génère les deux faces de la jaquette (avant et arrière)."""
         print("générer les faces avant et arrière de la jaquette")
 
     def action_pdf(self) -> None:
-        """générer le PDF final"""
+        """Génère le PDF final à partir des images créées."""
         print("générer pdf")
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    fenetre = Fenetre()
-    fenetre.show()
-    app.exec()

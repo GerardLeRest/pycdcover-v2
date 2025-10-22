@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+"""
+Tags.py — Récupère les tags MP3 d’un CD et les enregistre dans ~/PyCDCover/tags.txt
+Auteur : Gérard Le Rest (2025)
+"""
+
+from PySide6.QtWidgets import (
+    QApplication, QMainWindow, QVBoxLayout, QWidget,
+    QProgressBar, QLabel, QFileDialog, QMessageBox
+)
+from PySide6.QtCore import Qt
+from pathlib import Path
+from mutagen import File as MutaFile
+import sys
+
+
+class TagsWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Extraction des tags MP3")
+        self.resize(300, 100)
+    
+        layout = QVBoxLayout()
+        self.label = QLabel("Prêt à extraire les tags.")
+
+        self.progress = QProgressBar()
+        layout.addWidget(self.label)
+        layout.addWidget(self.progress)
+        layout.setContentsMargins(20, 10, 20, 20)  # gauche, haut, droite, bas
+
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+
+    def recuperer_tags(self):
+        # Choix du dossier
+        chemin = QFileDialog.getExistingDirectory(self, "Choisir le répertoire du CD", "/media")
+        if not chemin:
+            return
+
+        lecteur = Path(chemin)
+        albums = []
+
+        # Recherche des albums simples et doubles
+        for d in lecteur.iterdir():
+            if d.is_dir():
+                # Si le dossier contient des sous-dossiers, on les ajoute
+                sous_albums = [sd for sd in d.iterdir() if sd.is_dir()]
+                if sous_albums:
+                    albums.extend(sous_albums)
+                else:
+                    # Sinon, on ajoute le dossier lui-même
+                    albums.append(d)
+
+        # Si aucun dossier trouvé, on prend directement le dossier choisi
+        if not albums:
+            albums = [lecteur]
+
+        # Compte le nombre total de fichiers MP3
+        total = sum(len(list(a.glob("*.mp3"))) for a in albums)
+        if total == 0:
+            QMessageBox.information(self, "Aucun MP3", "Aucune piste MP3 trouvée.")
+            return
+
+        self.progress.setRange(0, total)
+
+        # Fichier de sortie
+        fichier = Path.home() / "PyCDCover" / "tags.txt"
+        fichier.parent.mkdir(exist_ok=True)
+
+        count = 0
+        with open(fichier, "w", encoding="utf-8") as f:
+            for album in albums:
+                mp3s = self._mp3s_tries_par_piste(album)
+                if not mp3s:
+                    continue
+
+                info0 = MutaFile(mp3s[0], easy=True)
+                artiste = info0.get("artist", ["Inconnu"])[0]
+                nom_album = info0.get("album", ["Inconnu"])[0]
+                genre = info0.get("genre", ["Inconnu"])[0]
+                annee = self._annee(info0)
+
+                f.write(f"C: {artiste}\nA: {nom_album}\n{annee} - {genre}\n")
+
+                # Numérotation des titres
+                for i, mp3 in enumerate(mp3s, 1):
+                    titre = MutaFile(mp3, easy=True).get("title", [mp3.stem])[0]
+                    f.write(f"{i} - {titre}\n")
+                    count += 1
+                    self.progress.setValue(count)
+                    QApplication.processEvents()
+                f.write("\n")
+
+        QMessageBox.information(self, "Terminé", "Extraction terminée avec succès !")
+
+    def _mp3s_tries_par_piste(self, dossier: Path):
+        """Retourne la liste des fichiers MP3 triés par numéro de piste."""
+        fichiers = []
+        for mp3 in dossier.glob("*.mp3"):
+            try:
+                num = int(MutaFile(mp3, easy=True).get("tracknumber", ["0"])[0].split("/")[0])
+            except Exception:
+                num = 0
+            fichiers.append((num, mp3))
+        return [m for _, m in sorted(fichiers, key=lambda x: x[0])]
+
+    def _annee(self, info):
+        """Extrait l’année à partir des tags si possible."""
+        for cle in ("originaldate", "date", "year"):
+            if cle in info:
+                val = info[cle][0][:4]
+                if val.isdigit():
+                    return val
+        return "Inconnue"
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    win = TagsWindow()
+    win.show()
+    win.recuperer_tags()
+    sys.exit(app.exec())
+

@@ -13,14 +13,14 @@ class Titres:
         # création du dossier de travail "dossier_utilisateur"
         # Dossier utilisateur (multiplateforme)
         dossier_utilisateur = Path.home()
-        # Dossier de travail de ton appli
+        # Dossier de travail de l'appli
         self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
         # Création automatique s’il n’existe pas - sécurité
         self.dossier_pycovercd.mkdir(exist_ok=True)
         # Se déplacer dans le dossier
         os.chdir(self.dossier_pycovercd)
         
-    def titre_horizontal(self, parent=None):
+    def titre_horizontal(self):
         """Création de l'image horizontale du titre"""
         print("titre_horizontal")
         # Créer l'image blanche
@@ -84,7 +84,6 @@ class Titres:
         out2.save(chemin_image, "PNG")
         return out2
 
-    
 if __name__ =="__main__":
     titre = Titres(1200, 1380, "Titre1")
     titre_horizontal = titre.titre_horizontal()
