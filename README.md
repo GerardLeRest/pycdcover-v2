@@ -78,7 +78,7 @@ Puis suivre les instructions ci-dessus.
 
 ---
 
-## Information et Licence
+## Information et Licences
 
 **informations sur le logiciel**
 
@@ -90,14 +90,19 @@ email: gerard.lerest@orange.fr
 Créé en : 01-04-2010
 Dernière mise à jour : 2025-10-18
 
-**Licence : GNU GPL v3 (ou version ultérieure)**
+**PyCDCover** est distribué sous double licence :
 
-Ce programme est un logiciel libre : vous pouvez le modifier et le redistribuer
-selon les termes de la Licence publique générale GNU (GPL-V3),
-version 3 ou toute version ultérieure.
+- **Licence libre : GNU GPL v3 (ou version ultérieure)**  
+  Ce programme est un logiciel libre : vous pouvez le modifier et le redistribuer
+  selon les termes de la Licence publique générale GNU (GPL-V3),
+  version 3 ou toute version ultérieure.  
+  Il est fourni sans aucune garantie,
+  ni de valeur commerciale, ni d’adéquation à un usage particulier.  
+  [Consulter la licence GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html)
 
-Il est fourni sans aucune garantie,
-ni de valeur commerciale, ni d’adéquation à un usage particulier.
-Pour plus d’informations, consultez la licence GPL-V3.
-
-[Licence publique générale GNU v3 (GPLv3)](https://www.gnu.org/licenses/gpl-3.0.html)
+- **Licence commerciale (usage professionnel)**  
+  Toute utilisation de ce logiciel dans un cadre commercial, industriel ou institutionnel
+  nécessite une licence commerciale distincte.  
+  Cette licence permet un usage interne sans obligation de redistribution du code source
+  et peut inclure un support technique.  
+  Pour toute demande : **contact [ton email professionnel]**.

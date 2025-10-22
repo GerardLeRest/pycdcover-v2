@@ -14,7 +14,7 @@ from mutagen import File as MutaFile
 import sys
 
 
-class TagsWindow(QMainWindow):
+class Tags(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Extraction des tags MP3")
