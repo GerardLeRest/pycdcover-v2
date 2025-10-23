@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (
     QMainWindow, QToolBar, QWidget, QVBoxLayout, QHBoxLayout,
-    QListWidget, QListWidgetItem
+    QListWidget, QListWidgetItem,  QMessageBox
 )
 from PySide6.QtCore import Qt, QSize, Slot, Signal
 from PySide6.QtGui import QIcon, QAction
@@ -9,28 +9,36 @@ from .Haut_gauche import Haut_gauche
 from .Haut_milieu import Haut_milieu
 from .Haut_droit import Haut_droit
 from .Bas import Bas
+from Modele.Tags import Tags
+from Modele.recup_images_avant import lire_tags, TelechargementUI
+from Modele.Lancement_av_ar import Lancement_av_ar
+from Modele.Gabarit import Gabarit
 from .A_propos import FenetreAPropos
-
+import sys, os
 
 class Fenetre(QMainWindow):
     """Fenêtre principale de l'application"""
-
     # Signal émis quand l’utilisateur clique sur “Titre”
     demande_saisie_titre = Signal(bool)
 
     def __init__(self):
         """Initialisation de la fenêtre principale."""
+        # ajouter le dossier parent du projet dans les chemins connus
+        sys.path.append(str(Path(__file__).resolve().parents[1]))
         super().__init__()
         self.setWindowTitle("PyCDCover")
-
         # --- Layouts
         self.central = QWidget()
         self.setCentralWidget(self.central)
         self.layout = QVBoxLayout()       # layout global
         self.layout_haut = QHBoxLayout()  # partie supérieure
         self.layout_bas = QVBoxLayout()   # partie inférieure
-
-        # --- Construction de la fenêtre
+        # dossiers
+        dossier_utilisateur = Path.home()
+        self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
+        self.dossier_thumbnails = self.dossier_pycovercd / "thumbnails"
+        os.chdir(self.dossier_pycovercd)
+        # methodes
         self.menu()
         self.barre_d_outils()
         self.panneau_gauche()
@@ -153,7 +161,6 @@ class Fenetre(QMainWindow):
     @Slot(bool)
     def action_titre(self, checked: bool = False) -> None:
         """Émet le signal de demande de saisie du titre."""
-        print("Signal 'demande_saisie_titre' émis depuis Fenetre")
         self.demande_saisie_titre.emit(True) # le signal émet True
 
     def information(self) -> None:
@@ -163,20 +170,29 @@ class Fenetre(QMainWindow):
 
     def action_recuperer_tags(self) -> None:
         """Récupère les tags à partir du fichier des métadonnées."""
-        print("importer les tags")
+        tags = Tags()
+        tags.recuperer_tags()
 
     def action_lire_ecrire_tags(self) -> None:
-        """Lit ou modifie le fichier tags.txt (dialogue + lecture/écriture)."""
-        print("lire et écrire tags")
-
+        """Lit ou modifie le fichier tags.txt """
+        
     def action_recuperer_images(self) -> None:
-        """Télécharge les images d’albums."""
-        print("télécharger les images")
+        albums = lire_tags("tags.txt")
+        if not albums:
+            QMessageBox.warning(self, "Aucun album trouvé", "Le fichier 'tags.txt' est vide ou introuvable.")
+            return
 
+        self.telechargement_ui = TelechargementUI(albums, self.dossier_pycovercd)
+        self.telechargement_ui.show()
+
+        
     def action_generer_deux_faces(self) -> None:
-        """Génère les deux faces de la jaquette (avant et arrière)."""
-        print("générer les faces avant et arrière de la jaquette")
+        """Génère les deux images de la jaquette (avant et arrière)."""
+        lancement_av_ar = Lancement_av_ar()
 
     def action_pdf(self) -> None:
         """Génère le PDF final à partir des images créées."""
-        print("générer pdf")
+        gabarit = Gabarit(72.0/254,1200,1200,1380,1180)
+        gabarit.creation_canvas()
+        gabarit.creation_lignes_decoupage()
+        gabarit.insertion_images(1200,1200,1380,1180)

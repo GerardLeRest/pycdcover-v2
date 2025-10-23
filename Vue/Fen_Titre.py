@@ -3,6 +3,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout, QLineEdit, QDialog,QMessageBox )
 import sys
 from PySide6.QtCore import Signal
+import subprocess
 
 
 class Fen_Titre(QDialog):

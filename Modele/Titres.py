@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+"""
+Tags.py — Récupère les tags MP3 d’un CD et les enregistre dans ~/PyCDCover/tags.txt
+Auteur : Gérard Le Rest (2025)
+"""
+
 from PIL import Image, ImageFont, ImageDraw
 from pathlib import Path
 import os
@@ -8,16 +14,12 @@ class Titres:
         self.titre = titre
         self.L_devant = L_devant
         self.H_back_cover = H_back_cover
-        self.x = 0 # position x de l'élément à placer
-        self.y = 0 # position y de l'élément à placer
-        # création du dossier de travail "dossier_utilisateur"
-        # Dossier utilisateur (multiplateforme)
+        # positions x et y de l'élément à placer
+        self.x = 0 
+        self.y = 0 
+        # dossiers
         dossier_utilisateur = Path.home()
-        # Dossier de travail de l'appli
         self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
-        # Création automatique s’il n’existe pas - sécurité
-        self.dossier_pycovercd.mkdir(exist_ok=True)
-        # Se déplacer dans le dossier
         os.chdir(self.dossier_pycovercd)
         
     def titre_horizontal(self):

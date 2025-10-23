@@ -24,12 +24,13 @@ class Application(QWidget):
         self.fenetre.demande_saisie_titre.connect(self.activer_titre)
 
     def reinitialiser_dossier_pycdcover(self)->None:
+        """vider le dossier PyCDCover"""
         dossier_principal = os.path.expanduser("~/PyCDCover")
         # Supprime complètement le dossier s'il existe
         if os.path.exists(dossier_principal):
             shutil.rmtree(dossier_principal)
-        # Le recrée avec le sous-dossier Thumbnails
-        chemin = os.path.join(dossier_principal, "Thumbnails")
+        # Le recrée avec le sous-dossier thumbnails
+        chemin = os.path.join(dossier_principal, "thumbnails")
         if not os.path.exists(chemin):
             os.makedirs(chemin)
 

@@ -19,15 +19,13 @@ class Tags(QMainWindow):
         super().__init__()
         self.setWindowTitle("Extraction des tags MP3")
         self.resize(300, 100)
-    
+        # interface
         layout = QVBoxLayout()
         self.label = QLabel("Prêt à extraire les tags.")
-
-        self.progress = QProgressBar()
+        self.progress = QProgressBar() # barre de progression
         layout.addWidget(self.label)
         layout.addWidget(self.progress)
         layout.setContentsMargins(20, 10, 20, 20)  # gauche, haut, droite, bas
-
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
@@ -37,10 +35,8 @@ class Tags(QMainWindow):
         chemin = QFileDialog.getExistingDirectory(self, "Choisir le répertoire du CD", "/media")
         if not chemin:
             return
-
         lecteur = Path(chemin)
         albums = []
-
         # Recherche des albums simples et doubles
         for d in lecteur.iterdir():
             if d.is_dir():
@@ -51,38 +47,32 @@ class Tags(QMainWindow):
                 else:
                     # Sinon, on ajoute le dossier lui-même
                     albums.append(d)
-
         # Si aucun dossier trouvé, on prend directement le dossier choisi
         if not albums:
             albums = [lecteur]
-
         # Compte le nombre total de fichiers MP3
         total = sum(len(list(a.glob("*.mp3"))) for a in albums)
         if total == 0:
             QMessageBox.information(self, "Aucun MP3", "Aucune piste MP3 trouvée.")
             return
-
+        # limites de la barre de progression
         self.progress.setRange(0, total)
-
         # Fichier de sortie
         fichier = Path.home() / "PyCDCover" / "tags.txt"
         fichier.parent.mkdir(exist_ok=True)
-
         count = 0
         with open(fichier, "w", encoding="utf-8") as f:
             for album in albums:
                 mp3s = self._mp3s_tries_par_piste(album)
-                if not mp3s:
+                if not mp3s: # fichier .jpeg, etc...
                     continue
-
+                # information du de l'album
                 info0 = MutaFile(mp3s[0], easy=True)
                 artiste = info0.get("artist", ["Inconnu"])[0]
                 nom_album = info0.get("album", ["Inconnu"])[0]
                 genre = info0.get("genre", ["Inconnu"])[0]
                 annee = self._annee(info0)
-
                 f.write(f"C: {artiste}\nA: {nom_album}\n{annee} - {genre}\n")
-
                 # Numérotation des titres
                 for i, mp3 in enumerate(mp3s, 1):
                     titre = MutaFile(mp3, easy=True).get("title", [mp3.stem])[0]
@@ -91,7 +81,6 @@ class Tags(QMainWindow):
                     self.progress.setValue(count)
                     QApplication.processEvents()
                 f.write("\n")
-
         QMessageBox.information(self, "Terminé", "Extraction terminée avec succès !")
 
     def _mp3s_tries_par_piste(self, dossier: Path):
@@ -109,16 +98,16 @@ class Tags(QMainWindow):
         """Extrait l’année à partir des tags si possible."""
         for cle in ("originaldate", "date", "year"):
             if cle in info:
-                val = info[cle][0][:4]
-                if val.isdigit():
+                val = info[cle][0][:4] # retient 2025 dans "2025/10/23" 
+                if val.isdigit():  #123 => ok - 1g7 => fauc 
                     return val
         return "Inconnue"
 
-
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    win = TagsWindow()
-    win.show()
-    win.recuperer_tags()
-    sys.exit(app.exec())
+    application = QApplication(sys.argv)
+    tags = Tags()
+    tags.show()
+    tags.recuperer_tags()
+    # on réfère sys.exit(app.exec()) à app.exec()
+    sys.exit(application.exec()) # adapté à windows (sorte 0:ok 1:nok -plus propre)
 

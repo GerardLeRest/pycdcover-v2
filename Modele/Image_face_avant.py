@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Face_avant — créer la face avant de la jaquette
+Face_avant — créer l'image de la face avant de la jaquette
 Auteur : Gérard Le Rest (2025)
 """
 
@@ -14,26 +14,23 @@ formats_3 = ('bmp','gif','jpg','msp','pcx','png','ppm','xbm')
 formats_4 = ('jpeg','tiff')
 
 
-class Face_avant:
+class Image_face_avant:
     def __init__(self, largeur=300, hauteur=300, env_home=None, repertoire=None):
         self.largeur = largeur
         self.hauteur = hauteur
+        #dossiers
         dossier_utilisateur = Path.home()
-
         # Dossier de travail de l'appli
         self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
-
-        # création du répertoire thumbnails_path s'il est absent
+        # Sous-dossier thumbnails (déjà créé par Application)
         self.thumbnail_path = self.dossier_pycovercd / "thumbnails"
-        os.makedirs(self.thumbnail_path, exist_ok=True)
-
-        # se placer dans le dossier PyCDCover
-        os.chdir(self.dossier_pycovercd)
-
+        # Se placer dans le dossier thumbnails
+        os.chdir(self.thumbnail_path)
+        # initialisation des variables
         self.dossier = ""
         self.fichiers = []
         self.photos = []
-
+        
     def preparation_assemblage_photos(self):
         """Prépare les dimensions de la grille en fonction du nombre d’images."""
         self.fichiers = os.listdir(self.thumbnail_path)
@@ -82,12 +79,13 @@ class Face_avant:
 
         except ZeroDivisionError:
             tkinter.messagebox.showinfo("Info", "Aucune image trouvée")
+            
 
 # ------------------------------------------------------------------------------
 # Programme principal de test
 # ------------------------------------------------------------------------------
 if __name__ == "__main__":
-    face = Face_avant()
+    face = Image_face_avant()
     face.preparation_assemblage_photos()
     face.assemblage_photos()
 

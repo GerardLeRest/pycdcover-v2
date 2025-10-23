@@ -1,33 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PyCDCover – Téléchargement automatique des jaquettes d’albums
-à partir du fichier tags.txt (extrait du CD).
-Crée les images dans ~/PyCDCover/thumbnails.
-Version finale – Gérard Le Rest, 2025
+Image_devant – Gère la lecture des tags et la création
+ou récupération des jaquettes musicales.
+Projet PyCDCover – ChatGPT, 2025
 """
 
 import os
 import io
 import re
-import sys
 import requests
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QProgressBar
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar, QApplication
 from PySide6.QtCore import Qt, QTimer
 
 
-# --------------------------------------------------------
-# Lecture du fichier tags.txt
-# --------------------------------------------------------
+# -----------------------------------------------------------
+# --- Fonctions utilitaires ---------------------------------
+# -----------------------------------------------------------
 def lire_tags(fichier="tags.txt"):
-    """Lit le fichier tags.txt et renvoie [(artiste, album), ...]."""
+    """Lit le fichier tags.txt et renvoie une liste [(artiste, album), ...]."""
     albums = []
     artiste, album = None, None
     if not os.path.exists(fichier):
-        print("❌ Fichier tags.txt introuvable.")
         return albums
 
     with open(fichier, "r", encoding="utf-8") as f:
@@ -45,44 +42,42 @@ def lire_tags(fichier="tags.txt"):
     return albums
 
 
-# --------------------------------------------------------
-# Nettoyage des noms pour la recherche MusicBrainz
-# --------------------------------------------------------
 def nettoyer_nom(nom):
-    """Supprime parenthèses, crochets et mots inutiles."""
-    # Supprimer tout contenu entre (), [], {}
+    """Nettoie les noms d’artistes ou d’albums."""
+    if not nom:
+        return ""
     nom = re.sub(r"[\(\[\{].*?[\)\]\}]", "", nom)
-
-    # Supprimer les mots parasites
     nom = re.sub(
         r"\b(remaster(ed)?|disc|cd|deluxe|version|edition|bonus|anniversary|remix|mono|stereo)\b",
         "",
         nom,
-        flags=re.IGNORECASE
+        flags=re.IGNORECASE,
     )
-
-    # Supprimer tirets et espaces multiples
     nom = re.sub(r"[-_]+", " ", nom)
     nom = re.sub(r"\s{2,}", " ", nom)
-
     return nom.strip()
 
 
-# --------------------------------------------------------
-# Classe Jaquette
-# --------------------------------------------------------
-class Jaquette:
+# -----------------------------------------------------------
+# --- Classe principale -------------------------------------
+# -----------------------------------------------------------
+class Image_devant:
     """Télécharge ou crée une jaquette à partir de MusicBrainz."""
 
     def __init__(self, artiste, album, dossier):
+        """Initialisation"""
+        # dossier
+        dossier_utilisateur = Path.home()
+        self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
+        self.dossier_thumbnails = self.dossier_pycovercd / "thumbnails"
+        # nettoyage des titres 
         self.artiste = nettoyer_nom(artiste)
         self.album = nettoyer_nom(album)
-        self.dossier = Path(dossier).expanduser()
-        self.dossier.mkdir(parents=True, exist_ok=True)
-        self.chemin = self.dossier / f"{self.artiste} - {self.album}.jpg"
+        self.chemin = self.dossier_thumbnails / f"{self.artiste} - {self.album}.jpg"
+        #User-Agent pour MusicBrainz
         self.user_agent = "PyCDCover/1.0 (Gérard Le Rest)"
 
-    # --- Recherche ---------------------------------------------------------
+
     def _recherche_musicbrainz(self):
         q = f'releasegroup:"{self.album}" AND artist:"{self.artiste}"'
         url = f"https://musicbrainz.org/ws/2/release-group/?query={q}&fmt=json&limit=1"
@@ -94,7 +89,6 @@ class Jaquette:
         except Exception:
             return None
 
-    # --- Téléchargement ----------------------------------------------------
     def _telecharger_image(self, id_release):
         if not id_release:
             return None
@@ -107,9 +101,8 @@ class Jaquette:
             return None
         return None
 
-    # --- Image de secours --------------------------------------------------
     def _image_secours(self):
-        """Crée une image orange avec texte centré."""
+        """Crée une image orange avec le nom de l’album."""
         taille = 512
         img = Image.new("RGB", (taille, taille), (255, 140, 0))
         draw = ImageDraw.Draw(img)
@@ -124,9 +117,8 @@ class Jaquette:
                             font=font, align="center")
         return img
 
-    # --- Public ------------------------------------------------------------
     def creer(self, forcer=False):
-        """Crée la jaquette et retourne le chemin."""
+        """Crée ou télécharge la jaquette et retourne le chemin."""
         if self.chemin.exists() and not forcer:
             print(f"✔ Déjà présent : {self.chemin.name}")
             return self.chemin
@@ -143,22 +135,22 @@ class Jaquette:
             except Exception:
                 pass
 
-        # Si échec → image orange de secours
         image = self._image_secours()
         image.save(self.chemin, "JPEG", quality=90)
         print(f"⚠ Jaquette de secours créée : {self.chemin.name}")
         return self.chemin
 
 
-# --------------------------------------------------------
-# Interface PySide6 avec QProgressBar
-# --------------------------------------------------------
+# -----------------------------------------------------------
+# --- Classe de progression ---------------------------------
+# -----------------------------------------------------------
 class TelechargementUI(QWidget):
-    """Fenêtre avec barre de progression pour les jaquettes."""
+    """Fenêtre de progression du téléchargement des jaquettes."""
 
-    def __init__(self, albums):
+    def __init__(self, albums, dossier):
         super().__init__()
         self.albums = albums
+        self.dossier = dossier
         self.total = len(albums)
         self.compteur = 0
 
@@ -166,8 +158,7 @@ class TelechargementUI(QWidget):
         self.setFixedSize(400, 120)
 
         layout = QVBoxLayout()
-        self.label = QLabel("Préparation…")
-        self.label.setAlignment(Qt.AlignCenter)
+        self.label = QLabel("Préparation…", alignment=Qt.AlignCenter)
         self.progress = QProgressBar()
         self.progress.setRange(0, self.total)
         layout.addWidget(self.label)
@@ -177,34 +168,17 @@ class TelechargementUI(QWidget):
         QTimer.singleShot(500, self.lancer_telechargement)
 
     def lancer_telechargement(self):
-        dossier_thumbs = Path("~/PyCDCover/thumbnails").expanduser()
-
         for artiste, album in self.albums:
             self.compteur += 1
             self.label.setText(f"[{self.compteur}/{self.total}] {artiste} – {album}")
             QApplication.processEvents()
 
-            j = Jaquette(artiste, album, dossier_thumbs)
+            j = Image_devant(artiste, album, self.dossier)
             j.creer()
 
             self.progress.setValue(self.compteur)
             QApplication.processEvents()
 
-        self.label.setText("✅ Terminé !")
+        self.label.setText("Terminé !")
         QTimer.singleShot(1500, self.close)
 
-
-# --------------------------------------------------------
-# Programme principal
-# --------------------------------------------------------
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    albums = lire_tags("tags.txt")
-
-    if not albums:
-        print("Aucun album trouvé dans tags.txt.")
-        sys.exit(0)
-
-    fen = TelechargementUI(albums)
-    fen.show()
-    sys.exit(app.exec())
