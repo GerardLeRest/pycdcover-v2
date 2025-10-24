@@ -60,8 +60,8 @@ class Fen_Titre(QDialog):
         if not self.champ.text():
             QMessageBox.warning(self, "Erreur", "Le champ est vide.")
             return
-        elif len(self.champ.text())>15:
-            QMessageBox.warning(self, "Erreur", "Le titre est trop long (<16c).")
+        elif len(self.champ.text())>50:
+            QMessageBox.warning(self, "Erreur", "Le titre est trop long (> 40 car).")
             return
         else:
             # on doit émettre avant la fermeture de la fenetre

@@ -14,17 +14,11 @@ Finaliser la version actuelle de PyCDCover:
 - creation et ouverture du pdf
 
 ## 💡 Idées en développement (protéger)
-1. **Version Album Studio**
-- Permettre la création de jaquettes pour des albums en préparation (maquettes studio)
-- Les titres/chansons sont récupérés à partir du tag du CD
-- insertion de l'image du CD sur la face avant
+1 Adapter les classe Face_Avant et Face_Arrière
+2 ajouter ces deux classes à Gabarit
+3 Pour un album, Centrer le texte à l'arrière de la jaquette
      
-2. **Lecture directe des fichiers MP3**
-   - Lecture automatique des métadonnées de/dossiers/fichiers de musique. Aucune icone est à disposition
-   - Affichage des métadonnées sans nécessiter de gravure.
-
 ---
 
 Ces idées sont en cours d’étude et demeurent propriété intellectuelle de leur auteur.
 Toute réutilisation doit respecter la licence GPLv3 ou faire l’objet d’une autorisation expresse.
-

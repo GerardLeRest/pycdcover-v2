@@ -192,7 +192,9 @@ class Fenetre(QMainWindow):
 
     def action_pdf(self) -> None:
         """Génère le PDF final à partir des images créées."""
-        gabarit = Gabarit(72.0/254,1200,1200,1380,1180)
-        gabarit.creation_canvas()
-        gabarit.creation_lignes_decoupage()
-        gabarit.insertion_images(1200,1200,1380,1180)
+        gabarit = Gabarit(72.0/254,1200,1200,1380,930)
+        gabarit.lignes()
+        gabarit.insertion_des_images()
+        gabarit.trace_rectangles_trait_continu()
+        
+            
