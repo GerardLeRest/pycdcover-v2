@@ -14,7 +14,8 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar, QApplication
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt, QTimer, Signal
+
 
 
 # -----------------------------------------------------------
@@ -66,6 +67,7 @@ class Image_devant:
 
     def __init__(self, artiste, album, dossier):
         """Initialisation"""
+        telechargement_termine = Signal()
         # dossier
         dossier_utilisateur = Path.home()
         self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
@@ -79,15 +81,30 @@ class Image_devant:
 
 
     def _recherche_musicbrainz(self):
-        q = f'releasegroup:"{self.album}" AND artist:"{self.artiste}"'
-        url = f"https://musicbrainz.org/ws/2/release-group/?query={q}&fmt=json&limit=1"
-        try:
-            r = requests.get(url, headers={"User-Agent": self.user_agent}, timeout=10)
-            data = r.json()
-            groupes = data.get("release-groups", [])
-            return groupes[0]["id"] if groupes else None
-        except Exception:
-            return None
+        """Recherche d'abord avec artiste+album, puis album seul si échec."""
+        def requete(query):
+            url = f"https://musicbrainz.org/ws/2/release-group/?query={query}&fmt=json&limit=1"
+            try:
+                r = requests.get(url, headers={"User-Agent": self.user_agent}, timeout=10)
+                data = r.json()
+                groupes = data.get("release-groups", [])
+                return groupes[0]["id"] if groupes else None
+            except Exception:
+                return None
+
+        # --- 1️ tentative stricte
+        q1 = f'releasegroup:"{self.album}" AND artist:"{self.artiste}"'
+        id_release = requete(q1)
+
+        # --- 2️ si rien trouvé, on tente plus large
+        if not id_release:
+            q2 = f'releasegroup:"{self.album}"'
+            id_release = requete(q2)
+            if id_release:
+                print(f"⚠ Trouvé avec recherche simplifiée pour : {self.artiste} – {self.album}")
+
+        return id_release
+
 
     def _telecharger_image(self, id_release):
         if not id_release:
@@ -130,7 +147,7 @@ class Image_devant:
                 image = Image.open(io.BytesIO(donnees)).convert("RGB")
                 image.thumbnail((512, 512))
                 image.save(self.chemin, "JPEG", quality=90)
-                print(f"✓ Jaquette enregistrée : {self.chemin.name}")
+                print(f"✓ Image enregistrée : {self.chemin.name}")
                 return self.chemin
             except Exception:
                 pass
@@ -146,6 +163,7 @@ class Image_devant:
 # -----------------------------------------------------------
 class TelechargementUI(QWidget):
     """Fenêtre de progression du téléchargement des jaquettes."""
+    telechargement_termine = Signal()  # Déclaration du signal
 
     def __init__(self, albums, dossier):
         super().__init__()
@@ -180,5 +198,9 @@ class TelechargementUI(QWidget):
             QApplication.processEvents()
 
         self.label.setText("Terminé !")
+        QTimer.singleShot(1500, self.close)
+
+        self.label.setText("Terminé !")
+        self.telechargement_termine.emit()   # signal envoyé à la fenêtre principale
         QTimer.singleShot(1500, self.close)
 

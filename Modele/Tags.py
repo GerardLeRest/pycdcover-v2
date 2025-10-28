@@ -8,13 +8,16 @@ from PySide6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QWidget,
     QProgressBar, QLabel, QFileDialog, QMessageBox
 )
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Signal
 from pathlib import Path
 from mutagen import File as MutaFile
 import sys
 
 
 class Tags(QMainWindow):
+
+    tags_termines = Signal() # signal
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Extraction des tags MP3")
@@ -82,6 +85,7 @@ class Tags(QMainWindow):
                     QApplication.processEvents()
                 f.write("\n")
         QMessageBox.information(self, "Terminé", "Extraction terminée avec succès !")
+        self.tags_termines.emit() # emission signal
 
     def _mp3s_tries_par_piste(self, dossier: Path):
         """Retourne la liste des fichiers MP3 triés par numéro de piste."""

@@ -18,6 +18,7 @@ class Titres:
         self.x = 0 
         self.y = 0 
         # dossiers
+        self.dossier_racine = Path(__file__).parent.parent
         dossier_utilisateur = Path.home()
         self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
         os.chdir(self.dossier_pycovercd)
@@ -29,7 +30,9 @@ class Titres:
         self.imageH = Image.new("RGB", (self.L_devant, 220), "white")
         self.draw = ImageDraw.Draw(self.imageH)
         # Police
-        police1 = os.path.join(self.dossier_pycovercd, "polices", "FreeSerif.ttf")
+        dossier_polices = os.path.join(self.dossier_racine, "polices")
+        os.chdir(dossier_polices)
+        police1 = "FreeSerif.ttf"
         taille = 60
         self.font1 = ImageFont.truetype(police1, taille)
         # Calcul du centrage
@@ -44,40 +47,21 @@ class Titres:
         self.imageH.save(chemin_image, "PNG")
         return self.imageH
 
-    def encadrements_titre(self) -> Image.Image:
-        """Création de l'encadrement du titre horizontal"""
-        # tracé de cinq rectangles = rectangle intérieur épais
-        for e in range(4):
-            bbox = self.draw.textbbox((self.x, self.y), self.titre, font=self.font1)
-            self.draw.rectangle(
-                [(bbox[0]-10-e, bbox[1]-10-e), (bbox[2]+10+e, bbox[3]+10+e)],
-                outline="#4e3728"
-            )
-        # Tracé du rectangle extérieur
-        bbox = self.draw.textbbox((self.x, self.y), self.titre, font=self.font1)
-        self.draw.rectangle(
-            [(bbox[0]-16, bbox[1]-16), (bbox[2]+16, bbox[3]+16)],
-            outline="#4e3728"
-        )
-        # Sauvegarde après ajout des encadrements
-        chemin_image = self.dossier_pycovercd / "TitreH.png"
-        self.imageH.save(chemin_image, "PNG")
-        return self.imageH
-
-
     def titre_vertical1(self) -> Image.Image:
         """Création du premier titre vertical"""
         self.imageV = Image.new("RGB", (self.H_back_cover, 60), "white")
         self.draw = ImageDraw.Draw(self.imageV)
-        police1 = os.path.join(self.dossier_pycovercd, "polices", "FreeSerif.ttf")
+        # Récupère le dossier de ce module, même si appelé depuis l’extérieur
+        # Récupère le dossier racine du projet (un niveau au-dessus de Modele)
+        dossier_racine = Path(__file__).resolve().parent.parent
+        dossier_polices = dossier_racine / "Polices"
+        police1 = dossier_polices / "FreeSerif.ttf"
         self.font1 = ImageFont.truetype(police1, 40)
         self.draw.text((40, 5), self.titre, fill="black", font=self.font1)
-
         out1 = self.imageV.rotate(90, expand=True)
         chemin_image = self.dossier_pycovercd / "TitreV1.png"
         out1.save(chemin_image, "PNG")
         return out1
-
 
     def titre_vertical2(self) -> Image.Image:
         """Création du deuxième titre vertical"""
@@ -89,6 +73,5 @@ class Titres:
 if __name__ =="__main__":
     titre = Titres(1200, 1380, "Titre1")
     titre_horizontal = titre.titre_horizontal()
-    encadrements_titre = titre.encadrements_titre()
-    titre_vertical = titre.titre_vertical1()
+    titre_vertical1 = titre.titre_vertical1()
     titre_vertical2 = titre.titre_vertical2()

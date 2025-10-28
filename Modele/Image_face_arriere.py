@@ -19,7 +19,7 @@ class Image_face_arriere:
         self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
         self.dossier_thumbnails = self.dossier_pycovercd / "thumbnails"
         os.chdir(self.dossier_pycovercd)
-        # Polices (polices de ton système ou à ajuster)
+        # Polices (polices du systeme)
         self.police_normale = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
         self.police_grasse = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 
