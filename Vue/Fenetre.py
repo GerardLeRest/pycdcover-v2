@@ -97,7 +97,11 @@ class Fenetre(QMainWindow):
     def panneau_gauche(self) -> None:
         """Construit le panneau gauche (liste des albums)."""
         self.recup_donnees = Haut_gauche()
-        self.recup_donnees.charger_depuis_fichier("tags.txt")
+
+        # chemin correct du fichier tags.txt
+        chemin_tags = Path.home() / "PyCDCover" / "tags.txt"
+        self.recup_donnees.charger_depuis_fichier()
+
         print("tableau chargé:", self.recup_donnees.tableau)
         self.liste = QListWidget()
         self.liste.setStyleSheet("""

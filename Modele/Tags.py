@@ -114,4 +114,3 @@ if __name__ == "__main__":
     tags.recuperer_tags()
     # on réfère sys.exit(app.exec()) à app.exec()
     sys.exit(application.exec()) # adapté à windows (sorte 0:ok 1:nok -plus propre)
-

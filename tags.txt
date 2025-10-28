@@ -1,7 +1,6 @@
-C: Dire Straits 
-A: Making Movies [Remastered) 
-Inconnue - Inconnu 
-Dire Straits - Making Movies [Remastered).jpg
+C: Dire Straits
+A: Making Movies [Remastered)
+Inconnue - Inconnu
 1 - Tunnel of love
 2 - Romeo and Juliet
 3 - Skateaway
@@ -10,10 +9,9 @@ Dire Straits - Making Movies [Remastered).jpg
 6 - Solid rock
 7 - Les boys
 
-C: INXS 
-A: Welcome To Wherever You Are 
-1992 - Rock 
-INXS - Welcome To Wherever You Are.jpg
+C: INXS
+A: Welcome To Wherever You Are
+1992 - Rock
 1 - Questions
 2 - Heaven Sent
 3 - Communication
@@ -27,10 +25,9 @@ INXS - Welcome To Wherever You Are.jpg
 11 - Strange Desire
 12 - Men And Women
 
-C: Midnight Oil 
-A: Diesel And Dust 
-1987 - Rock 
-Midnight Oil - Diesel And Dust.jpg
+C: Midnight Oil
+A: Diesel And Dust
+1987 - Rock
 1 - Beds Are Burning
 2 - Put Down That Weapon
 3 - Dreamworld
@@ -43,10 +40,9 @@ Midnight Oil - Diesel And Dust.jpg
 10 - Sometimes
 11 - Gunbarrel Highway
 
-C: Pink Floyd 
-A: The Wall (Disc 1 of 2) 
-1994 - Pop 
-Pink Floyd - The Wall (Disc 1 of 2).jpg
+C: Pink Floyd
+A: The Wall (Disc 1 of 2)
+1994 - Pop
 1 - In The Flesh
 2 - The Thin Ice
 3 - Another Brick In The Wall (Par
@@ -61,9 +57,9 @@ Pink Floyd - The Wall (Disc 1 of 2).jpg
 12 - Another Brick In The Wall (Par
 13 - Goodbye Cruel World
 
-C: Pink Floyd 
-A: The Wall (CD 2 of 2) 
-1994 - Pop 
+C: Pink Floyd
+A: The Wall (CD 2 of 2)
+1994 - Pop
 1 - Hey You
 2 - Is There Anybody Out There-
 3 - Nobody Home
@@ -78,20 +74,18 @@ A: The Wall (CD 2 of 2)
 12 - The Trial
 13 - Outside the Wall
 
-C: Pink Floyd 
-A: Animals 
-1977 - Rock 
-Pink Floyd - Animals.jpg
+C: Pink Floyd
+A: Animals
+1977 - Rock
 1 - Pigs On The Wing (Part 1)
 2 - Dogs
 3 - Pigs (Three Different Ones)
 4 - Sheep
 5 - Pigs On The Wing (Part 2)
 
-C: R.E.M. 
-A: Green 
-1988 - Rock 
-R.E.M. - Green.jpg
+C: R.E.M.
+A: Green
+1988 - Rock
 1 - Pop Song 89
 2 - Get Up
 3 - You Are The Everything
@@ -104,26 +98,22 @@ R.E.M. - Green.jpg
 10 - I Remember California
 11 - Untitled
 
-Aucun fichier MP3 trouvé
-
-C: The Waterboys 
-A: This Is The Sea 
-2001 - Pop 
-The Waterboys - This Is The Sea.jpg
-1 - Don't Bang The Drum
-2 - The Whole Of The Moon
-3 - Spirit
-4 - The Pan Within
+C: The Waterboys
+A: This Is The Sea
+2001 - Pop
+1 - This Is The Sea
+2 - Trumpets
+3 - Be My Enemy
+4 - Old England
 5 - Medicine Bow
-6 - Old England
-7 - Be My Enemy
-8 - Trumpets
-9 - This Is The Sea
+6 - The Pan Within
+7 - Spirit
+8 - The Whole Of The Moon
+9 - Don't Bang The Drum
 
-C: The Rolling Stones 
-A: Sticky Fingers 
-1971 - Rock 
-The Rolling Stones - Sticky Fingers.jpg
+C: The Rolling Stones
+A: Sticky Fingers
+1971 - Rock
 1 - Brown Sugar
 2 - Sway
 3 - Wild Horses

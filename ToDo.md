@@ -14,8 +14,7 @@ Finaliser la version actuelle de PyCDCover:
 - creation et ouverture du pdf
 
 ## 💡 Idées en développement (protéger)
-1 Adapter les classe Face_Avant et Face_Arrière
-2 ajouter ces deux classes à Gabarit
+1 gérer ld
 3 Pour un album, Centrer le texte à l'arrière de la jaquette
      
 ---
