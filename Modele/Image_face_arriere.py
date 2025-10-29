@@ -22,45 +22,104 @@ class Image_face_arriere:
         # Polices (polices du systeme)
         self.police_normale = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
         self.police_grasse = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+        self.hauteur, self.largeur = 0,0 # dimension de l'image
+        self.lignes = [] # liste des lignes du ficher tags.txt
 
-    def creer_image(self):
+    def creer_image_blanche(self):
         """Lit tags.txt et génère l’image arrière."""
-        chemin_tags = self.dossier_pycovercd / "tags.txt"
-        if not chemin_tags.exists():
+        fichier_tags = self.dossier_pycovercd / "tags.txt"   
+        #détermination du nombre d'images
+        self.nb_fichiers = sum(1 for f in self.dossier_thumbnails.iterdir() if f.is_file())
+        print(f"nombre de fichiers {self.nb_fichiers}")
+        if not fichier_tags.exists():
             print("Fichier tags.txt introuvable.")
             return
         # Lecture du fichier
-        with open(chemin_tags, "r") as f:
-            lignes = [ligne.strip() for ligne in f.readlines() if ligne.strip()]
+        with open(fichier_tags, "r") as f:
+            self.lignes = [ligne.strip() for ligne in f.readlines() if ligne.strip()]
         # Création de l'image blanche
-        largeur, hauteur = 1380, 930
-        image = Image.new("RGB", (largeur, hauteur), "white")
-        draw = ImageDraw.Draw(image)
+        if self.nb_fichiers >= 1:    # maquette CD
+            largeur, hauteur = 1380, 930
+        else:
+            largeur, hauteur = 460, 460
+        self.image = Image.new("RGB", (largeur, hauteur), "white")
+        self.draw = ImageDraw.Draw(self.image)
+        return self.draw
+
+    def configuration(self, hauteur):
         # Chargement de la police
-        font = ImageFont.truetype(self.police_normale, 20)
-        font_bold = ImageFont.truetype(self.police_grasse, 22)
+        if self.nb_fichiers > 1:
+            self.font = ImageFont.truetype(self.police_normale, 20)
+            self.font_bold = ImageFont.truetype(self.police_grasse, 22)
+        else:
+            # Mode album unique : plus grand texte
+            self.font = ImageFont.truetype(self.police_normale, 30)
+            self.font_bold = ImageFont.truetype(self.police_grasse, 35)
         # Position de départ
-        x, y = 40, 40
-        ligne_max = hauteur - 40
-        # Parcours des lignes du fichier
-        for ligne in lignes:
+        if self.nb_fichiers > 1:
+            self.x, self.y = 40, 40
+            self.ligne_max = hauteur - 40
+            self.espace = 28
+        else:
+            # cd maquette
+            self.x = 0  # on ne fixe plus x ici (calculé dynamiquement)
+            self.y = 30
+            self.espace = 60
+
+    def cd_maquette(self, draw):
+        """Affiche un album unique centré."""
+        for i, ligne in enumerate(self.lignes):
             if ligne.startswith("C: "):
-                texte = ligne[3:]
-                draw.text((x, y), texte, fill="black", font=font_bold)
+                continue
             elif ligne.startswith("A: "):
                 texte = ligne[3:]
-                draw.text((x, y), texte, fill="darkblue", font=font_bold)
+                font = self.font_bold
+                couleur = "darkblue"
+                self.y += 20    
+            elif i==2:  # année et genre
+                continue
             else:
-                draw.text((x, y), ligne, fill="gray", font=font)
-            y += 28
-            if y > ligne_max:
-                y = 40
-                x += 450  # colonne suivante
+                texte = ligne
+                font = self.font
+                couleur = "gray"
+
+            largeur_texte = draw.textlength(texte, font=font)
+            x = (self.image.width - largeur_texte) // 2
+            draw.text((x, self.y), texte, fill=couleur, font=font)
+            self.y += self.espace
+    
+    def cd_multiples(self, draw):
+        """écrire les lignes sur un CD multiple"""
+        for ligne in self.lignes:
+            if ligne.startswith("C: "):
+                texte = ligne[3:]
+                draw.text((self.x,self.y), texte, fill="black", font=self.font_bold)
+            elif ligne.startswith("A: "):
+                texte = ligne[3:]
+                draw.text((self.x, self.y), texte, fill="darkblue", font=self.font_bold)
+            else:
+                self.draw.text((self.x, self.y), ligne, fill="gray", font=self.font)
+            self.y += 28
+            if self.y > self.ligne_max:
+                self.y = self.espace
+                self.x += 450  # colonne suivante
+    
+    def sauvegarde_image(self)->None:
         # Sauvegarde de l'image
         chemin_sortie = self.dossier_pycovercd / "Image_Back_Cover.png"
-        image.save(chemin_sortie, "PNG")
+        self.image.save(chemin_sortie, "PNG")
         print(f"Image arrière enregistrée : {chemin_sortie}")
 
 if __name__ == "__main__":
     face_arriere = Image_face_arriere()
-    face_arriere.creer_image()
+    draw1 = face_arriere.creer_image_blanche()
+    face_arriere.configuration(930)
+    if draw1 is None:
+        exit("Erreur : impossible de créer l’image (vérifie tags.txt et thumbnails/)")
+    # Sélection du mode
+    if face_arriere.nb_fichiers > 1:
+        face_arriere.cd_multiples(draw1)
+    else:
+        face_arriere.cd_maquette(draw1)
+    # Sauvegarde
+    face_arriere.sauvegarde_image()
