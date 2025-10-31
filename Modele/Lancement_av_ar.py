@@ -6,10 +6,14 @@ Auteur : Gérard Le Rest (2025)
 
 from Modele.Image_face_avant import Image_face_avant
 from Modele.Image_face_arriere import Image_face_arriere
+from pathlib import Path
+import os
 
 class Lancement_av_ar:
 
     def __init__(self):
+        """initialisation"""
+        os.chdir(Path.home() / "PyCDCover")
         # lancement de la création de l'image de la face avant
         image_face_avant = Image_face_avant()
         image_face_avant.preparation_assemblage_photos()

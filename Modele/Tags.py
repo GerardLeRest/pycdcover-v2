@@ -34,32 +34,41 @@ class Tags(QMainWindow):
         self.setCentralWidget(widget)
 
     def recuperer_tags(self):
-        # Choix du dossier
+        """Sélectionne un dossier et détecte les albums simples ou multiples (CD1, CD2...), puis extrait les tags."""
         chemin = QFileDialog.getExistingDirectory(self, "Choisir le répertoire du CD", "/media")
         if not chemin:
             return
+
         lecteur = Path(chemin)
         albums = []
-        # Recherche des albums simples et doubles
+
         for d in lecteur.iterdir():
-            if d.is_dir():
-                # Si le dossier contient des sous-dossiers, on les ajoute
-                sous_albums = [sd for sd in d.iterdir() if sd.is_dir()]
-                if sous_albums:
-                    albums.extend(sous_albums)
-                else:
-                    # Sinon, on ajoute le dossier lui-même
-                    albums.append(d)
-        # Si aucun dossier trouvé, on prend directement le dossier choisi
+            if not d.is_dir():
+                continue
+            sous_dossiers = [sd for sd in d.iterdir() if sd.is_dir()]
+            if sous_dossiers:
+                albums.extend(sous_dossiers)  # CD1, CD2, etc.
+            else:
+                albums.append(d)
+
         if not albums:
             albums = [lecteur]
-        # Compte le nombre total de fichiers MP3
+
         total = sum(len(list(a.glob("*.mp3"))) for a in albums)
         if total == 0:
             QMessageBox.information(self, "Aucun MP3", "Aucune piste MP3 trouvée.")
             return
-        # limites de la barre de progression
+
         self.progress.setRange(0, total)
+        self.label.setText("Extraction en cours...")
+        QApplication.processEvents()
+
+        # 👇 Ici on appelle directement la suite
+        self.fichier_sortie(albums)
+
+
+        
+    def fichier_sortie(self, albums):
         # Fichier de sortie
         fichier = Path.home() / "PyCDCover" / "tags.txt"
         fichier.parent.mkdir(exist_ok=True)
@@ -111,6 +120,7 @@ if __name__ == "__main__":
     application = QApplication(sys.argv)
     tags = Tags()
     tags.show()
-    tags.recuperer_tags()
+    albums = tags.recuperer_tags()
+    tags.fichier_sortie(albums)
     # on réfère sys.exit(app.exec()) à app.exec()
     sys.exit(application.exec()) # adapté à windows (sorte 0:ok 1:nok -plus propre)

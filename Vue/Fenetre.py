@@ -118,16 +118,19 @@ class Fenetre(QMainWindow):
         self.liste.setFixedWidth(300)
         self.liste.addItems(self.recup_donnees.tableau)
         self.liste.itemClicked.connect(self.on_item_clicked)
-        self.layout_haut.addWidget(self.liste)
+        self.layout_haut.addWidget(self.liste)  
 
+    
     def panneau_milieu(self) -> None:
         """Construit le panneau central (visuel de l’album)."""
-        self.haut_milieu = Haut_milieu("Albert Hammond", "Wonderful, Glourious", "index3.jpeg")
+        self.haut_milieu = Haut_milieu("", "", "")
         self.layout_haut.addWidget(self.haut_milieu)
+        self.haut_milieu.assembler_elements()
+
 
     def panneau_droit(self) -> None:
         """Construit le panneau droit (informations de l’album)."""
-        self.haut_droit = Haut_droit("Albert Hammond", "Wonderful, Glorious", "2012", "Rock")
+        self.haut_droit = Haut_droit("", "", "","")
         self.layout_haut.addWidget(self.haut_droit, alignment=Qt.AlignTop)
 
         self.layout.addLayout(self.layout_haut)
@@ -136,13 +139,13 @@ class Fenetre(QMainWindow):
     def panneau_bas(self) -> None:
         """Construit le panneau inférieur (liste des chansons)."""
         chansons = [
-            {"numero": 1, "titre": "Tunnel of Love"},
-            {"numero": 2, "titre": "Romeo and Juliet"},
-            {"numero": 3, "titre": "Skateaway"},
-            {"numero": 4, "titre": "Expresso Love"},
-            {"numero": 5, "titre": "Hand in Hand"}
+            {"numero": 1, "titre": "T"},
+            {"numero": 2, "titre": ""},
+            {"numero": 3, "titre": ""},
+            {"numero": 4, "titre": ""},
+            {"numero": 5, "titre": ""}
         ]
-        self.bas = Bas(chansons, "Wonderful", "Dire Straits", "2012")
+        self.bas = Bas([], "", "", "")
         self.layout_bas.addWidget(self.bas, alignment=Qt.AlignTop)
         self.layout.addLayout(self.layout_bas)
         self.central.setLayout(self.layout)
@@ -153,15 +156,17 @@ class Fenetre(QMainWindow):
         self.recup_donnees.album_selectionne.connect(self.haut_droit.MAJ_haut_droit)
         self.recup_donnees.album_selectionne.connect(self.bas.MAJ_bas)
 
-    @Slot(QListWidgetItem)
-    def on_item_clicked(self, item: QListWidgetItem) -> None:
-        """Met à jour les panneaux quand un album est sélectionné."""
+    def on_item_clicked(self, item: QListWidgetItem)->None:
+        """méthode lancée suite à un clic sur un élément de la liste"""
         cle = item.text()
+        print("Clic sur :", cle)
+        # récupération des infos
         infos = self.recup_donnees.albums.get(cle)
-        if not infos:
+        if not infos:        
             return
+        self.recup_donnees.album_selectionne.emit(infos)  # émémission de infos
 
-        self.recup_donnees.selectionner_album(cle)
+        # affichage des différentes données
         print("   artiste   :", infos.get("artiste"))
         print("   album     :", infos.get("album"))
         print("   annee     :", infos.get("annee"))
@@ -181,7 +186,6 @@ class Fenetre(QMainWindow):
         fen_a_propos = FenetreAPropos()
         fen_a_propos.exec()
 
-   
     def action_recuperer_tags(self) -> None:
         """Récupère les tags à partir des fichiers MP3."""
         self.tags = Tags()  # crée la fenêtre de progression
@@ -199,28 +203,42 @@ class Fenetre(QMainWindow):
         self.act_recup_images.setEnabled(True) # activation du bouton
         
     def action_recuperer_images(self) -> None:
-        " récupérer les images"
+        """Récupère les jaquettes à partir des tags."""
         chemin_tags = Path.home() / "PyCDCover" / "tags.txt"
+
+        if not chemin_tags.exists():
+            QMessageBox.warning(self, "Fichier manquant", f"Le fichier {chemin_tags} est introuvable.")
+            return
+
         albums = lire_tags(chemin_tags)
         if not albums:
             QMessageBox.warning(self, "Aucun album trouvé", "Le fichier 'tags.txt' est vide ou introuvable.")
             return
 
+        # Lancer la récupération des jaquettes
         self.telechargement_ui = TelechargementUI(albums, self.dossier_pycovercd)
-        # siganal de fin de télécharement envoyéé par la classe self.telechargement_u
+
+        # Quand le téléchargement est terminé → activer le bouton "Faces"
         self.telechargement_ui.telechargement_termine.connect(
             lambda: self.act_faces.setEnabled(True)
         )
+
         self.telechargement_ui.show()
-        
+            
     def action_generer_deux_faces(self) -> None:
         """Génère les deux images de la jaquette (avant et arrière)."""
+        print("→ Génération des deux faces")
+
+        # 🔹 Relire les données si besoin
+        self.recup_donnees.charger_depuis_fichier()
+        self.liste.clear()
+        self.liste.addItems(self.recup_donnees.tableau)
+
+        # 🔹 Lancer la génération (indispensable)
         lancement_av_ar = Lancement_av_ar()
-        # récetion du siganl de fin de téléchargement
-        self.telechargement_ui.telechargement_termine.connect(
-                lambda: self.act_faces.setEnabled(True)
-            )
-        self.act_pdf.setEnabled(True) #activer le boouton
+
+        # 🔹 Activer le bouton PDF
+        self.act_pdf.setEnabled(True)
 
 
     def action_pdf(self) -> None:

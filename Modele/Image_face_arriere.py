@@ -15,13 +15,15 @@ class Image_face_arriere:
 
     def __init__(self):
         # Dossier de travail : ~/PyCDCover/thumbnails
+        self.dossier_racine = self.dossier_racine = Path(__file__).parent.parent
         dossier_utilisateur = Path.home()
         self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
         self.dossier_thumbnails = self.dossier_pycovercd / "thumbnails"
         os.chdir(self.dossier_pycovercd)
         # Polices (polices du systeme)
-        self.police_normale = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-        self.police_grasse = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+        self.dossier_polices = os.path.join(self.dossier_racine, "ressources", "polices")
+        self.police_normale = f"{self.dossier_polices}/DejaVuSans.ttf"
+        self.police_grasse = f"{self.dossier_polices}/DejaVuSans-Bold.ttf"
         self.hauteur, self.largeur = 0,0 # dimension de l'image
         self.lignes = [] # liste des lignes du ficher tags.txt
 

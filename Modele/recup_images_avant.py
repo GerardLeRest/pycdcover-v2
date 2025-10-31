@@ -22,25 +22,25 @@ from PySide6.QtCore import Qt, QTimer, Signal
 # --- Fonctions utilitaires ---------------------------------
 # -----------------------------------------------------------
 def lire_tags(fichier="tags.txt"):
-    """Lit le fichier tags.txt et renvoie une liste [(artiste, album), ...]."""
-    albums = []
-    artiste, album = None, None
-    if not os.path.exists(fichier):
-        return albums
+        """Lit le fichier tags.txt et renvoie une liste [(artiste, album), ...]."""
+        albums = []
+        artiste, album = None, None
+        if not os.path.exists(fichier):
+            return albums
 
-    with open(fichier, "r", encoding="utf-8") as f:
-        for ligne in f:
-            ligne = ligne.strip()
-            if ligne.startswith("C:"):
-                artiste = ligne[2:].strip()
-            elif ligne.startswith("A:"):
-                album = ligne[2:].strip()
-            elif ligne == "" and artiste and album:
+        with open(fichier, "r", encoding="utf-8") as f:
+            for ligne in f:
+                ligne = ligne.strip()
+                if ligne.startswith("C:"):
+                    artiste = ligne[2:].strip()
+                elif ligne.startswith("A:"):
+                    album = ligne[2:].strip()
+                elif ligne == "" and artiste and album:
+                    albums.append((artiste, album))
+                    artiste, album = None, None
+            if artiste and album:
                 albums.append((artiste, album))
-                artiste, album = None, None
-        if artiste and album:
-            albums.append((artiste, album))
-    return albums
+        return albums
 
 
 def nettoyer_nom(nom):

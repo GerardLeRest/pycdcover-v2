@@ -20,6 +20,7 @@ class Titres:
         # dossiers
         self.dossier_racine = Path(__file__).parent.parent
         dossier_utilisateur = Path.home()
+        self.dossier_polices = os.path.join(self.dossier_racine, "ressources", "polices")
         self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
         os.chdir(self.dossier_pycovercd)
         
@@ -29,9 +30,7 @@ class Titres:
         # Créer l'image blanche
         self.imageH = Image.new("RGB", (self.L_devant, 220), "white")
         self.draw = ImageDraw.Draw(self.imageH)
-        # Police
-        dossier_polices = os.path.join(self.dossier_racine, "polices")
-        os.chdir(dossier_polices)
+        os.chdir(self.dossier_polices)
         police1 = "FreeSerif.ttf"
         taille = 60
         self.font1 = ImageFont.truetype(police1, taille)
@@ -54,8 +53,7 @@ class Titres:
         # Récupère le dossier de ce module, même si appelé depuis l’extérieur
         # Récupère le dossier racine du projet (un niveau au-dessus de Modele)
         dossier_racine = Path(__file__).resolve().parent.parent
-        dossier_polices = dossier_racine / "Polices"
-        police1 = dossier_polices / "FreeSerif.ttf"
+        police1 = f"{self.dossier_polices}/FreeSerif.ttf"
         self.font1 = ImageFont.truetype(police1, 40)
         self.draw.text((40, 5), self.titre, fill="black", font=self.font1)
         out1 = self.imageV.rotate(90, expand=True)

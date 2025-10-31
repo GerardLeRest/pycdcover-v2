@@ -100,13 +100,13 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     chansons = [
-        {"numero": 1, "titre": "Tunnel of Love"},
-        {"numero": 2, "titre": "Romeo and Juliet"},
-        {"numero": 3, "titre": "Skateaway"},
-        {"numero": 4, "titre": "Expresso Love"},
-        {"numero": 5, "titre": "Hand in Hand"}
+        {"numero": 1,"titre": ""},
+        {"numero": 2, "titre": ""},
+        {"numero": 3, "titre": ""},
+        {"numero": 4, "titre": ""},
+        {"numero": 5, "titre": ""}
     ]
-    bas = Bas(chansons, "Making Movies", "Dire Straits", 1980)
+    bas = Bas(chansons, "", "", None)
     #bas = Bas(chansons, " ", " ", None)
     bas.resize(850, 300)
     bas.show() 
