@@ -33,7 +33,6 @@ class Haut_milieu(QWidget):
         # mode: album dem - albums(tagues)
         self.dossier_pycovercd = Path.home()/ "PyCDCover"
         
-        
 
     def assembler_elements(self) -> None:
         """Assemble les labels et le bouton dans un layout vertical."""
@@ -41,25 +40,26 @@ class Haut_milieu(QWidget):
         layout.setContentsMargins(20, 20, 20, 20)
         layout.setSpacing(20)
 
+         # Label ARTISTE (nom de l'artiste, plus petit)
+        self.label_artiste = QLabel(self.nom_artiste, self)
+        self.label_artiste.setAlignment(Qt.AlignCenter)
+        self.label_artiste.setStyleSheet("""
+            font-size: 28px;
+            color: #6b5e4f;
+            font-weight: 600;
+        """)
+        layout.addWidget(self.label_artiste, alignment=Qt.AlignHCenter)
+
         # Label ALBUM (titre principal, en grand)
         self.label_album = QLabel(self.nom_album, self)
         self.label_album.setAlignment(Qt.AlignCenter)
         self.label_album.setStyleSheet("""
-            font-size: 28px;
-            color: #4e3728;
-            font-weight: 600;
+            font-size: 18px;
+            color: #4e3728; 
         """)
         layout.addWidget(self.label_album, alignment=Qt.AlignHCenter)
 
-        # Label ARTISTE (nom de l'artiste, plus petit)
-        self.label_artiste = QLabel(self.nom_artiste, self)
-        self.label_artiste.setAlignment(Qt.AlignCenter)
-        self.label_artiste.setStyleSheet("""
-            font-size: 18px;
-            color: #6b5e4f;
-        """)
-        layout.addWidget(self.label_artiste, alignment=Qt.AlignHCenter)
-
+       
         # Zone d’image
         self.label_image = QLabel(self)
         self.label_image.setFixedSize(200, 200)
@@ -87,7 +87,7 @@ class Haut_milieu(QWidget):
                 border-radius: 8px;
                 padding: 6px 16px;
                 background-color: white;
-                font-weight: bold;
+                font-weight: normal;
             }
             QPushButton:hover {
                 background-color: #ffaa43;
@@ -102,12 +102,6 @@ class Haut_milieu(QWidget):
         """Charge la jaquette depuis le nom ou le dictionnaire fourni."""
 
         couverture = infos_album if isinstance(infos_album, str) else infos_album.get("couverture")
-
-        if not couverture:
-            # Nettoyage du nom pour correspondre au fichier réel
-            nom_nettoye = re.sub(r"\s*\(.*?\)\s*", "", album).strip()
-            couverture = f"{artiste} - {nom_nettoye}.jpg"
-
 
         self.dossier_thumbnails = self.dossier_pycovercd / "thumbnails"
 
