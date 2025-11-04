@@ -10,10 +10,11 @@ from .Haut_milieu import Haut_milieu
 from .Haut_droit import Haut_droit
 from .Bas import Bas
 from Modele.Tags import Tags
-from Modele.recup_images_avant import lire_tags, TelechargementUI
+from Modele.recup_images_avant import lire_tags
+from Vue.TelechargementUI import TelechargementUI
 from Modele.Lancement_av_ar import Lancement_av_ar
 from Modele.Gabarit import Gabarit
-from Vue.Editeur_tags import Editeur_tags
+from .Editeur_tags import Editeur_tags
 from .A_propos import FenetreAPropos
 import sys, os
 import platform
@@ -65,6 +66,13 @@ class Fenetre(QMainWindow):
         toolbar = QToolBar("Icônes")
         toolbar.setIconSize(QSize(32, 32))
         self.addToolBar(toolbar)
+        toolbar.setStyleSheet("""
+            QToolButton:hover {
+                background-color: #ffaa43; /* orange sur survol */
+                color: white;
+            }
+        """)
+
         # --- Icônes et actions
         self.dossier_icones = Path(__file__).resolve().parent.parent / "icones"
         self.act_titre = QAction(QIcon(str(self.dossier_icones / "titre.svg")), "Titre", self)
@@ -196,6 +204,7 @@ class Fenetre(QMainWindow):
         # On lance l’extraction juste après affichage
         QTimer.singleShot(100, self.tags.recuperer_tags)
 
+
     def action_lire_ecrire_tags(self) -> None:
         """Lit ou modifie le fichier tags.txt """
         self.editeur_tags = Editeur_tags() #instanciation de l'éditeur de tags
@@ -203,7 +212,7 @@ class Fenetre(QMainWindow):
         self.act_recup_images.setEnabled(True) # activation du bouton
         
     def action_recuperer_images(self) -> None:
-        """Récupère les jaquettes à partir des tags."""
+        """Récupère les images à partir des tags."""
         chemin_tags = Path.home() / "PyCDCover" / "tags.txt"
 
         if not chemin_tags.exists():
@@ -214,29 +223,24 @@ class Fenetre(QMainWindow):
         if not albums:
             QMessageBox.warning(self, "Aucun album trouvé", "Le fichier 'tags.txt' est vide ou introuvable.")
             return
-
-        # Lancer la récupération des jaquettes
-        self.telechargement_ui = TelechargementUI(albums, self.dossier_pycovercd)
-
+        # Lancer la récupération des images
+        self.telechargement_ui = TelechargementUI(albums)
         # Quand le téléchargement est terminé → activer le bouton "Faces"
         self.telechargement_ui.telechargement_termine.connect(
             lambda: self.act_faces.setEnabled(True)
         )
-
+        # Afficher la fenêtre de progression
         self.telechargement_ui.show()
             
     def action_generer_deux_faces(self) -> None:
         """Génère les deux images de la jaquette (avant et arrière)."""
         print("→ Génération des deux faces")
-
         # 🔹 Relire les données si besoin
         self.recup_donnees.charger_depuis_fichier()
         self.liste.clear()
         self.liste.addItems(self.recup_donnees.tableau)
-
         # 🔹 Lancer la génération (indispensable)
         lancement_av_ar = Lancement_av_ar()
-
         # 🔹 Activer le bouton PDF
         self.act_pdf.setEnabled(True)
 

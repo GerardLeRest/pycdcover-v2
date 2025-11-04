@@ -33,7 +33,6 @@ class Haut_milieu(QWidget):
         # mode: album dem - albums(tagues)
         self.dossier_pycovercd = Path.home()/ "PyCDCover"
         
-
     def assembler_elements(self) -> None:
         """Assemble les labels et le bouton dans un layout vertical."""
         layout = QVBoxLayout(self)
@@ -83,7 +82,7 @@ class Haut_milieu(QWidget):
         self.bouton_changer.setStyleSheet("""
             QPushButton {
                 color: #4e3728;
-                border: 2px solid #ffaa43;
+                border: 1px solid #6b5e4f;
                 border-radius: 8px;
                 padding: 6px 16px;
                 background-color: white;
@@ -100,12 +99,9 @@ class Haut_milieu(QWidget):
 
     def charger_photo(self, infos_album) -> None:
         """Charge la jaquette depuis le nom ou le dictionnaire fourni."""
-
         couverture = infos_album if isinstance(infos_album, str) else infos_album.get("couverture")
 
         self.dossier_thumbnails = self.dossier_pycovercd / "thumbnails"
-
-        #dossier_thumbnails = Path.home() / "PyCDCover" / "thumbnails"
         if not any(self.dossier_thumbnails.iterdir()):
             self.dossier_thumbnails = Path(__file__).resolve().parent.parent / "ressources" / "PyCDCover" / "thumbnails"
 
@@ -113,40 +109,40 @@ class Haut_milieu(QWidget):
         if chemin.exists():
             pixmap = QPixmap(str(chemin)).scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.label_image.setPixmap(pixmap)
-            print(f"✅ Couverture chargée : {chemin}")
+            self.pixmap_actuelle = pixmap   # 🔒 garde une référence persistante
+            print(f"Couverture chargée : {chemin}")
         else:
-            print(f"❌ Couverture introuvable : {chemin}")
+            print(f"Couverture introuvable : {chemin}")
             self.label_image.clear()
+            self.pixmap_actuelle = None
 
-
-    def changer_image(self) -> None:
-        """Permet de choisir une nouvelle image via une boîte de dialogue."""
-        fichier, _ = QFileDialog.getOpenFileName(
-            self,
-            "Choisir une nouvelle jaquette",
-            "",
-            "Images (*.png *.jpg *.jpeg *.bmp *.gif)"
-        )
-
-        if not fichier:
+    
+    def changer_image(self, couverture: str) -> None:
+        """changer l'image sélectionnée"""
+        if not couverture:
+            print("Aucun nom de couverture fourni")
+            self.label_image.clear()
             return
 
-        # On ne garde que le nom du fichier (pas le chemin complet)
-        self.couverture = Path(fichier).name
+        dossier_thumbnails = Path.home() / "PyCDCover" / "thumbnails"
+        chemin = dossier_thumbnails / couverture
 
-        # Affichage immédiat de la nouvelle image
-        pixmap = QPixmap(fichier).scaled(
-            200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation
-        )
-        self.label_image.setPixmap(pixmap)
-        print(f"✅ Nouvelle jaquette chargée : {fichier}")
+        if chemin.exists():
+            pixmap = QPixmap(str(chemin)).scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.label_image.setPixmap(pixmap)
+            self.pixmap_actuelle = pixmap  # garde une référence
+            print(f"Couverture chargée : {chemin}")
+        else:
+            print(f"Couverture introuvable : {chemin}")
+            self.label_image.clear()
+            self.pixmap_actuelle = None
+
 
 
     def MAJ_haut_milieu(self, infos: dict[str, Any]) -> None:
-        print("okay")
         """Met à jour les labels artiste et album, et recharge la jaquette."""
         self.label_artiste.setText(infos.get('artiste') or "")
         self.label_album.setText(infos.get('album') or "")
-        couverture = infos.get('couverture') or ""
+        couverture = infos.get("couverture", "")
         self.charger_photo(couverture)
-        print(couverture)
+        print("Chargement de :", couverture)

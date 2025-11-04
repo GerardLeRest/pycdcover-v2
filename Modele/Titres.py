@@ -44,7 +44,6 @@ class Titres:
         # Sauvegarder après le dessin
         chemin_image = self.dossier_pycovercd / "TitreH.png"
         self.imageH.save(chemin_image, "PNG")
-        return self.imageH
 
     def titre_vertical1(self) -> Image.Image:
         """Création du premier titre vertical"""
@@ -59,17 +58,15 @@ class Titres:
         out1 = self.imageV.rotate(90, expand=True)
         chemin_image = self.dossier_pycovercd / "TitreV1.png"
         out1.save(chemin_image, "PNG")
-        return out1
 
     def titre_vertical2(self) -> Image.Image:
         """Création du deuxième titre vertical"""
         out2 = self.imageV.rotate(270, expand=True)
         chemin_image = self.dossier_pycovercd / "TitreV2.png"
         out2.save(chemin_image, "PNG")
-        return out2
 
 if __name__ =="__main__":
     titre = Titres(1200, 1380, "Titre1")
-    titre_horizontal = titre.titre_horizontal()
-    titre_vertical1 = titre.titre_vertical1()
-    titre_vertical2 = titre.titre_vertical2()
+    titre.titre_horizontal()
+    titre.titre_vertical1()
+    titre.titre_vertical2()

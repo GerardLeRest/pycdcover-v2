@@ -28,7 +28,7 @@ class Haut_gauche(QObject):
             print(f"Fichier trouvé : {self.fichier_tags_secours}")
             self.fichier_tags = self.fichier_tags_secours
         else:
-            print("❌ Aucun fichier tags.txt trouvé.")
+            print("Aucun fichier tags.txt trouvé.")
             return {}
 
         # Lecture du fichier choisi

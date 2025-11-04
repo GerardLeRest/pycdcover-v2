@@ -9,6 +9,7 @@ import tkinter.messagebox
 from math import ceil, sqrt
 from pathlib import Path
 from PIL import Image
+import glob
 
 formats_3 = ('bmp','gif','jpg','msp','pcx','png','ppm','xbm')
 formats_4 = ('jpeg','tiff')
@@ -25,15 +26,17 @@ class Image_face_avant:
         # Sous-dossier thumbnails (déjà créé par Application)
         self.thumbnail_path = self.dossier_pycovercd / "thumbnails"
         # Se placer dans le dossier thumbnails
-        os.chdir(self.thumbnail_path)
+        
+        os.chdir(self.dossier_pycovercd)
         # initialisation des variables
         self.dossier = ""
         self.fichiers = []
         self.photos = []
-        
+  
+    
     def preparation_assemblage_photos(self):
         """Prépare les dimensions de la grille en fonction du nombre d’images."""
-        self.fichiers = os.listdir(self.thumbnail_path)
+        self.fichiers = os.listdir(self.thumbnail_path) # nombre d'images
         total = len(self.fichiers)
         self.NiL = ceil(sqrt(total))           # nombre d’images en largeur
         self.NiH = ceil(total / self.NiL)      # nombre d’images en hauteur
@@ -79,7 +82,7 @@ class Image_face_avant:
 
         except ZeroDivisionError:
             tkinter.messagebox.showinfo("Info", "Aucune image trouvée")
-            
+    
 
 # ------------------------------------------------------------------------------
 # Programme principal de test

@@ -49,7 +49,7 @@ class Editeur_tags(QMainWindow):
         bouton.setStyleSheet("""
             QPushButton {
                 color: #4e3728;
-                border: 1px solid #ffaa43;
+                border: 1px solid #6b5e4f;
                 border-radius: 8px;
                 padding: 6px 16px;
                 margin: 5px;
@@ -57,7 +57,7 @@ class Editeur_tags(QMainWindow):
                 font-weight: normal;
             }
             QPushButton:hover {
-                background-color: #ffaa43;
+                background-color: #6b5e4f;
                 color: white;
             }
         """)

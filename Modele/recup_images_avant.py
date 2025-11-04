@@ -1,50 +1,76 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Image_devant – Gère la lecture des tags et la création
-ou récupération des jaquettes musicales.
-Projet PyCDCover – ChatGPT, 2025
+# PyCDCover - Classe : RecupImagesAvant
+# Auteur principal : GPT-5
+# Supervision, direction et résolution des incohérences : Gérard Le Rest
 """
 
-import os
-import io
-import re
-import requests
+import os, io, re, json, requests
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
-
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar, QApplication
-from PySide6.QtCore import Qt, QTimer, Signal
-
+from urllib.parse import quote
 
 
 # -----------------------------------------------------------
 # --- Fonctions utilitaires ---------------------------------
 # -----------------------------------------------------------
-def lire_tags(fichier="tags.txt"):
-        """Lit le fichier tags.txt et renvoie une liste [(artiste, album), ...]."""
-        albums = []
-        artiste, album = None, None
-        if not os.path.exists(fichier):
-            return albums
 
-        with open(fichier, "r", encoding="utf-8") as f:
-            for ligne in f:
-                ligne = ligne.strip()
-                if ligne.startswith("C:"):
-                    artiste = ligne[2:].strip()
-                elif ligne.startswith("A:"):
-                    album = ligne[2:].strip()
-                elif ligne == "" and artiste and album:
-                    albums.append((artiste, album))
-                    artiste, album = None, None
-            if artiste and album:
-                albums.append((artiste, album))
+def get_itunes_cover(artiste: str, album: str) -> str | None:
+    """Recherche la jaquette de l'album sur iTunes et renvoie l'URL haute résolution."""
+    try:
+        recherche = quote(f"{artiste} {album}")
+        url = f"https://itunes.apple.com/search?term={recherche}&entity=album&limit=1"
+        r = requests.get(url, timeout=8)
+        if r.status_code == 200:
+            data = r.json()
+            if data.get("resultCount", 0) > 0:
+                image_url = data["results"][0]["artworkUrl100"]
+                return image_url.replace("100x100bb", "600x600bb")
+    except Exception as e:
+        print(f"Erreur API iTunes pour {artiste} - {album} : {e}")
+    return None
+
+
+def lire_tags(fichier="tags.txt"):
+    """
+    Lit le fichier tags.txt et renvoie une liste de dictionnaires :
+    [
+        {
+            "artiste": "Nom de l'artiste",
+            "album": "Titre de l'album",
+            "couverture": "Artiste - Album.jpg",
+            "image_url": "https://..."
+        },
+        ...
+    ]
+    """
+    albums = []
+    artiste, album = None, None
+
+    if not os.path.exists(fichier):
         return albums
+
+    with open(fichier, "r", encoding="utf-8") as f:
+        for ligne in f:
+            ligne = ligne.strip()
+            if ligne.startswith("C:"):
+                artiste = ligne[2:].strip()
+            elif ligne.startswith("A:"):
+                album = ligne[2:].strip()
+                if artiste and album:
+                    couverture = f"{artiste} - {album}.jpg"
+                    image_url = get_itunes_cover(artiste, album)
+                    albums.append({
+                        "artiste": artiste,
+                        "album": album,
+                        "couverture": couverture,
+                        "image_url": image_url
+                    })
+    return albums
 
 
 def nettoyer_nom(nom):
-    """Nettoie les noms d’artistes ou d’albums."""
+    """Nettoie les noms d’artistes ou d’albums pour éviter les erreurs d’URL."""
     if not nom:
         return ""
     nom = re.sub(r"[\(\[\{].*?[\)\]\}]", "", nom)
@@ -60,56 +86,79 @@ def nettoyer_nom(nom):
 
 
 # -----------------------------------------------------------
+# --- Gestion du cache JSON ---------------------------------
+# -----------------------------------------------------------
+CACHE_PATH = Path.home() / "PyCDCover" / "cache.json"
+
+def lire_cache():
+    if CACHE_PATH.exists():
+        try:
+            with open(CACHE_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return {}
+    return {}
+
+def ecrire_cache(cache):
+    try:
+        with open(CACHE_PATH, "w", encoding="utf-8") as f:
+            json.dump(cache, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
+
+# -----------------------------------------------------------
 # --- Classe principale -------------------------------------
 # -----------------------------------------------------------
 class Image_devant:
-    """Télécharge ou crée une jaquette à partir de MusicBrainz."""
+    """Télécharge ou crée une miniature carrée (iTunes → MusicBrainz → secours)."""
 
-    def __init__(self, artiste, album, dossier):
-        """Initialisation"""
-        telechargement_termine = Signal()
-        # dossier
-        dossier_utilisateur = Path.home()
-        self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
-        self.dossier_thumbnails = self.dossier_pycovercd / "thumbnails"
-        # nettoyage des titres 
+    def __init__(self, artiste, album):
         self.artiste = nettoyer_nom(artiste)
         self.album = nettoyer_nom(album)
-        self.chemin = self.dossier_thumbnails / f"{self.artiste} - {self.album}.jpg"
-        #User-Agent pour MusicBrainz
         self.user_agent = "PyCDCover/1.0 (Gérard Le Rest)"
-
+        self.dossier_thumbnails = Path.home() / "PyCDCover" / "thumbnails"
+        self.dossier_thumbnails.mkdir(exist_ok=True)
+        self.chemin = self.dossier_thumbnails / f"{self.artiste} - {self.album}.jpg"
 
     def _recherche_musicbrainz(self):
-        """Recherche d'abord avec artiste+album, puis album seul si échec."""
+        """Recherche l’ID du release-group sur MusicBrainz (avec cache)."""
+        cache = lire_cache()
+        cle = f"{self.artiste}|{self.album}"
+        if cle in cache:
+            return cache[cle]
+
         def requete(query):
-            url = f"https://musicbrainz.org/ws/2/release-group/?query={query}&fmt=json&limit=1"
+            url = "https://musicbrainz.org/ws/2/release-group/"
             try:
-                r = requests.get(url, headers={"User-Agent": self.user_agent}, timeout=10)
+                r = requests.get(
+                    url,
+                    params={"query": query, "fmt": "json", "limit": 1},
+                    headers={"User-Agent": self.user_agent},
+                    timeout=8,
+                )
                 data = r.json()
                 groupes = data.get("release-groups", [])
                 return groupes[0]["id"] if groupes else None
             except Exception:
                 return None
 
-        # --- 1️ tentative stricte
         q1 = f'releasegroup:"{self.album}" AND artist:"{self.artiste}"'
         id_release = requete(q1)
-
-        # --- 2️ si rien trouvé, on tente plus large
         if not id_release:
             q2 = f'releasegroup:"{self.album}"'
             id_release = requete(q2)
             if id_release:
-                print(f"⚠ Trouvé avec recherche simplifiée pour : {self.artiste} – {self.album}")
+                print(f"⚠ Recherche simplifiée : {self.artiste} – {self.album}")
+
+        if id_release:
+            cache[cle] = id_release
+            ecrire_cache(cache)
 
         return id_release
 
-
-    def _telecharger_image(self, id_release):
-        if not id_release:
-            return None
-        url = f"https://coverartarchive.org/release-group/{id_release}/front"
+    def _telecharger_image(self, url):
+        """Télécharge une image à partir d'une URL."""
         try:
             r = requests.get(url, headers={"User-Agent": self.user_agent}, timeout=10)
             if r.status_code == 200:
@@ -119,7 +168,7 @@ class Image_devant:
         return None
 
     def _image_secours(self):
-        """Crée une image orange avec le nom de l’album."""
+        """Crée une image orange avec artiste et album."""
         taille = 512
         img = Image.new("RGB", (taille, taille), (255, 140, 0))
         draw = ImageDraw.Draw(img)
@@ -130,23 +179,36 @@ class Image_devant:
             font = ImageFont.load_default()
         tw, th = draw.multiline_textbbox((0, 0), texte, font=font)[2:]
         draw.multiline_text(((taille - tw) / 2, (taille - th) / 2),
-                            texte, fill=(255, 255, 255),
-                            font=font, align="center")
+                            texte, fill="white", font=font, align="center")
         return img
 
     def creer(self, forcer=False):
-        """Crée ou télécharge la jaquette et retourne le chemin."""
+        """Crée ou télécharge la miniature carrée et retourne son chemin."""
         if self.chemin.exists() and not forcer:
             print(f"✔ Déjà présent : {self.chemin.name}")
             return self.chemin
 
-        id_release = self._recherche_musicbrainz()
-        donnees = self._telecharger_image(id_release)
+        # 1️⃣ Essayer via iTunes
+        image_url = get_itunes_cover(self.artiste, self.album)
+        donnees = self._telecharger_image(image_url) if image_url else None
+
+        # 2️⃣ Sinon, fallback via MusicBrainz
+        if not donnees:
+            id_release = self._recherche_musicbrainz()
+            if id_release:
+                url_mb = f"https://coverartarchive.org/release-group/{id_release}/front"
+                donnees = self._telecharger_image(url_mb)
+
+        # 3️⃣ Si toujours rien → image de secours
         if donnees:
             try:
                 image = Image.open(io.BytesIO(donnees)).convert("RGB")
                 image.thumbnail((512, 512))
-                image.save(self.chemin, "JPEG", quality=90)
+                fond = Image.new("RGB", (512, 512), (255, 140, 0))
+                x = (512 - image.width) // 2
+                y = (512 - image.height) // 2
+                fond.paste(image, (x, y))
+                fond.save(self.chemin, "JPEG", quality=90)
                 print(f"✓ Image enregistrée : {self.chemin.name}")
                 return self.chemin
             except Exception:
@@ -154,53 +216,13 @@ class Image_devant:
 
         image = self._image_secours()
         image.save(self.chemin, "JPEG", quality=90)
-        print(f"⚠ Jaquette de secours créée : {self.chemin.name}")
+        print(f"⚠ Jaquette de secours : {self.chemin.name}")
         return self.chemin
 
 
 # -----------------------------------------------------------
-# --- Classe de progression ---------------------------------
+# --- Test manuel -------------------------------------------
 # -----------------------------------------------------------
-class TelechargementUI(QWidget):
-    """Fenêtre de progression du téléchargement des jaquettes."""
-    telechargement_termine = Signal()  # Déclaration du signal
-
-    def __init__(self, albums, dossier):
-        super().__init__()
-        self.albums = albums
-        self.dossier = dossier
-        self.total = len(albums)
-        self.compteur = 0
-
-        self.setWindowTitle("Téléchargement des jaquettes")
-        self.setFixedSize(400, 120)
-
-        layout = QVBoxLayout()
-        self.label = QLabel("Préparation…", alignment=Qt.AlignCenter)
-        self.progress = QProgressBar()
-        self.progress.setRange(0, self.total)
-        layout.addWidget(self.label)
-        layout.addWidget(self.progress)
-        self.setLayout(layout)
-
-        QTimer.singleShot(500, self.lancer_telechargement)
-
-    def lancer_telechargement(self):
-        for artiste, album in self.albums:
-            self.compteur += 1
-            self.label.setText(f"[{self.compteur}/{self.total}] {artiste} – {album}")
-            QApplication.processEvents()
-
-            j = Image_devant(artiste, album, self.dossier)
-            j.creer()
-
-            self.progress.setValue(self.compteur)
-            QApplication.processEvents()
-
-        self.label.setText("Terminé !")
-        QTimer.singleShot(1500, self.close)
-
-        self.label.setText("Terminé !")
-        self.telechargement_termine.emit()   # signal envoyé à la fenêtre principale
-        QTimer.singleShot(1500, self.close)
-
+if __name__ == "__main__":
+    test = Image_devant("Alt-J", "An Awesome Wave")
+    test.creer()

@@ -9,6 +9,7 @@ from reportlab.pdfgen import canvas
 from PIL import Image, ImageDraw
 from pathlib import Path
 import os
+import glob
 
 
 class Gabarit:
@@ -27,6 +28,15 @@ class Gabarit:
         self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
         # Se placer dans le dossier thumbnails
         os.chdir(self.dossier_pycovercd)
+
+    def compter_images_thumbnails(self):
+        """Compte les images présentes dans ~/PyCDCover/thumbnails/."""
+        dossier = os.path.expanduser("~/PyCDCover/thumbnails")
+        motifs = ("*.jpg", "*.jpeg", "*.png")
+        fichiers = []
+        for motif in motifs:
+            fichiers.extend(glob.glob(os.path.join(dossier, motif)))
+        return len(fichiers)
 
     def lignes_pointillees(self):
         """dessiner les lignes"""
@@ -50,32 +60,40 @@ class Gabarit:
     def face(self, image_originale, largeur, hauteur):
         """création des images (face avant et dos sans titres verticaux) à imprimer"""
         im = Image.new("RGB", (largeur, hauteur), "white")  # création de l'image blanche
-        # insertion du titre horizontal
-        into1 = Image.open("TitreH.png")
-        L, H = into1.size
-        marge_x = (largeur - L) / 2
-        # descendre le titre de 80 pixels
-        im.paste(into1, (int(marge_x), 40, int(marge_x) + L, 40 + H))
-        # ouverture et traitement de l'image principale
-        im2 = Image.open(image_originale)
-        # redimensionnement
-        L, H = im2.size
-        Lf, Hf = float(L), float(H)
-        rapport = Hf / Lf  # rapport hauteur/longueur de l'image
-        if (L == largeur) and (H <= hauteur):
-            out = im2  # image Image_Back_Cover.png
-        elif Hf > Lf:
-            L_modifie = int(960 / rapport)
-            out = im2.resize((L_modifie, 960))
-        else:
-            H_modifie = int(960 * rapport)
-            out = im2.resize((960, H_modifie))
-        # collage de l'image dans le gabarit
-        L, H = out.size
-        marge_x = (largeur - L) / 2
-        im.paste(out, (int(marge_x), 220, int(marge_x) + L, H + 220))
-        return im  # retour de l'image finale
+        compteur = self.compter_images_thumbnails()
+        if compteur > 1:
+            # insertion du titre horizontal
+            into1 = Image.open("TitreH.png")
+            L, H = into1.size
+            marge_x = (largeur - L) / 2
+            # descendre le titre davantage si un seul CD
+            decalage_titre = 60 if os.path.exists("tags.txt") and len(open("tags.txt").readlines()) < 20 else 40
+            im.paste(into1, (int(marge_x), decalage_titre, int(marge_x) + L, decalage_titre + H))
+            # ouverture et traitement de l'image principale000
+            im2 = Image.open(image_originale)
+            # redimensionnement
+            L, H = im2.size
+            Lf, Hf = float(L), float(H)
+            rapport = Hf / Lf  # rapport hauteur/longueur de l'image
+            if (L == largeur) and (H <= hauteur):
+                out = im2  # image Image_Back_Cover.png
+            elif Hf > Lf:
+                L_modifie = int(960 / rapport)
+                out = im2.resize((L_modifie, 960))
+            else:
+                H_modifie = int(960 * rapport)
+                out = im2.resize((960, H_modifie))
+            # collage de l'image dans le gabarit
+            L, H = out.size
+            marge_x = (largeur - L) / 2
+            im.paste(out, (int(marge_x), 220, int(marge_x) + L, H + 220))
+        else: # maquette
+            im2 = Image.open(image_originale)
+            out = im2.resize((1200, 1200)) # l'image à placer est aussi grande que l'image blanche
+            im.paste(out, (0, 40)) # en haut à gauche
+        return im 
 
+    
     def insertion_images(self):
         """création et insertion de toutes les images"""
         #try:
@@ -120,15 +138,16 @@ class Gabarit:
         self.canv.rect(360 * self.coefficient, 480 * self.coefficient,
                     self.L_back_cover * self.coefficient, self.H_back_cover * self.coefficient)
             
+    
     def sauvegarde(self):
         """sauvegarde"""
         self.canv.showPage()
         self.canv.save()
-        
 
 
 if __name__ == "__main__":
     gabarit = Gabarit(0.283464567,1200,1200,1380,1180) # 72.0/254
+    nombre_images = gabarit.compter_images_thumbnails()
     gabarit.lignes_pointillees()
     gabarit.insertion_images()
     gabarit.lignes_continues()

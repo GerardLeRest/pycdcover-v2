@@ -13,8 +13,10 @@ from pathlib import Path
 from mutagen import File as MutaFile
 import sys
 
-
 class Tags(QMainWindow):
+    """Récupérer tous les tags MP3 (artiste, album, année, genre, titres, numéros de piste)
+    puis les enregistrer proprement dans ~/PyCDCover/tags.txt,
+    avec une barre de progression et des messages d’information."""
 
     tags_termines = Signal() # signal
 
@@ -33,15 +35,15 @@ class Tags(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
-    def recuperer_tags(self):
+    def recuperer_tags(self)->None:
         """Sélectionne un dossier et détecte les albums simples ou multiples (CD1, CD2...), puis extrait les tags."""
+        # fenetre du choix du dossier des albums
         chemin = QFileDialog.getExistingDirectory(self, "Choisir le répertoire du CD", "/media")
         if not chemin:
             return
-
         lecteur = Path(chemin)
-        albums = []
-
+        albums = [] # liste des dossiers des albums
+        #parcours des dosiers d'albums
         for d in lecteur.iterdir():
             if not d.is_dir():
                 continue
@@ -50,7 +52,7 @@ class Tags(QMainWindow):
                 albums.extend(sous_dossiers)  # CD1, CD2, etc.
             else:
                 albums.append(d)
-
+        # cas des maquettes
         if not albums:
             albums = [lecteur]
 
@@ -58,17 +60,15 @@ class Tags(QMainWindow):
         if total == 0:
             QMessageBox.information(self, "Aucun MP3", "Aucune piste MP3 trouvée.")
             return
-
+        # barre de progressions
         self.progress.setRange(0, total)
         self.label.setText("Extraction en cours...")
         QApplication.processEvents()
-
         # 👇 Ici on appelle directement la suite
         self.fichier_sortie(albums)
 
-
         
-    def fichier_sortie(self, albums):
+    def fichier_sortie(self, albums:list)->None:
         # Fichier de sortie
         fichier = Path.home() / "PyCDCover" / "tags.txt"
         fichier.parent.mkdir(exist_ok=True)
@@ -93,15 +93,14 @@ class Tags(QMainWindow):
                     self.progress.setValue(count)
                     QApplication.processEvents()
                 f.write("\n")
-        QMessageBox.information(self, "Terminé", "Extraction terminée avec succès !")
         self.tags_termines.emit() # emission signal
 
-    def _mp3s_tries_par_piste(self, dossier: Path):
+    def _mp3s_tries_par_piste(self, dossier: Path) -> list[Path]:
         """Retourne la liste des fichiers MP3 triés par numéro de piste."""
         fichiers = []
         for mp3 in dossier.glob("*.mp3"):
             try:
-                num = int(MutaFile(mp3, easy=True).get("tracknumber", ["0"])[0].split("/")[0])
+                num = int(MutaFile(mp3, easy=list).get("tracknumber", ["0"])[0].split("/")[0])
             except Exception:
                 num = 0
             fichiers.append((num, mp3))
@@ -112,7 +111,7 @@ class Tags(QMainWindow):
         for cle in ("originaldate", "date", "year"):
             if cle in info:
                 val = info[cle][0][:4] # retient 2025 dans "2025/10/23" 
-                if val.isdigit():  #123 => ok - 1g7 => fauc 
+                if val.isdigit():  #123 => ok - 1g7 => faux 
                     return val
         return "Inconnue"
 

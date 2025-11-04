@@ -39,9 +39,8 @@ class Haut_droit(QWidget):
         lab.setStyleSheet("""
             font-size: 16px;
             color: #4e3728;
-            border: 0.5px solid #ffaa43;
+            border: 0.5px solid #6b5e4f;
             border-radius: 8px;
-            padding: 6px;
         """)
         # on mémorise ce label pour pouvoir le mettre à jour
         self.tableau.append(lab)
