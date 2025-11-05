@@ -103,7 +103,7 @@ class TelechargementUI(QWidget):
         self.label.setText(f"Téléchargement {index}/{total}")
 
     def _telechargement_fini(self):
-        self.label.setText("Téléchargement terminé ✅")
+        self.label.setText("Téléchargement terminé")
         self.telechargement_termine.emit()
         self.thread.quit()
         self.thread.wait()

@@ -5,17 +5,17 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QSize, Slot, Signal, QTimer, QUrl
 from PySide6.QtGui import QIcon, QAction,  QDesktopServices
 from pathlib import Path
-from .Haut_gauche import Haut_gauche
-from .Haut_milieu import Haut_milieu
-from .Haut_droit import Haut_droit
-from .Bas import Bas
+from Vue.Haut_gauche import Haut_gauche
+from Vue.Haut_milieu import Haut_milieu
+from Vue.Haut_droit import Haut_droit
+from Vue.Bas import Bas
 from Modele.Tags import Tags
 from Modele.recup_images_avant import lire_tags
 from Vue.TelechargementUI import TelechargementUI
 from Modele.Lancement_av_ar import Lancement_av_ar
 from Modele.Gabarit import Gabarit
-from .Editeur_tags import Editeur_tags
-from .A_propos import FenetreAPropos
+from Vue.Editeur_tags import Editeur_tags
+from Vue.A_propos import FenetreAPropos
 import sys, os, platform, subprocess, webbrowser
 
 
@@ -79,10 +79,9 @@ class Fenetre(QMainWindow):
         self.act_recup_images = QAction(QIcon(str(self.dossier_icones / "recup_images.svg")), "Récupérer les images", self)
         self.act_faces = QAction(QIcon(str(self.dossier_icones / "deux_faces.svg")), "Générer 2 faces", self)
         self.act_pdf = QAction(QIcon(str(self.dossier_icones / "pdf.svg")), "PDF", self)
-        self.act_infos = QAction(QIcon(str(self.dossier_icones / "infos.svg")), "Infos-fichiers", self)
 
         # --- Ajout à la barre d’outils
-        for a in (self.act_titre, self.act_recup_tags, self.act_tags_rw, self.act_recup_images, self.act_faces, self.act_pdf, self.act_infos):
+        for a in (self.act_titre, self.act_recup_tags, self.act_tags_rw, self.act_recup_images, self.act_faces, self.act_pdf):
             toolbar.addAction(a)
 
         # --- Connexion
@@ -94,12 +93,11 @@ class Fenetre(QMainWindow):
         self.act_recup_images.triggered.connect(self.action_recuperer_images)
         self.act_faces.triggered.connect(self.action_generer_deux_faces)
         self.act_pdf.triggered.connect(self.action_pdf)
-        self.act_infos.triggered.connect(self.action_infos)
         # --- Désactivation initiale
         self.act_titre.setEnabled(True) # activer le bouton "Titre"
         # désactiver tous les autres boutons
         for a in (self.act_recup_tags, self.act_tags_rw,
-                self.act_recup_images, self.act_faces, self.act_pdf, self.act_infos):
+                self.act_recup_images, self.act_faces, self.act_pdf):
             a.setEnabled(False)
 
     def panneau_gauche(self) -> None:
@@ -259,8 +257,6 @@ class Fenetre(QMainWindow):
         lancement_av_ar = Lancement_av_ar()
         # 🔹 Activer le bouton PDF
         self.act_pdf.setEnabled(True)
-        self.act_infos.setEnabled(True)
-
 
     def action_pdf(self) -> None:
         """Génère le PDF final à partir des images créées."""
@@ -283,27 +279,4 @@ class Fenetre(QMainWindow):
         except Exception as e:
             print(f"Erreur lors de l'ouverture du PDF : {e}")
 
-
-    def action_infos(self):
-        """Ouvre le dossier PyCDCover avec le gestionnaire de fichiers approprié."""
-        from pathlib import Path
-        import os
-        import platform
-        import subprocess
-        from PySide6.QtWidgets import QMessageBox
-
-        dossier = self.dossier_pycdcover
-
-        try:
-            systeme = platform.system()
-
-            if systeme == "Windows":
-                os.startfile(dossier)
-            elif systeme == "Darwin":  # macOS
-                subprocess.Popen(["open", dossier])
-            else:  # Linux
-                subprocess.Popen(["nautilus", dossier])
-
-        except Exception as e:
-            QMessageBox.warning(self, "Erreur", f"Impossible d’ouvrir le dossier :\n{e}")
 

@@ -10,7 +10,7 @@ class FenetreAPropos(QDialog):
 
         # tailles de la fenêtre
         self.setMinimumSize(250, 250)
-        self.setMaximumSize(290, 290)
+        self.setMaximumSize(340, 340)
         self.setWindowTitle("PyCDCover")
 
         # construction des éléments
@@ -74,10 +74,15 @@ class FenetreAPropos(QDialog):
     def preparation_texte_bas(self) -> None:
         """construction du label du texte du bas"""
         self.texte_bas = QLabel(
-            "Pochettes : https://musicbrainz.org/\n"
-            "Matérial icons : https://musicbrainz.org", self
+            "Images : https://pixabay.com/fr/\n" +
+            "Matérial icons: https://musicbrainz.org \n" +
+            "Chemin des fichiers:\n" +
+            "GNU/Linux: ~/PyCDCover / \n" +
+            "macOS: ~/PyCDCover / \n" +
+            "Windows: C:/Users/Nom_utilisateur>/PyCDCover /"
+            , self
         )
-        self.texte_bas.setAlignment(Qt.AlignCenter)
+        self.texte_bas.setAlignment(Qt.AlignLeft)
         self.texte_bas.setStyleSheet("""
             QLabel {
                 color: #666;
@@ -120,10 +125,10 @@ class FenetreAPropos(QDialog):
         layout.addWidget(self.bouton_fermer, alignment=Qt.AlignHCenter)
 
         self.setLayout(layout)
+        self.show()
 
 if __name__ == "__main__":
     app = QApplication([])
     w = FenetreAPropos()
-    w.show()
     app.exec()
 
