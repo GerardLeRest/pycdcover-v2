@@ -8,12 +8,13 @@ Fait partie du projet PyCDCover.
 Auteur : Gérard Le Rest (2025)
 """
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFileDialog
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QPushButton,
+                               QFileDialog, QMessageBox)
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from pathlib import Path
 from typing import Any
-import os
+
 
 class Haut_milieu(QWidget):
     """Zone supérieure centrale : affiche artiste, album et image de jaquette."""
@@ -22,43 +23,41 @@ class Haut_milieu(QWidget):
         """Initialise la zone avec artiste, album et image."""
         super().__init__()
 
-        # Variables principales
         self.nom_artiste = nom_artiste
         self.nom_album = nom_album
         self.chemin_photo_artiste = chemin_photo_artiste
+
         self.label_artiste = QLabel()
         self.label_album = QLabel()
         self.label_image = QLabel()
 
-        # mode: album dem - albums(tagues)
-        self.dossier_pycovercd = Path.home()/ "PyCDCover"
-        
+        self.dossier_pycdcover = Path.home() / "PyCDCover"
+
     def assembler_elements(self) -> None:
         """Assemble les labels et le bouton dans un layout vertical."""
         layout = QVBoxLayout(self)
         layout.setContentsMargins(20, 20, 20, 20)
         layout.setSpacing(20)
 
-         # Label ARTISTE (nom de l'artiste, plus petit)
+        # Label ARTISTE
         self.label_artiste = QLabel(self.nom_artiste, self)
         self.label_artiste.setAlignment(Qt.AlignCenter)
         self.label_artiste.setStyleSheet("""
             font-size: 28px;
-            color: #6b5e4f;
+            color: #4e3728;
             font-weight: 600;
         """)
         layout.addWidget(self.label_artiste, alignment=Qt.AlignHCenter)
 
-        # Label ALBUM (titre principal, en grand)
+        # Label ALBUM
         self.label_album = QLabel(self.nom_album, self)
         self.label_album.setAlignment(Qt.AlignCenter)
         self.label_album.setStyleSheet("""
             font-size: 18px;
-            color: #4e3728; 
+            color: #6b5e4f;
         """)
         layout.addWidget(self.label_album, alignment=Qt.AlignHCenter)
 
-       
         # Zone d’image
         self.label_image = QLabel(self)
         self.label_image.setFixedSize(200, 200)
@@ -72,36 +71,31 @@ class Haut_milieu(QWidget):
         """)
         layout.addWidget(self.label_image, alignment=Qt.AlignHCenter)
 
-        # ⚠️ NE PAS CHARGER D’IMAGE AU DÉMARRAGE
-        # (aucun dictionnaire disponible à ce moment)
-        # self.charger_photo(self.chemin_photo_artiste)  ← supprimé
-
-        # Bouton "Changer"
-        self.bouton_changer = QPushButton("Changer", self)
-        self.bouton_changer.setFixedSize(140, 40)
-        self.bouton_changer.setStyleSheet("""
-            QPushButton {
-                color: #4e3728;
-                border: 1px solid #6b5e4f;
-                border-radius: 8px;
-                padding: 6px 16px;
-                background-color: white;
-                font-weight: normal;
-            }
-            QPushButton:hover {
-                background-color: #ffaa43;
-                color: white;
-            }
-        """)
-        self.bouton_changer.clicked.connect(self.changer_image)
-        layout.addWidget(self.bouton_changer, alignment=Qt.AlignHCenter)
-
+        # # Bouton "Changer"
+        # self.bouton_fichiers = QPushButton("Fichiers", self)
+        # self.bouton_fichiers.setFixedSize(140, 40)
+        # self.bouton_fichiers.setStyleSheet("""
+        #     QPushButton {
+        #         color: #4e3728;
+        #         border: 1px solid #4e3728;
+        #         border-radius: 8px;
+        #         padding: 6px 16px;
+        #         background-color: white;
+        #         font-weight: normal;
+        #     }
+        #     QPushButton:hover {
+        #         background-color: #ffaa43;
+        #         color: white;
+        #     }
+        # """)
+        # self.bouton_fichiers.clicked.connect(self.ouvrir_fichiers)
+        # layout.addWidget(self.bouton_fichiers, alignment=Qt.AlignHCenter)
 
     def charger_photo(self, infos_album) -> None:
         """Charge la jaquette depuis le nom ou le dictionnaire fourni."""
         couverture = infos_album if isinstance(infos_album, str) else infos_album.get("couverture")
 
-        self.dossier_thumbnails = self.dossier_pycovercd / "thumbnails"
+        self.dossier_thumbnails = self.dossier_pycdcover / "thumbnails"
         if not any(self.dossier_thumbnails.iterdir()):
             self.dossier_thumbnails = Path(__file__).resolve().parent.parent / "ressources" / "PyCDCover" / "thumbnails"
 
@@ -109,40 +103,40 @@ class Haut_milieu(QWidget):
         if chemin.exists():
             pixmap = QPixmap(str(chemin)).scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.label_image.setPixmap(pixmap)
-            self.pixmap_actuelle = pixmap   # 🔒 garde une référence persistante
+            self.pixmap_actuelle = pixmap
             print(f"Couverture chargée : {chemin}")
         else:
             print(f"Couverture introuvable : {chemin}")
             self.label_image.clear()
             self.pixmap_actuelle = None
 
-    
-    def changer_image(self, couverture: str) -> None:
-        """changer l'image sélectionnée"""
-        if not couverture:
-            print("Aucun nom de couverture fourni")
-            self.label_image.clear()
-            return
+    # def ouvrir_fichiers(self):
+    #     """Affiche une petite fenêtre d'information avec un lien cliquable vers le dossier PyCDCover."""
 
-        dossier_thumbnails = Path.home() / "PyCDCover" / "thumbnails"
-        chemin = dossier_thumbnails / couverture
+    #     # Prépare le texte avec lien cliquable (format HTML)
+    #     texte = f"""
+    #     <b>Les fichiers de PyCDCover se trouvent ici :</b><br><br>
+    #     <a href='file://{self.dossier_pycdcover}'>{self.dossier_pycdcover}</a><br><br>
+    #     (Cliquez sur le lien pour ouvrir le dossier)
+    #     """
 
-        if chemin.exists():
-            pixmap = QPixmap(str(chemin)).scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-            self.label_image.setPixmap(pixmap)
-            self.pixmap_actuelle = pixmap  # garde une référence
-            print(f"Couverture chargée : {chemin}")
-        else:
-            print(f"Couverture introuvable : {chemin}")
-            self.label_image.clear()
-            self.pixmap_actuelle = None
-
+    #     # Crée et configure la boîte d’information
+    #     msg = QMessageBox(self)
+    #     msg.setWindowTitle("Dossier PyCDCover")
+    #     msg.setText(texte)                        # texte HTML
+    #     msg.setTextFormat(Qt.RichText)            # interprétation HTML activée
+    #     msg.setTextInteractionFlags(Qt.TextBrowserInteraction)  # rend le lien actif
+    #     msg.setOpenExternalLinks(True)            # ouvre avec le gestionnaire de fichiers par défaut
+    #     msg.setIcon(QMessageBox.Information)
+    #     msg.exec()                                # affiche la fenêtre
 
 
     def MAJ_haut_milieu(self, infos: dict[str, Any]) -> None:
         """Met à jour les labels artiste et album, et recharge la jaquette."""
+        self.infos_album = infos  # 🔸 On garde le dictionnaire pour le bouton
         self.label_artiste.setText(infos.get('artiste') or "")
         self.label_album.setText(infos.get('album') or "")
         couverture = infos.get("couverture", "")
         self.charger_photo(couverture)
         print("Chargement de :", couverture)
+

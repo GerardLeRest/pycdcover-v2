@@ -1,9 +1,9 @@
 from PySide6.QtWidgets import (
     QMainWindow, QToolBar, QWidget, QVBoxLayout, QHBoxLayout,
-    QListWidget, QListWidgetItem,  QMessageBox
+    QListWidget, QListWidgetItem,  QMessageBox, QFileDialog
 )
-from PySide6.QtCore import Qt, QSize, Slot, Signal, QTimer
-from PySide6.QtGui import QIcon, QAction
+from PySide6.QtCore import Qt, QSize, Slot, Signal, QTimer, QUrl
+from PySide6.QtGui import QIcon, QAction,  QDesktopServices
 from pathlib import Path
 from .Haut_gauche import Haut_gauche
 from .Haut_milieu import Haut_milieu
@@ -16,9 +16,7 @@ from Modele.Lancement_av_ar import Lancement_av_ar
 from Modele.Gabarit import Gabarit
 from .Editeur_tags import Editeur_tags
 from .A_propos import FenetreAPropos
-import sys, os
-import platform
-import subprocess
+import sys, os, platform, subprocess, webbrowser
 
 
 class Fenetre(QMainWindow):
@@ -40,9 +38,9 @@ class Fenetre(QMainWindow):
         self.layout_bas = QVBoxLayout()   # partie inférieure
         # dossiers
         dossier_utilisateur = Path.home()
-        self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
-        self.dossier_thumbnails = self.dossier_pycovercd / "thumbnails"
-        os.chdir(self.dossier_pycovercd)
+        self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
+        self.dossier_thumbnails = self.dossier_pycdcover / "thumbnails"
+        os.chdir(self.dossier_pycdcover)
         self.editeur_tags = None  # on garde la référence de l'éditeur
         # methodes
         self.menu()
@@ -81,9 +79,10 @@ class Fenetre(QMainWindow):
         self.act_recup_images = QAction(QIcon(str(self.dossier_icones / "recup_images.svg")), "Récupérer les images", self)
         self.act_faces = QAction(QIcon(str(self.dossier_icones / "deux_faces.svg")), "Générer 2 faces", self)
         self.act_pdf = QAction(QIcon(str(self.dossier_icones / "pdf.svg")), "PDF", self)
+        self.act_infos = QAction(QIcon(str(self.dossier_icones / "infos.svg")), "Infos-fichiers", self)
 
         # --- Ajout à la barre d’outils
-        for a in (self.act_titre, self.act_recup_tags, self.act_tags_rw, self.act_recup_images, self.act_faces, self.act_pdf):
+        for a in (self.act_titre, self.act_recup_tags, self.act_tags_rw, self.act_recup_images, self.act_faces, self.act_pdf, self.act_infos):
             toolbar.addAction(a)
 
         # --- Connexion
@@ -95,11 +94,12 @@ class Fenetre(QMainWindow):
         self.act_recup_images.triggered.connect(self.action_recuperer_images)
         self.act_faces.triggered.connect(self.action_generer_deux_faces)
         self.act_pdf.triggered.connect(self.action_pdf)
+        self.act_infos.triggered.connect(self.action_infos)
         # --- Désactivation initiale
         self.act_titre.setEnabled(True) # activer le bouton "Titre"
         # désactiver tous les autres boutons
         for a in (self.act_recup_tags, self.act_tags_rw,
-                self.act_recup_images, self.act_faces, self.act_pdf):
+                self.act_recup_images, self.act_faces, self.act_pdf, self.act_infos):
             a.setEnabled(False)
 
     def panneau_gauche(self) -> None:
@@ -115,14 +115,30 @@ class Fenetre(QMainWindow):
         self.liste.setStyleSheet("""
             QListWidget {
                 font-size: 16px;
-                color: #4e3728;
-                margin:15;
+                color: #6b5e4f;
+                margin: 15px;
+                border: 1px solid #4e3728;
+                background-color: white;
             }
             QListWidget::item {
-                padding: 4px;
-                margin: 4px 6px;
+                padding: 6px 10px;
+                margin: 2px 4px;
+                border-radius: 4px;
+            }
+            QListWidget::item:selected {
+                border: none;
+                outline: none;
+                background-color: #FE6E3E;   /* orange rouge cohérent */
+                color: white;
+                font-weight: 600;
+            }
+            QListWidget::item:hover {
+                background-color: #FFAA43;
+                color: white;
             }
         """)
+        self.liste.setFocusPolicy(Qt.NoFocus)
+        self.liste.viewport().setStyleSheet("outline: none; border: none; background: transparent;")
         self.liste.setFixedWidth(300)
         self.liste.addItems(self.recup_donnees.tableau)
         self.liste.itemClicked.connect(self.on_item_clicked)
@@ -243,10 +259,12 @@ class Fenetre(QMainWindow):
         lancement_av_ar = Lancement_av_ar()
         # 🔹 Activer le bouton PDF
         self.act_pdf.setEnabled(True)
+        self.act_infos.setEnabled(True)
 
 
     def action_pdf(self) -> None:
         """Génère le PDF final à partir des images créées."""
+        self.act_titre.setEnabled(True)
         gabarit = Gabarit(0.283464567,1200,1200,1380,1180) # 72.0/254
         gabarit.lignes_pointillees()
         gabarit.insertion_images()
@@ -254,7 +272,7 @@ class Fenetre(QMainWindow):
         gabarit.sauvegarde()
         # Ouvre un fichier PDF avec le lecteur par défaut du système
         systeme = platform.system()
-        chemin_pdf = self.dossier_pycovercd /"image_impression.pdf"
+        chemin_pdf = self.dossier_pycdcover /"image_impression.pdf"
         try:
             if systeme == "Windows":
                 os.startfile(chemin_pdf)  # intégré à Windows
@@ -264,3 +282,28 @@ class Fenetre(QMainWindow):
                 subprocess.run(["xdg-open", chemin_pdf])
         except Exception as e:
             print(f"Erreur lors de l'ouverture du PDF : {e}")
+
+
+    def action_infos(self):
+        """Ouvre le dossier PyCDCover avec le gestionnaire de fichiers approprié."""
+        from pathlib import Path
+        import os
+        import platform
+        import subprocess
+        from PySide6.QtWidgets import QMessageBox
+
+        dossier = self.dossier_pycdcover
+
+        try:
+            systeme = platform.system()
+
+            if systeme == "Windows":
+                os.startfile(dossier)
+            elif systeme == "Darwin":  # macOS
+                subprocess.Popen(["open", dossier])
+            else:  # Linux
+                subprocess.Popen(["nautilus", dossier])
+
+        except Exception as e:
+            QMessageBox.warning(self, "Erreur", f"Impossible d’ouvrir le dossier :\n{e}")
+

@@ -21,8 +21,8 @@ class Titres:
         self.dossier_racine = Path(__file__).parent.parent
         dossier_utilisateur = Path.home()
         self.dossier_polices = os.path.join(self.dossier_racine, "ressources", "polices")
-        self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
-        os.chdir(self.dossier_pycovercd)
+        self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
+        os.chdir(self.dossier_pycdcover)
         
     def titre_horizontal(self):
         """Création de l'image horizontale du titre"""
@@ -42,7 +42,7 @@ class Titres:
         # Dessiner le texte
         self.draw.text((self.x, self.y), self.titre, fill="black", font=self.font1)
         # Sauvegarder après le dessin
-        chemin_image = self.dossier_pycovercd / "TitreH.png"
+        chemin_image = self.dossier_pycdcover / "TitreH.png"
         self.imageH.save(chemin_image, "PNG")
 
     def titre_vertical1(self) -> Image.Image:
@@ -56,13 +56,13 @@ class Titres:
         self.font1 = ImageFont.truetype(police1, 40)
         self.draw.text((40, 5), self.titre, fill="black", font=self.font1)
         out1 = self.imageV.rotate(90, expand=True)
-        chemin_image = self.dossier_pycovercd / "TitreV1.png"
+        chemin_image = self.dossier_pycdcover / "TitreV1.png"
         out1.save(chemin_image, "PNG")
 
     def titre_vertical2(self) -> Image.Image:
         """Création du deuxième titre vertical"""
         out2 = self.imageV.rotate(270, expand=True)
-        chemin_image = self.dossier_pycovercd / "TitreV2.png"
+        chemin_image = self.dossier_pycdcover / "TitreV2.png"
         out2.save(chemin_image, "PNG")
 
 if __name__ =="__main__":

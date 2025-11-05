@@ -66,7 +66,7 @@ class WorkerTelechargement(QObject):
 
         # 🔔 Tous les téléchargements terminés
         self.telechargement_termine.emit()
-        print("✅ Téléchargement terminé pour tous les albums.")
+        print("Téléchargement terminé pour tous les albums.")
 
 
 

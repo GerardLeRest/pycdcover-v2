@@ -40,6 +40,7 @@ class Haut_droit(QWidget):
             font-size: 16px;
             color: #4e3728;
             border: 0.5px solid #6b5e4f;
+            padding-left: 5px;
             border-radius: 8px;
         """)
         # on mémorise ce label pour pouvoir le mettre à jour

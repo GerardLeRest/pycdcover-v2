@@ -25,9 +25,9 @@ class Gabarit:
         # dossier utilisateur
         dossier_utilisateur = Path.home()
         # Dossier de travail de l'appli
-        self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
+        self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
         # Se placer dans le dossier thumbnails
-        os.chdir(self.dossier_pycovercd)
+        os.chdir(self.dossier_pycdcover)
 
     def compter_images_thumbnails(self):
         """Compte les images présentes dans ~/PyCDCover/thumbnails/."""
@@ -103,7 +103,7 @@ class Gabarit:
         # création de la face arrière
         image_dos = self.face("Image_Back_Cover.png", self.L_back_cover, self.H_back_cover)
         image_dos.save("Dos.png", "png")
-        os.chdir(self.dossier_pycovercd)  # sécurité pour le chemin de travail
+        os.chdir(self.dossier_pycdcover)  # sécurité pour le chemin de travail
         # insertion de l'image Devant
         xorigine, yorigine = 360 * self.coefficient, 1700 * self.coefficient
         self.canv.drawImage("Devant.jpeg", xorigine, yorigine,

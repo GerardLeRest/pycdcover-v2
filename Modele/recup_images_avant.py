@@ -80,7 +80,8 @@ def nettoyer_nom(nom):
         nom,
         flags=re.IGNORECASE,
     )
-    nom = re.sub(r"[-_]+", " ", nom)
+    # ❌ Ne pas remplacer les tirets
+    # nom = re.sub(r"[-_]+", " ", nom)
     nom = re.sub(r"\s{2,}", " ", nom)
     return nom.strip()
 

@@ -22,12 +22,12 @@ class Image_face_avant:
         #dossiers
         dossier_utilisateur = Path.home()
         # Dossier de travail de l'appli
-        self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
+        self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
         # Sous-dossier thumbnails (déjà créé par Application)
-        self.thumbnail_path = self.dossier_pycovercd / "thumbnails"
+        self.thumbnail_path = self.dossier_pycdcover / "thumbnails"
         # Se placer dans le dossier thumbnails
         
-        os.chdir(self.dossier_pycovercd)
+        os.chdir(self.dossier_pycdcover)
         # initialisation des variables
         self.dossier = ""
         self.fichiers = []
@@ -77,7 +77,7 @@ class Image_face_avant:
                     index += 1
 
             # sauvegarde de la mosaïque finale
-            sortie = self.dossier_pycovercd / "Image_thumbnails.jpeg"
+            sortie = self.dossier_pycdcover / "Image_thumbnails.jpeg"
             im.save(sortie, "jpeg")
 
         except ZeroDivisionError:

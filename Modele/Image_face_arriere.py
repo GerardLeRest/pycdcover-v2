@@ -18,9 +18,9 @@ class Image_face_arriere:
         # Dossier de travail : ~/PyCDCover/thumbnails
         self.dossier_racine = Path(__file__).parent.parent
         dossier_utilisateur = Path.home()
-        self.dossier_pycovercd = dossier_utilisateur / "PyCDCover"
-        self.dossier_thumbnails = self.dossier_pycovercd / "thumbnails"
-        os.chdir(self.dossier_pycovercd)
+        self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
+        self.dossier_thumbnails = self.dossier_pycdcover / "thumbnails"
+        os.chdir(self.dossier_pycdcover)
         # --- Chemins vers les fichiers .ttf ---
         self.dossier_polices = os.path.join(self.dossier_racine, "ressources", "polices")
         self.police_normale = f"{self.dossier_polices}/DejaVuSans.ttf"
@@ -30,7 +30,7 @@ class Image_face_arriere:
 
     def creer_image_blanche(self)->None:
         """Lit tags.txt et génère l’image arrière."""
-        fichier_tags = self.dossier_pycovercd / "tags.txt"
+        fichier_tags = self.dossier_pycdcover / "tags.txt"
         # Détermination du nombre d'images dans le dossier thumbnails
         self.nb_fichiers = sum(1 for f in self.dossier_thumbnails.iterdir() if f.is_file())
         print(f"nombre de fichiers {self.nb_fichiers}")
@@ -183,7 +183,7 @@ class Image_face_arriere:
 
     def sauvegarde_image(self) -> None:
         """Sauvegarde de l'image générée."""
-        chemin_sortie = self.dossier_pycovercd / "Image_Back_Cover.png"
+        chemin_sortie = self.dossier_pycdcover / "Image_Back_Cover.png"
         self.image.save(chemin_sortie, "PNG")
         print(f"Image arrière enregistrée : {chemin_sortie}")
 

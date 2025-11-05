@@ -33,9 +33,14 @@ class Bas(QWidget):
         # taille et couleur du texte
         self.table.setStyleSheet("""
             QTableWidget::item {
-            font-size: 16px;
-            color: #4e3728;
-            padding: 6px
+                font-size: 16px;
+                color: #4e3728;
+                padding: 6px;
+            }
+            QTableWidget::item:selected {
+                background-color: #FF6633;
+                color: white;
+                font-weight: 600;
             }
         """)
 
