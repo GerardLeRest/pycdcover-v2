@@ -106,14 +106,19 @@ class Tags(QMainWindow):
             fichiers.append((num, mp3))
         return [m for _, m in sorted(fichiers, key=lambda x: x[0])]
 
-    def _annee(self, info):
+    
+    def _annee(self, info: dict[str, list[str]]) -> str:
         """Extrait l’année à partir des tags si possible."""
         for cle in ("originaldate", "date", "year"):
             if cle in info:
-                val = info[cle][0][:4] # retient 2025 dans "2025/10/23" 
-                if val.isdigit():  #123 => ok - 1g7 => faux 
+                val = info[cle][0][:4]  # retient 2025 dans "2025/10/23"
+                if val.isdigit():       # 123 => ok - 1g7 => faux 
                     return val
         return "Inconnue"
+
+# ------------------------------------------------------------------------------
+# Programme principal de test
+# ------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)

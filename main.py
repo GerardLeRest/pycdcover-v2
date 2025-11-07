@@ -9,6 +9,7 @@ from Controleur.Application import Application
 
 def main():
     """Lance l'application PyCDCover."""
+    
     app = QApplication([])
     application = Application()   # instancie le contrôleur
     application.demarrer()        # affiche la fenêtre principale

@@ -4,11 +4,10 @@ Application.py — Récupère les tags MP3 d’un CD et les enregistre dans ~/Py
 Auteur : Gérard Le Rest (2025)
 """
 
-from PySide6.QtWidgets import QWidget, QApplication, QMessageBox
-from PySide6.QtCore import Slot
+import os, sys, shutil, platform, subprocess
 from pathlib import Path
+from PySide6.QtWidgets import QWidget, QApplication, QMessageBox
 from PySide6.QtCore import Slot, QTimer
-from PySide6.QtWidgets import QMessageBox
 
 # --- Imports MVC ---
 from Vue.Fenetre import Fenetre
@@ -45,14 +44,26 @@ class Application(QWidget):
         self.vue.show()
     
     @Slot()
-    def action_titre(self):
+    def action_titre(self) -> None:
         """Ouvre la fenêtre de saisie du titre."""
         self.fen_titre = Fen_Titre()
         self.fen_titre.titre_selectionne.connect(self.action_recuperer_titre)
-        self.fen_titre.exec()  # fenêtre modale
+        self.fen_titre.exec()
 
     @Slot(str)
-    def action_recuperer_titre(self, titre_saisi: str):
+    def action_recuperer_titre(self, titre_saisi: str) -> None:
+        """Reçoit le titre saisi et génère les images correspondantes."""
+        print(f"Titre reçu : {titre_saisi}")
+        titres = Titres(1200, 1380, titre_saisi)
+        titres.titre_horizontal()
+        titres.titre_vertical1()
+        titres.titre_vertical2()
+        print("✅ Titres générés avec succès.")
+        self.vue.act_recup_tags.setEnabled(True)  # active le bouton suivant
+
+
+    @Slot(str)
+    def action_recuperer_tags(self, titre_saisi: str) -> None:
         """Reçoit le titre saisi et génère les images correspondantes."""
         print(f"Titre reçu : {titre_saisi}")
         # Création de l’objet métier Titres
@@ -60,38 +71,33 @@ class Application(QWidget):
         t.titre_horizontal()
         t.titre_vertical1()
         t.titre_vertical2()
-        print("✅ Titres générés avec succès.")
-         # 🔹 Activation du bouton suivant ("Récupérer les tags")
+        print("Titres générés avec succès.")
+        # 🔹 Activation du bouton suivant ("Récupérer les tags")
         self.vue.act_recup_tags.setEnabled(True)
-    
-   
+
     @Slot()
-    def action_recuperer_tags(self):
-        """Récupère les tags depuis le CD et crée tags.txt."""
-        self.tags = Tags()             # crée l’objet
-        self.tags.recuperer_tags()     # ⚙️ lance la génération du fichier
-        print("✅ Fichier tags.txt créé dans ~/PyCDCover")
-
-        # Active le bouton suivant (Lire/Écrire Tags)
-        self.vue.act_tags_rw.setEnabled(True)
- 
-
+    def action_recuperer_tags(self) -> None:
+        """Récupère les tags MP3 du CD et crée le fichier tags.txt."""
+        print("→ Récupération des tags MP3...")
+        self.tags = Tags()
+        self.tags.tags_termines.connect(lambda: self.vue.act_tags_rw.setEnabled(True))
+        self.tags.show()
+        self.tags.recuperer_tags()
+   
+    
     @Slot()
     def action_ouvrir_editeur_tags(self) -> None:
         """Ouvre la fenêtre d'édition du fichier tags.txt."""
         print("→ Ouverture de l’éditeur de tags...")
-
-        # ✅ On stocke l’objet dans self pour qu’il reste en mémoire
-        self.editeur_tags = Editeur_tags()
+        # Instanciation 
+        self.editeur_tags = Editeur_tags() 
         self.editeur_tags.show()
-
-        # ✅ Activation du bouton suivant ("Récupérer les images")
+        # Activation du bouton suivant ("Récupérer les images")
         self.vue.act_recup_images.setEnabled(True)
 
 
-
     @Slot()
-    def action_recuperer_images(self):
+    def action_recuperer_images(self) -> None:
         """Récupère les images à partir du fichier tags.txt."""
         chemin_tags = Path.home() / "PyCDCover" / "tags.txt"
 
@@ -112,10 +118,11 @@ class Application(QWidget):
             lambda: self.vue.act_faces.setEnabled(True)
         )
         self.telechargement_ui.show()
+        self.vue.act_pdf.setEnabled(True)  # active le bouton suivant
 
   
     @Slot()
-    def action_faces(self):
+    def action_faces(self) -> None:
         """Génère les deux faces (avant et arrière) de la jaquette."""
         print("→ Génération des deux faces")
         # 🔹 Relire les données si besoin
@@ -128,7 +135,7 @@ class Application(QWidget):
         self.vue.act_pdf.setEnabled(True)
 
     @Slot()
-    def action_pdf(self):
+    def action_pdf(self) -> None:
         gabarit = Gabarit(0.283464567,1200,1200,1380,1180) # 72.0/254
         gabarit.lignes_pointillees()
         gabarit.insertion_images()
@@ -182,10 +189,12 @@ class Application(QWidget):
         print("titre_vertical2 exécutée")
 
     
-
+# ------------------------------------------------------------------------------
+# Programme principal de test
+# ------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     appli = Application()
-    appli.fenetre.show()  # on affiche la fenêtre principale
+    appli.vue.show()  # ✅ c’est bien self.vue dans la classe
     app.exec()

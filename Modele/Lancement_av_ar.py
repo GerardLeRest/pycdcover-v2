@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Lancer la création des deux images de la jaquette
+Lancement-av-ar.py — creation des deux faces avant et arriere
 Auteur : Gérard Le Rest (2025)
 """
+
 
 from Modele.Image_face_avant import Image_face_avant
 from Modele.Image_face_arriere import Image_face_arriere
@@ -10,7 +12,8 @@ from pathlib import Path
 import os
 
 class Lancement_av_ar:
-
+    """creation des deux faces avant et arriere"""
+    
     def __init__(self):
         """initialisation"""
         os.chdir(Path.home() / "PyCDCover")
@@ -35,6 +38,7 @@ class Lancement_av_ar:
 # ------------------------------------------------------------------------------
 # Programme principal de test
 # ------------------------------------------------------------------------------
+
 if __name__ == "__main__":
     lancement_av_ar = Lancement_av_ar()
 

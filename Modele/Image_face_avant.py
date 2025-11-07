@@ -16,6 +16,8 @@ formats_4 = ('jpeg','tiff')
 
 
 class Image_face_avant:
+    """créer l'image avant de la jaquette"""
+    
     def __init__(self, largeur=300, hauteur=300, env_home=None, repertoire=None):
         self.largeur = largeur
         self.hauteur = hauteur
@@ -26,7 +28,6 @@ class Image_face_avant:
         # Sous-dossier thumbnails (déjà créé par Application)
         self.thumbnail_path = self.dossier_pycdcover / "thumbnails"
         # Se placer dans le dossier thumbnails
-        
         os.chdir(self.dossier_pycdcover)
         # initialisation des variables
         self.dossier = ""
@@ -34,7 +35,7 @@ class Image_face_avant:
         self.photos = []
   
     
-    def preparation_assemblage_photos(self):
+    def preparation_assemblage_photos(self) -> None:
         """Prépare les dimensions de la grille en fonction du nombre d’images."""
         self.fichiers = os.listdir(self.thumbnail_path) # nombre d'images
         total = len(self.fichiers)
@@ -44,7 +45,7 @@ class Image_face_avant:
         self.Larg_Im_fin = self.NiL * self.largeur + (self.NiL + 1) * 10
         self.Haut_Im_fin = self.NiH * self.hauteur + (self.NiH + 1) * 10
 
-    def assemblage_photos(self):
+    def assemblage_photos(self) -> None:
         """Assemble les miniatures du dossier thumbnails pour créer la jaquette."""
         try:
             im = Image.new("RGB", (self.Larg_Im_fin, self.Haut_Im_fin), "white")

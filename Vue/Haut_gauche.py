@@ -1,15 +1,21 @@
+#!/usr/bin/env python3
+"""
+Haut_GAUCHE.py: gestion de la partie haute gauche de l'interface
+Auteur : Gérard Le Rest (2025)
+"""
+
 from PySide6.QtCore import QObject, Signal, Slot
 from pathlib import Path
 from Modele.recup_images_avant import nettoyer_nom
 
 class Haut_gauche(QObject):
+    """affichage dans la fentre haut gauche"""
+    
     album_selectionne = Signal(dict)
-
     def __init__(self):
         super().__init__()
         self.tableau = []
         self.albums = {}
-
         self.fichier_tags_principal = Path.home() / "PyCDCover" / "tags.txt" # fichier du dosssier personnel
         # fichier de l'album de démonstration
         self.fichier_tags_secours = Path(__file__).resolve().parent.parent / "ressources" / "PyCDCover" / "tags2.txt"

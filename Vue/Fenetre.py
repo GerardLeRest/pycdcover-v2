@@ -1,26 +1,27 @@
+#!/usr/bin/env python3
+"""
+Fenetre.py: fenêtre principale de la classe
+Auteur : Gérard Le Rest (2025)
+"""
+
 from PySide6.QtWidgets import (
     QMainWindow, QToolBar, QWidget, QVBoxLayout, QHBoxLayout,
-    QListWidget, QListWidgetItem,  QMessageBox, QFileDialog
-)
-from PySide6.QtCore import Qt, QSize, Slot, Signal, QTimer, QUrl
-from PySide6.QtGui import QIcon, QAction,  QDesktopServices
+    QListWidget, QListWidgetItem)
+from PySide6.QtCore import Qt, QSize, Signal
+from PySide6.QtGui import QIcon, QAction
 from pathlib import Path
 from Vue.Haut_gauche import Haut_gauche
 from Vue.Haut_milieu import Haut_milieu
 from Vue.Haut_droit import Haut_droit
 from Vue.Bas import Bas
-from Modele.Tags import Tags
 from Modele.recup_images_avant import lire_tags
-from Vue.TelechargementUI import TelechargementUI
-from Modele.Lancement_av_ar import Lancement_av_ar
-from Modele.Gabarit import Gabarit
-from Vue.Editeur_tags import Editeur_tags
 from Vue.A_propos import FenetreAPropos
-import sys, os, platform, subprocess, webbrowser
+import sys
 
 
 class Fenetre(QMainWindow):
     """Fenêtre principale de l'application"""
+
     # Signaux envoyés vers le contrôleur
     # --- Signaux envoyés vers le contrôleur
     demande_saisie_titre = Signal()                  # quand on clique sur "Titre"
@@ -47,13 +48,8 @@ class Fenetre(QMainWindow):
         dossier_utilisateur = Path.home()
         self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
         self.dossier_thumbnails = self.dossier_pycdcover / "thumbnails"
-        os.chdir(self.dossier_pycdcover)
+        self.tags_txt = self.dossier_pycdcover / "tags.txt"
         self.editeur_tags = None  # on garde la référence de l'éditeur
-
-        # 🔹 Signaux que la Vue émettra vers le contrôleur
-        demande_saisie_titre = Signal(bool)
-        demande_ouvrir_editeur_tags = Signal()
-        
         # methodes
         self.menu()
         self.barre_d_outils()
@@ -82,10 +78,8 @@ class Fenetre(QMainWindow):
                 color: white;
             }
         """)
-
         # --- Dossier des icônes
         self.dossier_icones = Path(__file__).resolve().parent.parent / "icones"
-
         # --- Création des actions
         self.act_titre = QAction(QIcon(str(self.dossier_icones / "titre.svg")), "Titre", self)
         self.act_recup_tags = QAction(QIcon(str(self.dossier_icones / "recup_tags.svg")), "Récupérer les tags", self)
@@ -93,39 +87,24 @@ class Fenetre(QMainWindow):
         self.act_recup_images = QAction(QIcon(str(self.dossier_icones / "recup_images.svg")), "Récupérer les images", self)
         self.act_faces = QAction(QIcon(str(self.dossier_icones / "deux_faces.svg")), "Générer 2 faces", self)
         self.act_pdf = QAction(QIcon(str(self.dossier_icones / "pdf.svg")), "PDF", self)
-
         # --- Ajout à la barre d’outils
         for a in (self.act_titre, self.act_recup_tags, self.act_tags_rw, self.act_recup_images, self.act_faces, self.act_pdf):
             toolbar.addAction(a)
-
-        # # --- Connexions Vue → Signaux
-        # self.act_titre.triggered.connect(lambda: self.demande_saisie_titre.emit(True))
-        # self.act_recup_tags.triggered.connect(self.demande_ouvrir_recuperation_tags.emit)
-        # self.act_tags_rw.triggered.connect(self.demande_ouvrir_editeur_tags.emit)
-        # self.act_recup_images.triggered.connect(self.demande_recuperer_images.emit)
-        # self.act_faces.triggered.connect(self.demande_faces.emit)
-        # --- Connexion
-        # icône enclenchée lance la méthode action_titre grâce au signal
-        #self.act_titre.triggered.connect(self.action_titre)
+        # Bulls d'information
         self.act_titre.setToolTip("Créer le titre")
-        #self.act_recup_tags.triggered.connect(self.action_recuperer_tags)
         self.act_recup_tags.setToolTip("Récupérer les tags")
-        #self.act_tags_rw.triggered.connect(self.action_lire_ecrire_tags)
         self.act_tags_rw.setToolTip("Éditer/Modifier les tags")
-        #self.act_recup_images.triggered.connect(self.action_recuperer_images)
         self.act_recup_images.setToolTip("Récupérer les images")
-        #self.act_faces.triggered.connect(self.action_generer_deux_faces)
         self.act_faces.setToolTip("Créer les deux faces")
-        #self.act_pdf.triggered.connect(self.action_pdf)
         self.act_pdf.setToolTip("Créer le pdf")
-        # --- Désactivation initiale
-        self.act_titre.setEnabled(True) # activer le bouton "Titre"
+        self.act_titre.setEnabled(True)
+        # activer le bouton "Titre"
         # désactiver tous les autres boutons
         for a in (self.act_recup_tags, self.act_tags_rw,
                 self.act_recup_images, self.act_faces, self.act_pdf):
             a.setEnabled(False)
         
-        # Connexions Vue → Signaux
+        # Connexions Vue → Controle
         self.act_titre.triggered.connect(self.demande_saisie_titre.emit)
         self.act_recup_tags.triggered.connect(self.demande_ouvrir_recuperation_tags.emit)
         self.act_tags_rw.triggered.connect(self.demande_ouvrir_editeur_tags.emit)
@@ -133,16 +112,14 @@ class Fenetre(QMainWindow):
         self.act_faces.triggered.connect(self.demande_faces.emit)
         self.act_pdf.triggered.connect(self.demande_pdf.emit)
 
-
-
     def panneau_gauche(self) -> None:
         """Construit le panneau gauche (liste des albums)."""
         self.recup_donnees = Haut_gauche()
-
         # chemin correct du fichier tags.txt
-        chemin_tags = Path.home() / "PyCDCover" / "tags.txt"
-        self.recup_donnees.charger_depuis_fichier()
-
+        chemin_tags = self.tags_txt
+        self.recup_donnees = Haut_gauche()
+        self.recup_donnees.charger_depuis_fichier()  # <<< AJOUT ICI ✅
+        print("tableau chargé:", self.recup_donnees.tableau)
         print("tableau chargé:", self.recup_donnees.tableau)
         self.liste = QListWidget()
         self.liste.setStyleSheet("""
@@ -232,82 +209,7 @@ class Fenetre(QMainWindow):
         for t in infos.get("chansons", []):
             print("   ", t["numero"], "-", t["titre"])
 
-    # @Slot(bool)
-    # def action_titre(self, checked: bool = False) -> None:
-    #     """Émet le signal de demande de saisie du titre."""
-    
-    # @Slot()
-    # def action_lire_ecrire_tags(self):
-    #     self.demande_ouvrir_editeur_tags.emit()
-
     def information(self) -> None:
         """Ouvre la fenêtre 'À propos'."""
         fen_a_propos = FenetreAPropos()
         fen_a_propos.exec()
-
-    # def action_recuperer_tags(self) -> None:
-    #     """Récupère les tags à partir des fichiers MP3."""
-    #     self.tags = Tags()  # crée la fenêtre de progression
-    #     # Quand les tags sont terminés → activer le bouton suivant
-    #     self.tags.tags_termines.connect(lambda: self.act_tags_rw.setEnabled(True))
-    #     # On affiche la fenêtre
-    #     self.tags.show()
-    #     # On lance l’extraction juste après affichage
-    #     QTimer.singleShot(100, self.tags.recuperer_tags)
-
-
-    # def action_recuperer_images(self) -> None:
-    #     """Récupère les images à partir des tags."""
-    #     chemin_tags = Path.home() / "PyCDCover" / "tags.txt"
-
-    #     if not chemin_tags.exists():
-    #         QMessageBox.warning(self, "Fichier manquant", f"Le fichier {chemin_tags} est introuvable.")
-    #         return
-
-    #     albums = lire_tags(chemin_tags)
-    #     if not albums:
-    #         QMessageBox.warning(self, "Aucun album trouvé", "Le fichier 'tags.txt' est vide ou introuvable.")
-    #         return
-    #     # Lancer la récupération des images
-    #     self.telechargement_ui = TelechargementUI(albums)
-    #     # Quand le téléchargement est terminé → activer le bouton "Faces"
-    #     self.telechargement_ui.telechargement_termine.connect(
-    #         lambda: self.act_faces.setEnabled(True)
-    #     )
-    #     # Afficher la fenêtre de progression
-    #     self.telechargement_ui.show()
-            
-    # def action_generer_deux_faces(self) -> None:
-    #     """Génère les deux images de la jaquette (avant et arrière)."""
-    #     print("→ Génération des deux faces")
-    #     # 🔹 Relire les données si besoin
-    #     self.recup_donnees.charger_depuis_fichier()
-    #     self.liste.clear()
-    #     self.liste.addItems(self.recup_donnees.tableau)
-    #     # 🔹 Lancer la génération (indispensable)
-    #     lancement_av_ar = Lancement_av_ar()
-    #     # 🔹 Activer le bouton PDF
-    #     self.act_pdf.setEnabled(True)
-
-    # def action_pdf(self) -> None:
-    #     """Génère le PDF final à partir des images créées."""
-    #     self.act_titre.setEnabled(True)
-    #     gabarit = Gabarit(0.283464567,1200,1200,1380,1180) # 72.0/254
-    #     gabarit.lignes_pointillees()
-    #     gabarit.insertion_images()
-    #     gabarit.lignes_continues()
-    #     gabarit.sauvegarde()
-    #     # Ouvre un fichier PDF avec le lecteur par défaut du système
-    #     systeme = platform.system()
-    #     chemin_pdf = self.dossier_pycdcover /"image_impression.pdf"
-    #     try:
-    #         if systeme == "Windows":
-    #             os.startfile(chemin_pdf)  # intégré à Windows
-    #         elif systeme == "Darwin":  # macOS
-    #             subprocess.run(["open", chemin_pdf])
-    #         else:  # Linux ou autre Unix
-    #             subprocess.run(["xdg-open", chemin_pdf])
-    #     except Exception as e:
-    #         print(f"Erreur lors de l'ouverture du PDF : {e}")
-
-

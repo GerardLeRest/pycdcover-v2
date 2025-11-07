@@ -5,16 +5,22 @@
 # ========================================================================
 
 """
-    Petite fenêtre de progression affichée pendant la récupération des images.
-    Émet le signal 'telechargement_termine' quand le processus est fini.
+Petite fenêtre de progression affichée pendant la récupération des images.
+Émet le signal 'telechargement_termine' quand le processus est fini.
 """
 
+from __future__ import annotations
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar
 from PySide6.QtCore import Signal, Qt, QThread, QObject
 from pathlib import Path
 from Modele.recup_images_avant import Image_devant
 import re
+from typing import Any
 
+
+# ========================================================================
+# --- Thread worker ------------------------------------------------------
+# ========================================================================
 
 class WorkerTelechargement(QObject):
     """
@@ -23,36 +29,36 @@ class WorkerTelechargement(QObject):
       - progression(index, total)
       - telechargement_termine()
     """
-    telechargement_termine = Signal()
-    progression = Signal(int, int)
+    telechargement_termine: Signal = Signal()
+    progression: Signal = Signal(int, int)
 
-    def __init__(self, albums):
+    def __init__(self, albums: list[dict[str, Any]]) -> None:
         super().__init__()
-        self.albums = albums
+        self.albums: list[dict[str, Any]] = albums
 
-    def run(self):
+    def run(self) -> None:
         """Boucle principale de téléchargement."""
-        dossier_thumbnails = Path.home() / "PyCDCover" / "thumbnails"
+        dossier_thumbnails: Path = Path.home() / "PyCDCover" / "thumbnails"
         dossier_thumbnails.mkdir(parents=True, exist_ok=True)
 
-        total = len(self.albums)
-        precedent = None  # 🔸 pour éviter les doublons (ex : The Wall (I)/(II))
+        total: int = len(self.albums)
+        precedent: str | None = None  # pour éviter les doublons (ex : The Wall (I)/(II))
 
         for i, album in enumerate(self.albums, start=1):
             try:
-                artiste = album["artiste"]
-                titre = album["album"]
+                artiste: str = album["artiste"]
+                titre: str = album["album"]
 
-                # 🔹 Supprime les parenthèses (I)/(II) pour comparer
-                base_titre = re.sub(r"\s*\(.*?\)", "", titre).strip()
+                # Supprime les parenthèses (I)/(II) pour comparer
+                base_titre: str = re.sub(r"\s*\(.*?\)", "", titre).strip()
 
-                # 🔸 Si c’est le même album que le précédent → on saute
+                # Si c’est le même album que le précédent → on saute
                 if base_titre == precedent:
                     print(f"↩ Jaquette déjà créée pour : {base_titre}")
                     self.progression.emit(i, total)
                     continue
 
-                # 🔹 Crée ou télécharge la jaquette
+                # Crée ou télécharge la jaquette
                 image = Image_devant(artiste, titre)
                 image.creer()
 
@@ -64,16 +70,20 @@ class WorkerTelechargement(QObject):
                 self.progression.emit(i, total)
                 continue
 
-        # 🔔 Tous les téléchargements terminés
+        # Tous les téléchargements terminés
         self.telechargement_termine.emit()
         print("Téléchargement terminé pour tous les albums.")
 
 
+# ========================================================================
+# --- Interface utilisateur ----------------------------------------------
+# ========================================================================
 
 class TelechargementUI(QWidget):
-    telechargement_termine = Signal()
+    """Fenêtre de suivi du téléchargement des images."""
+    telechargement_termine: Signal = Signal()
 
-    def __init__(self, albums: list):
+    def __init__(self, albums: list[dict[str, Any]]) -> None:
         super().__init__()
         self.setWindowTitle("Téléchargement des images")
         self.resize(340, 120)
@@ -87,23 +97,27 @@ class TelechargementUI(QWidget):
         self.progress.setRange(0, len(albums))
         layout.addWidget(self.progress)
 
-        # --- Thread de travail ---
+        # Thread de travail
         self.worker = WorkerTelechargement(albums)
         self.thread = QThread()
         self.worker.moveToThread(self.thread)
 
+        # Connexions
         self.worker.progression.connect(self._mettre_a_jour_progression)
         self.worker.telechargement_termine.connect(self._telechargement_fini)
         self.thread.started.connect(self.worker.run)
 
         self.thread.start()
 
-    def _mettre_a_jour_progression(self, index, total):
+    def _mettre_a_jour_progression(self, index: int, total: int) -> None:
+        """Met à jour la barre de progression et le texte."""
         self.progress.setValue(index)
         self.label.setText(f"Téléchargement {index}/{total}")
 
-    def _telechargement_fini(self):
+    def _telechargement_fini(self) -> None:
+        """Méthode appelée quand tous les téléchargements sont terminés."""
         self.label.setText("Téléchargement terminé")
         self.telechargement_termine.emit()
         self.thread.quit()
         self.thread.wait()
+

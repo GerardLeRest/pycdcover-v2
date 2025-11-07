@@ -3,8 +3,6 @@
 """
 Haut_milieu.py — Affiche le nom de l’artiste, le nom de l’album
 et la jaquette correspondante (modifiable par l’utilisateur).
-Fait partie du projet PyCDCover.
-
 Auteur : Gérard Le Rest (2025)
 """
 
@@ -71,25 +69,6 @@ class Haut_milieu(QWidget):
         """)
         layout.addWidget(self.label_image, alignment=Qt.AlignHCenter)
 
-        # # Bouton "Changer"
-        # self.bouton_fichiers = QPushButton("Fichiers", self)
-        # self.bouton_fichiers.setFixedSize(140, 40)
-        # self.bouton_fichiers.setStyleSheet("""
-        #     QPushButton {
-        #         color: #4e3728;
-        #         border: 1px solid #4e3728;
-        #         border-radius: 8px;
-        #         padding: 6px 16px;
-        #         background-color: white;
-        #         font-weight: normal;
-        #     }
-        #     QPushButton:hover {
-        #         background-color: #ffaa43;
-        #         color: white;
-        #     }
-        # """)
-        # self.bouton_fichiers.clicked.connect(self.ouvrir_fichiers)
-        # layout.addWidget(self.bouton_fichiers, alignment=Qt.AlignHCenter)
 
     def charger_photo(self, infos_album) -> None:
         """Charge la jaquette depuis le nom ou le dictionnaire fourni."""
@@ -110,27 +89,6 @@ class Haut_milieu(QWidget):
             self.label_image.clear()
             self.pixmap_actuelle = None
 
-    # def ouvrir_fichiers(self):
-    #     """Affiche une petite fenêtre d'information avec un lien cliquable vers le dossier PyCDCover."""
-
-    #     # Prépare le texte avec lien cliquable (format HTML)
-    #     texte = f"""
-    #     <b>Les fichiers de PyCDCover se trouvent ici :</b><br><br>
-    #     <a href='file://{self.dossier_pycdcover}'>{self.dossier_pycdcover}</a><br><br>
-    #     (Cliquez sur le lien pour ouvrir le dossier)
-    #     """
-
-    #     # Crée et configure la boîte d’information
-    #     msg = QMessageBox(self)
-    #     msg.setWindowTitle("Dossier PyCDCover")
-    #     msg.setText(texte)                        # texte HTML
-    #     msg.setTextFormat(Qt.RichText)            # interprétation HTML activée
-    #     msg.setTextInteractionFlags(Qt.TextBrowserInteraction)  # rend le lien actif
-    #     msg.setOpenExternalLinks(True)            # ouvre avec le gestionnaire de fichiers par défaut
-    #     msg.setIcon(QMessageBox.Information)
-    #     msg.exec()                                # affiche la fenêtre
-
-
     def MAJ_haut_milieu(self, infos: dict[str, Any]) -> None:
         """Met à jour les labels artiste et album, et recharge la jaquette."""
         self.infos_album = infos  # 🔸 On garde le dictionnaire pour le bouton
@@ -139,4 +97,3 @@ class Haut_milieu(QWidget):
         couverture = infos.get("couverture", "")
         self.charger_photo(couverture)
         print("Chargement de :", couverture)
-

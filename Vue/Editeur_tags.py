@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+"""
+Editeur.py: Editer/mofier les tags dans une fenêtre
+Auteur : Gérard Le Rest (2025)
+"""
+
 from PySide6.QtWidgets import (QMainWindow, QPushButton, QTextEdit, QLabel,
                                QVBoxLayout, QHBoxLayout, QWidget, QApplication)
 from PySide6.QtCore import Qt
@@ -6,6 +12,8 @@ import sys
 
 
 class Editeur_tags(QMainWindow):
+    """Editer/mofier les tags dans une fenêtre"""
+    
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Éditeur de tags")
@@ -14,7 +22,7 @@ class Editeur_tags(QMainWindow):
         self.chemin_tags = Path.home() / "PyCDCover" / "tags.txt"
         self.interface()
     
-    def interface(self):
+    def interface(self) -> None:
         """interaction enttre les bouton et l'éditeur"""
         # layouts principal
         layout = QVBoxLayout()
@@ -45,7 +53,7 @@ class Editeur_tags(QMainWindow):
         self.text_edit.textChanged.connect(self.marquer_modifie)
         self.modifie = False
 
-    def habillage_bouton(self, bouton):
+    def habillage_bouton(self, bouton: QPushButton) -> None:
         bouton.setStyleSheet("""
             QPushButton {
                 color: #4e3728;
@@ -57,36 +65,39 @@ class Editeur_tags(QMainWindow):
                 font-weight: normal;
             }
             QPushButton:hover {
-                background-color: #6b5e4f;
+                background-color: #ffaa43;
                 color: white;
             }
         """)
 
-    def charger_tags(self):
+    def charger_tags(self) -> None:
         """placer les tags au démarrage dans l'éditeur"""
         if self.chemin_tags.exists():
             with open(self.chemin_tags, "r", encoding="utf-8") as f:
                 self.text_edit.setPlainText(f.read())
 
-    def quitter_sauvegarder(self):
+    def quitter_sauvegarder(self) -> None:
         "enregister les changements"
         if self.modifie:
             with open(self.chemin_tags, "w", encoding="utf-8") as f:
                 f.write(self.text_edit.toPlainText())
         self.close()
 
-    def marquer_modifie(self):
+    def marquer_modifie(self) -> None:
         "le texte a été modié"
         self.modifie = True    
 
-    def quitter_sans_enregistrer(self):
+    def quitter_sans_enregistrer(self) ->None:
         "Quitter sans enregistrer"
         self.close()
+
+# ------------------------------------------------------------------------------
+# Programme principal de test
+# ------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     editeur = Editeur_tags()
     editeur.show()
     app.exec()
-
 

@@ -1,9 +1,18 @@
+#!/usr/bin/env python3
+"""
+Haut_droit.py: gestion de la partie haute droite de l'interface
+Auteur : Gérard Le Rest (2025)
+"""
+
+
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSizePolicy
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 from typing import Any
 
 class Haut_droit(QWidget):
+    """affiche les données en hat à droite"""
+    
     ROW_H = 36        # hauteur uniforme des valeurs
     GAP   = 40        # espace entre blocs
     TOP   = 70       # marge haute pour descendre le premier bloc

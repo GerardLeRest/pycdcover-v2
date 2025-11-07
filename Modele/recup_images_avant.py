@@ -9,13 +9,14 @@ import os, io, re, json, requests
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 from urllib.parse import quote
+from typing import Optional, Any
 
 
 # -----------------------------------------------------------
 # --- Fonctions utilitaires ---------------------------------
 # -----------------------------------------------------------
 
-def get_itunes_cover(artiste: str, album: str) -> str | None:
+def get_itunes_cover(artiste: str, album: str) -> Optional[str]:
     """Recherche la jaquette de l'album sur iTunes et renvoie l'URL haute résolution."""
     try:
         recherche = quote(f"{artiste} {album}")
@@ -31,7 +32,7 @@ def get_itunes_cover(artiste: str, album: str) -> str | None:
     return None
 
 
-def lire_tags(fichier="tags.txt"):
+def lire_tags(fichier: str = "tags.txt") -> list[dict[str, Any]]:
     """
     Lit le fichier tags.txt et renvoie une liste de dictionnaires :
     [
@@ -44,8 +45,9 @@ def lire_tags(fichier="tags.txt"):
         ...
     ]
     """
-    albums = []
-    artiste, album = None, None
+    albums: list[dict[str, Any]] = []
+    artiste: Optional[str] = None
+    album: Optional[str] = None
 
     if not os.path.exists(fichier):
         return albums
@@ -69,7 +71,7 @@ def lire_tags(fichier="tags.txt"):
     return albums
 
 
-def nettoyer_nom(nom):
+def nettoyer_nom(nom: str) -> str:
     """Nettoie les noms d’artistes ou d’albums pour éviter les erreurs d’URL."""
     if not nom:
         return ""
@@ -80,8 +82,6 @@ def nettoyer_nom(nom):
         nom,
         flags=re.IGNORECASE,
     )
-    # ❌ Ne pas remplacer les tirets
-    # nom = re.sub(r"[-_]+", " ", nom)
     nom = re.sub(r"\s{2,}", " ", nom)
     return nom.strip()
 
@@ -91,7 +91,7 @@ def nettoyer_nom(nom):
 # -----------------------------------------------------------
 CACHE_PATH = Path.home() / "PyCDCover" / "cache.json"
 
-def lire_cache():
+def lire_cache() -> dict[str, str]:
     if CACHE_PATH.exists():
         try:
             with open(CACHE_PATH, "r", encoding="utf-8") as f:
@@ -100,7 +100,7 @@ def lire_cache():
             return {}
     return {}
 
-def ecrire_cache(cache):
+def ecrire_cache(cache: dict[str, str]) -> None:
     try:
         with open(CACHE_PATH, "w", encoding="utf-8") as f:
             json.dump(cache, f, ensure_ascii=False, indent=2)
@@ -114,22 +114,22 @@ def ecrire_cache(cache):
 class Image_devant:
     """Télécharge ou crée une miniature carrée (iTunes → MusicBrainz → secours)."""
 
-    def __init__(self, artiste, album):
-        self.artiste = nettoyer_nom(artiste)
-        self.album = nettoyer_nom(album)
-        self.user_agent = "PyCDCover/1.0 (Gérard Le Rest)"
-        self.dossier_thumbnails = Path.home() / "PyCDCover" / "thumbnails"
+    def __init__(self, artiste: str, album: str) -> None:
+        self.artiste: str = nettoyer_nom(artiste)
+        self.album: str = nettoyer_nom(album)
+        self.user_agent: str = "PyCDCover/1.0 (Gérard Le Rest)"
+        self.dossier_thumbnails: Path = Path.home() / "PyCDCover" / "thumbnails"
         self.dossier_thumbnails.mkdir(exist_ok=True)
-        self.chemin = self.dossier_thumbnails / f"{self.artiste} - {self.album}.jpg"
+        self.chemin: Path = self.dossier_thumbnails / f"{self.artiste} - {self.album}.jpg"
 
-    def _recherche_musicbrainz(self):
+    def _recherche_musicbrainz(self) -> Optional[str]:
         """Recherche l’ID du release-group sur MusicBrainz (avec cache)."""
         cache = lire_cache()
         cle = f"{self.artiste}|{self.album}"
         if cle in cache:
             return cache[cle]
 
-        def requete(query):
+        def requete(query: str) -> Optional[str]:
             url = "https://musicbrainz.org/ws/2/release-group/"
             try:
                 r = requests.get(
@@ -158,8 +158,10 @@ class Image_devant:
 
         return id_release
 
-    def _telecharger_image(self, url):
+    def _telecharger_image(self, url: Optional[str]) -> Optional[bytes]:
         """Télécharge une image à partir d'une URL."""
+        if not url:
+            return None
         try:
             r = requests.get(url, headers={"User-Agent": self.user_agent}, timeout=10)
             if r.status_code == 200:
@@ -168,7 +170,7 @@ class Image_devant:
             return None
         return None
 
-    def _image_secours(self):
+    def _image_secours(self) -> Image.Image:
         """Crée une image orange avec artiste et album."""
         taille = 512
         img = Image.new("RGB", (taille, taille), (255, 140, 0))
@@ -179,11 +181,13 @@ class Image_devant:
         except Exception:
             font = ImageFont.load_default()
         tw, th = draw.multiline_textbbox((0, 0), texte, font=font)[2:]
-        draw.multiline_text(((taille - tw) / 2, (taille - th) / 2),
-                            texte, fill="white", font=font, align="center")
+        draw.multiline_text(
+            ((taille - tw) / 2, (taille - th) / 2),
+            texte, fill="white", font=font, align="center"
+        )
         return img
 
-    def creer(self, forcer=False):
+    def creer(self, forcer: bool = False) -> Path:
         """Crée ou télécharge la miniature carrée et retourne son chemin."""
         if self.chemin.exists() and not forcer:
             print(f"✔ Déjà présent : {self.chemin.name}")
@@ -224,6 +228,8 @@ class Image_devant:
 # -----------------------------------------------------------
 # --- Test manuel -------------------------------------------
 # -----------------------------------------------------------
+
 if __name__ == "__main__":
     test = Image_devant("Alt-J", "An Awesome Wave")
     test.creer()
+

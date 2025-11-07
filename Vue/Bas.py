@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+"""
+Bas.py - Affichage dans le tableau du logiviel
+Auteur : Gérard Le Rest (2025)
+"""
+
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QApplication,
     QTableWidget, QTableWidgetItem, QHeaderView
@@ -8,6 +14,7 @@ from PySide6.QtGui import QFont
 
 
 class Bas(QWidget):
+    """affichage des méta-données du disque"""
     
     def __init__(self, chansons: list, album: str, artiste: str, annee: int):
         """initialisation"""
@@ -45,7 +52,7 @@ class Bas(QWidget):
         """)
 
         # mise en page
-        header = self.table.horizontalHeader()
+        header = self.table.horizontalHeader() 
         header.setDefaultSectionSize(32)  # fixe la hauteur des barre entière
         # police
         font = QFont("", 18, QFont.Bold)   # police par défaut, taille 18, en gras
@@ -100,6 +107,10 @@ class Bas(QWidget):
         self.table.setRowCount(len(self.chansons))
         self.remplir_table()
 
+
+# ------------------------------------------------------------------------------
+# Programme principal de test
+# ------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

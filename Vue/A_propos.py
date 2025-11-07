@@ -1,10 +1,17 @@
+#!/usr/bin/env python3
+"""
+A_propose.py - fenêtre d'informations du programme
+Auteur : Gérard Le Rest (2025)
+"""
+
 from PySide6.QtWidgets import QApplication, QDialog, QLabel, QVBoxLayout, QPushButton
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 import os
 
 class FenetreAPropos(QDialog):
-
+    """fentetre d'information sur le logiciel"""
+    
     def __init__(self):
         super().__init__()
 
@@ -126,6 +133,10 @@ class FenetreAPropos(QDialog):
 
         self.setLayout(layout)
         self.show()
+
+# ------------------------------------------------------------------------------
+# Programme principal de test
+# ------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     app = QApplication([])

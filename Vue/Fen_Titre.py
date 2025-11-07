@@ -1,12 +1,19 @@
+#!/usr/bin/env python3
+"""
+Fen_Titre.py: fenêtre de saisie du titre
+Auteur : Gérard Le Rest (2025)
+"""
+
 from PySide6.QtWidgets import (
     QLabel, QVBoxLayout, QApplication, QPushButton,
     QHBoxLayout, QLineEdit, QDialog,QMessageBox )
 import sys
 from PySide6.QtCore import Signal
-import subprocess
+import os
 
 
 class Fen_Titre(QDialog):
+    """fenetre de saisie du nom"""
 
     titre_selectionne = Signal(str)
 
@@ -41,21 +48,27 @@ class Fen_Titre(QDialog):
         # bouton
         bouton = QPushButton("Ok", self)
         bouton.setStyleSheet("""
+            QPushButton {
                 color: #4e3728;
-                border: 1px solid #ffaa43;
+                border: 1px solid #6b5e4f;
+                border-radius: 8px;
                 padding: 6px 16px;
-                border-radius: 8px;""")
-        # accept (QDialog): fereme la fenêtre
-        # fixe le code de retour à QDialog.Accepted
-        # fait sortir la boucle d’événement de exec()
-        # accept -> if dialog.exec vaut True
+                margin: 5px;
+                background-color: white;
+                font-weight: normal;
+            }
+            QPushButton:hover {
+                background-color: #ffaa43;
+                color: white;
+            }
+        """)
         bouton.clicked.connect(self.emission_titre)
         layoutH.addWidget(bouton)
         layoutV.addLayout(layoutH)
 
         self.setLayout(layoutV)
 
-    def emission_titre (self):
+    def emission_titre (self) -> None:
         """vérifie la validité du champ"""
         if not self.champ.text():
             QMessageBox.warning(self, "Erreur", "Le champ est vide.")
@@ -68,7 +81,7 @@ class Fen_Titre(QDialog):
             self.titre_selectionne.emit(self.champ.text())
             self.accept()
 
-    def recup_titre(self):
+    def recup_titre(self) ->str:
         """Renvoie le titre saisi"""
         return self.titre
 
