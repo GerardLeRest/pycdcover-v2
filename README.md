@@ -4,11 +4,18 @@
 
 ## Exemple de jaquette maquette 1 CD)
 
+Utilisé avec l’autorisation du groupe **CENT DÉTRESSES**.  
+@CENT DÉTRESSES
+
 ![Jaquette_maquette](ressources/jaquette_maquette.png)
 
 ## Exemple de jaquette multi-Albums
 
+Les images ci-dessous servent uniquement de démonstration.  
+Elles sont distribuées à titre non commercial et en basse résolution.
+
 ![Jaquette_muti-album](ressources/jaquette-multi-albums.png)
+
 # 1. Présentation
 
 **PyCDCover** est un logiciel qui permet de créer une jaquette regroupant les différentes  
@@ -17,7 +24,7 @@ informations d’un album (auteur, titre, année, genre, image).
 Le logiciel récupère automatiquement :
 
 - les **tags** depuis les fichiers audio du CD,
-- les **images d’albums** sur le site *MusicBrainz*, à partir des tags (auteur – album).
+- les **images d’albums** sur les site *Itunes* ou**MusicBrainz*, à partir des tags (auteur – album).
 
 Si aucune image n’est trouvée, elle est remplacée par une **image orange** portant le nom de l’artiste et de l’album.  
 Vous pouvez aussi **modifier librement les images** (bouton *Changer*) et **éditer les tags** à votre convenance.
@@ -25,6 +32,8 @@ Vous pouvez aussi **modifier librement les images** (bouton *Changer*) et **édi
 ---
 
 ## 2. Installation de l’environnement
+
+## 2.1. GNU/Linux
 
 ### a) Installer Python et les outils nécessaires
 
@@ -53,19 +62,27 @@ pip install -r requirements.txt
 
 Le fichier `requirements.txt` contient la liste des paquets nécessaires au projet.
 
----
-
-## 3. Lancement
+### e) Lancement
 
 Dans le répertoire du projet, exécutez :
-
 ```python
 python3 Fenetre.py
 ```
 
----
+## 2.2. Sous Windows
 
-## 4. Fonctionnement
+### Téléchargement (version 9.0.0)
+
+La dernière version stable de **PyCDCover** est disponible ici :
+➡️ [Télécharger PyCDCover.exe — v9.0.0](https://github.com/gerardlerest/pycdcover/releases/tag/v9.0.0)
+
+Cette version inclut toutes les optimisations majeures du projet (gabarits, titres automatiques, génération PDF, miniatures…).
+
+- Télécahger
+
+
+
+## 5. Fonctionnement
 
 1. Insérer le CD avec les fichiers correctement tagués.
 2. Créer le **titre du CD** (1ʳᵉ icône à gauche).
