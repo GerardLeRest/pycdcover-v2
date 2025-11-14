@@ -54,13 +54,13 @@ class Editeur_tags(QMainWindow):
         self.modifie = False
 
     def habillage_bouton(self, bouton: QPushButton) -> None:
-        bouton.setStyleSheet("""
+            bouton.setStyleSheet("""
             QPushButton {
                 color: #4e3728;
                 border: 1px solid #6b5e4f;
                 border-radius: 8px;
-                padding: 6px 16px;
-                margin: 5px;
+                padding: 6px 10px;
+                margin: 10px;
                 background-color: white;
                 font-weight: normal;
             }

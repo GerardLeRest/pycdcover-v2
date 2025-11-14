@@ -1,0 +1,37 @@
+Date : 2025-11-07 16:23:03
+Directory : /home/gerard/Bureau/pycdcover-v2/Modele
+Total : 10 files,  482 codes, 159 comments, 89 blanks, all 730 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Python   |         10 |        482 |        159 |         89 |        730 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                          | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                             |         10 |        482 |        159 |         89 |        730 |
+| . (Files)                                                     |          8 |        619 |        193 |        119 |        931 |
+| ..                                                            |          2 |       -137 |        -34 |        -30 |       -201 |
+| ../Controleur                                                 |          2 |       -137 |        -34 |        -30 |       -201 |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                      | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/gerard/Bureau/pycdcover-v2/Controleur/Application.py    | Python   |       -137 |        -34 |        -29 |       -200 |
+| /home/gerard/Bureau/pycdcover-v2/Controleur/__init__.py       | Python   |          0 |          0 |         -1 |         -1 |
+| /home/gerard/Bureau/pycdcover-v2/Modele/Gabarit.py            | Python   |        110 |         33 |         14 |        157 |
+| /home/gerard/Bureau/pycdcover-v2/Modele/Image_face_arriere.py | Python   |        125 |         48 |         20 |        193 |
+| /home/gerard/Bureau/pycdcover-v2/Modele/Image_face_avant.py   | Python   |         57 |         20 |         19 |         96 |
+| /home/gerard/Bureau/pycdcover-v2/Modele/Lancement_av_ar.py    | Python   |         22 |         15 |          8 |         45 |
+| /home/gerard/Bureau/pycdcover-v2/Modele/Tags.py               | Python   |         93 |         24 |         13 |        130 |
+| /home/gerard/Bureau/pycdcover-v2/Modele/Titres.py             | Python   |         50 |         13 |         10 |         73 |
+| /home/gerard/Bureau/pycdcover-v2/Modele/__init__.py           | Python   |          0 |          0 |          1 |          1 |
+| /home/gerard/Bureau/pycdcover-v2/Modele/recup_images_avant.py | Python   |        162 |         40 |         34 |        236 |
+| Total                                                         |          |        482 |        159 |         89 |        730 |
++---------------------------------------------------------------+----------+------------+------------+------------+------------+

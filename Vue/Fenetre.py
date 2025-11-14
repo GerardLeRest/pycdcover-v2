@@ -24,12 +24,12 @@ class Fenetre(QMainWindow):
 
     # Signaux envoyés vers le contrôleur
     # --- Signaux envoyés vers le contrôleur
-    demande_saisie_titre = Signal()                  # quand on clique sur "Titre"
-    demande_ouvrir_recuperation_tags = Signal()      # quand on clique sur "Récupérer tags"
-    demande_ouvrir_editeur_tags = Signal()           # quand on clique sur "Lire/Écrire tags"
-    demande_recuperer_images = Signal()              # quand on clique sur "Récupérer images"
-    demande_faces = Signal()                         # quand on clique sur "Créer faces"
-    demande_pdf = Signal()                           # quand on clique sur "Créer PDF"
+    demande_saisie_titre = Signal() # quand on clique sur "Titre"
+    demande_ouvrir_recuperation_tags = Signal() # quand on clique sur "Récupérer tags"
+    demande_ouvrir_editeur_tags = Signal() # quand on clique sur "Lire/Écrire tags"
+    demande_recuperer_images = Signal() # quand on clique sur "Récupérer images"
+    demande_faces = Signal() # quand on clique sur "Créer faces"
+    demande_pdf = Signal() # quand on clique sur "Créer PDF"
   
 
     def __init__(self):
@@ -50,6 +50,12 @@ class Fenetre(QMainWindow):
         self.dossier_thumbnails = self.dossier_pycdcover / "thumbnails"
         self.tags_txt = self.dossier_pycdcover / "tags.txt"
         self.editeur_tags = None  # on garde la référence de l'éditeur
+        # taillesde la fenetre
+        self.setMinimumSize(900, 600)
+        self.setMaximumSize(1250, 800)
+        self.resize(1100, 700)  # Taille par défaut agréable
+        # bloquer le bouton maximiser
+        self.setWindowFlags(Qt.Window | Qt.CustomizeWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
         # methodes
         self.menu()
         self.barre_d_outils()
@@ -97,8 +103,8 @@ class Fenetre(QMainWindow):
         self.act_recup_images.setToolTip("Récupérer les images")
         self.act_faces.setToolTip("Créer les deux faces")
         self.act_pdf.setToolTip("Créer le pdf")
+         # activer le bouton "Titre"
         self.act_titre.setEnabled(True)
-        # activer le bouton "Titre"
         # désactiver tous les autres boutons
         for a in (self.act_recup_tags, self.act_tags_rw,
                 self.act_recup_images, self.act_faces, self.act_pdf):
@@ -112,13 +118,14 @@ class Fenetre(QMainWindow):
         self.act_faces.triggered.connect(self.demande_faces.emit)
         self.act_pdf.triggered.connect(self.demande_pdf.emit)
 
+
     def panneau_gauche(self) -> None:
         """Construit le panneau gauche (liste des albums)."""
         self.recup_donnees = Haut_gauche()
         # chemin correct du fichier tags.txt
         chemin_tags = self.tags_txt
         self.recup_donnees = Haut_gauche()
-        self.recup_donnees.charger_depuis_fichier()  # <<< AJOUT ICI ✅
+        self.recup_donnees.charger_depuis_fichier()  
         print("tableau chargé:", self.recup_donnees.tableau)
         print("tableau chargé:", self.recup_donnees.tableau)
         self.liste = QListWidget()
@@ -127,7 +134,7 @@ class Fenetre(QMainWindow):
                 font-size: 16px;
                 color: #6b5e4f;
                 margin: 15px;
-                border: 1px solid #4e3728;
+                border: 1px solid #d3d3d3;
                 background-color: white;
             }
             QListWidget::item {

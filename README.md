@@ -1,3 +1,14 @@
+## Aperçu du logiciel
+
+![Interface](ressources/interface.png)
+
+## Exemple de jaquette maquette 1 CD)
+
+![Jaquette_maquette](ressources/jaquette_maquette.png)
+
+## Exemple de jaquette multi-Albums
+
+![Jaquette_muti-album](ressources/jaquette_multi-albums)
 # 1. Présentation
 
 **PyCDCover** est un logiciel qui permet de créer une jaquette regroupant les différentes  

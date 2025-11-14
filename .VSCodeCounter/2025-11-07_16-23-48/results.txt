@@ -1,0 +1,34 @@
+Date : 2025-11-07 16:23:48
+Directory : /home/gerard/Bureau/pycdcover-v2/Vue
+Total : 10 files,  776 codes, 195 comments, 161 blanks, all 1132 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Python   |         10 |        776 |        195 |        161 |      1,132 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                     | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                        |         10 |        776 |        195 |        161 |      1,132 |
++----------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                 | language | code       | comment    | blank      | total      |
++----------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/gerard/Bureau/pycdcover-v2/Vue/A_propos.py         | Python   |        104 |         24 |         18 |        146 |
+| /home/gerard/Bureau/pycdcover-v2/Vue/Bas.py              | Python   |         86 |         25 |         20 |        131 |
+| /home/gerard/Bureau/pycdcover-v2/Vue/Editeur_tags.py     | Python   |         71 |         19 |         14 |        104 |
+| /home/gerard/Bureau/pycdcover-v2/Vue/Fen_Titre.py        | Python   |         69 |         15 |         14 |         98 |
+| /home/gerard/Bureau/pycdcover-v2/Vue/Fenetre.py          | Python   |        163 |         32 |         20 |        215 |
+| /home/gerard/Bureau/pycdcover-v2/Vue/Haut_droit.py       | Python   |         67 |         17 |         15 |         99 |
+| /home/gerard/Bureau/pycdcover-v2/Vue/Haut_gauche.py      | Python   |         83 |         17 |         15 |        115 |
+| /home/gerard/Bureau/pycdcover-v2/Vue/Haut_milieu.py      | Python   |         68 |         15 |         16 |         99 |
+| /home/gerard/Bureau/pycdcover-v2/Vue/TelechargementUI.py | Python   |         65 |         31 |         28 |        124 |
+| /home/gerard/Bureau/pycdcover-v2/Vue/__init__.py         | Python   |          0 |          0 |          1 |          1 |
+| Total                                                    |          |        776 |        195 |        161 |      1,132 |
++----------------------------------------------------------+----------+------------+------------+------------+------------+

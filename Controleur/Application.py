@@ -6,8 +6,10 @@ Auteur : Gérard Le Rest (2025)
 
 import os, sys, shutil, platform, subprocess
 from pathlib import Path
-from PySide6.QtWidgets import QWidget, QApplication, QMessageBox
-from PySide6.QtCore import Slot, QTimer
+from PySide6.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog
+from PySide6.QtCore import Slot
+from PySide6.QtGui import QPixmap
+from PySide6.QtCore import Qt
 
 # --- Imports MVC ---
 from Vue.Fenetre import Fenetre
@@ -31,14 +33,18 @@ class Application(QWidget):
         self.reinitialiser_dossier_pycdcover()
         self.vue = Fenetre()
         self.dossier_pycdcover = Path.home() / "PyCDCover"
-        # --- Connexions Vue → Contrôleur
+        # Connexions Vue → Contrôleur - BP menu
         self.vue.demande_saisie_titre.connect(self.action_titre)
         self.vue.demande_ouvrir_recuperation_tags.connect(self.action_recuperer_tags)
         self.vue.demande_ouvrir_editeur_tags.connect(self.action_ouvrir_editeur_tags)
         self.vue.demande_recuperer_images.connect(self.action_recuperer_images)
         self.vue.demande_faces.connect(self.action_faces)
         self.vue.demande_pdf.connect(self.action_pdf)
-     
+        # ------------------------------------------#
+        # Connexions Vue → Contrôleur - BP "changer"
+        self.vue.haut_milieu.demande_image_changee.connect(self.on_image_changee)
+        self.donnees = {}
+      
     def demarrer(self):
         """Affiche la fenêtre principale."""
         self.vue.show()
@@ -59,7 +65,8 @@ class Application(QWidget):
         titres.titre_vertical1()
         titres.titre_vertical2()
         print("✅ Titres générés avec succès.")
-        self.vue.act_recup_tags.setEnabled(True)  # active le bouton suivant
+        # active le bouton suivant - BP récupération de tags
+        self.vue.act_recup_tags.setEnabled(True)  
 
 
     @Slot(str)
@@ -154,9 +161,17 @@ class Application(QWidget):
         except Exception as e:
             print(f"Erreur lors de l'ouverture du PDF : {e}")
 
+    @Slot(str)
+    def on_image_changee(self, nom_image: str) -> None:
+        """Met à jour la donnée métier (nom du fichier de jaquette)."""
+        # 🔹 Relance la mise à jour de la vue
+        self.donnees["couverture"] = nom_image
+        self.vue.haut_milieu.MAJ_haut_milieu(self.donnees)
+
+
 # ------------------------------------------------------------------------------
 
-    def reinitialiser_dossier_pycdcover(self)->None:
+    def reinitialiser_dossier_pycdcover(self) -> None:
         """vider le dossier PyCDCover"""
         dossier_principal = os.path.expanduser("~/PyCDCover")
         # Supprime complètement le dossier s'il existe

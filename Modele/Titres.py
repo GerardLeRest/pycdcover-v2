@@ -22,7 +22,6 @@ class Titres:
         self.dossier_racine = Path(__file__).parent.parent
         self.dossier_polices = self.dossier_racine / "ressources" / "polices"
         self.dossier_pycdcover = Path.home() / "PyCDCover"
-        self.dossier_pycdcover.mkdir(exist_ok=True)
 
     def titre_horizontal(self) -> None:
         """Création de l'image horizontale du titre"""
