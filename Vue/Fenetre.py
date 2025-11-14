@@ -85,7 +85,7 @@ class Fenetre(QMainWindow):
             }
         """)
         # --- Dossier des icônes
-        self.dossier_icones = Path(__file__).resolve().parent.parent / "icones"
+        self.dossier_icones = Path(__file__).resolve().parent.parent / "ressources" / "icones"
         # --- Création des actions
         self.act_titre = QAction(QIcon(str(self.dossier_icones / "titre.svg")), "Titre", self)
         self.act_recup_tags = QAction(QIcon(str(self.dossier_icones / "recup_tags.svg")), "Récupérer les tags", self)
