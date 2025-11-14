@@ -8,7 +8,7 @@
 
 ## Exemple de jaquette multi-Albums
 
-![Jaquette_muti-album](ressources/jaquette_multi-albums)
+![Jaquette_muti-album](ressources/jaquette-multi-albums.png)
 # 1. Présentation
 
 **PyCDCover** est un logiciel qui permet de créer une jaquette regroupant les différentes  
