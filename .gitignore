@@ -1,49 +1,36 @@
-# Environnements virtuels Python
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Environnements virtuels
 mon_env/
 venv/
 env/
-ENV/
-.venv
+.venv/
 
-# Fichiers Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-*.egg
-*.egg-info/
-dist/
+# PyInstaller
 build/
-*.whl
+dist/
+*.spec
 
-# IDE et éditeurs
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
+# Dossier de génération propre au projet
+output/
 
-# Fichiers de configuration locaux
-*.local
-.env
+# Exécutables / installateurs
+*.exe
+*.msi
+*.flatpak
+*.AppImage
+*.deb
 
 # Fichiers temporaires
-*.tmp
-*.bak
 *.log
+*.tmp
 
-# Fichiers de test
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Fichiers spécifiques au projet (à ajuster selon tes besoins)
-# tags.txt
-# *.jpeg
-# *.jpg
-# *.png
-
-# Fichiers système
+# Système
 Thumbs.db
-.directory
+.DS_Store
+
+# VSCodeCounter
+.VSCodeCounter/
