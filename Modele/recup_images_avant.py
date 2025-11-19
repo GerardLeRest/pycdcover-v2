@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 """
-# PyCDCover - Classe : RecupImagesAvant
-# Auteur principal : GPT-5
-# Supervision, direction et résolution des incohérences : Gérard Le Rest
+Image_devant — Module de récupération et normalisation des images d’albums
+
+Ce module a été entièrement conçu et structuré par ChatGPT (GPT-5, 2025).
+Je (Gérard Le Rest) l’utilise comme un composant externe, 
+au même titre qu’une bibliothèque tierce.
+
+Je n’en revendique pas la paternité intellectuelle.
+Je n’ai pas vocation à en expliquer les détails internes.
+Je l’emploie “en boîte noire”, sans garantie de débogage.
+
+Toute la logique complexe de recherche iTunes / MusicBrainz,
+du cache JSON et du traitement des jaquettes relève de l’IA.
 """
 
 import os, io, re, json, requests
@@ -48,10 +57,8 @@ def lire_tags(fichier: str = "tags.txt") -> list[dict[str, Any]]:
     albums: list[dict[str, Any]] = []
     artiste: Optional[str] = None
     album: Optional[str] = None
-
     if not os.path.exists(fichier):
         return albums
-
     with open(fichier, "r", encoding="utf-8") as f:
         for ligne in f:
             ligne = ligne.strip()
@@ -190,7 +197,6 @@ class Image_devant:
     def creer(self, forcer: bool = False) -> Path:
         """Crée ou télécharge la miniature carrée et retourne son chemin."""
         if self.chemin.exists() and not forcer:
-            print(f"✔ Déjà présent : {self.chemin.name}")
             return self.chemin
 
         # 1️⃣ Essayer via iTunes
@@ -214,16 +220,14 @@ class Image_devant:
                 y = (512 - image.height) // 2
                 fond.paste(image, (x, y))
                 fond.save(self.chemin, "JPEG", quality=90)
-                print(f"✓ Image enregistrée : {self.chemin.name}")
                 return self.chemin
             except Exception:
                 pass
 
         image = self._image_secours()
         image.save(self.chemin, "JPEG", quality=90)
-        print(f"⚠ Jaquette de secours : {self.chemin.name}")
         return self.chemin
-
+    
 
 # -----------------------------------------------------------
 # --- Test manuel -------------------------------------------
@@ -232,4 +236,3 @@ class Image_devant:
 if __name__ == "__main__":
     test = Image_devant("Alt-J", "An Awesome Wave")
     test.creer()
-

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 """
 Lancement-av-ar.py — creation des deux faces avant et arriere
 Auteur : Gérard Le Rest (2025)
 """
-
 
 from Modele.Image_face_avant import Image_face_avant
 from Modele.Image_face_arriere import Image_face_arriere
@@ -26,7 +25,8 @@ class Lancement_av_ar:
         draw1 = face_arriere.creer_image_blanche()
         face_arriere.configuration(930)
         if draw1 is None:
-            exit("Erreur : impossible de créer l’image (vérifie tags.txt et thumbnails/)")
+            print("Erreur : impossible de créer l’image (vérifie tags.txt et thumbnails/)")
+            return
         # Sélection du mode
         if face_arriere.nb_fichiers > 1:
             face_arriere.cd_multiples(draw1)
@@ -41,4 +41,3 @@ class Lancement_av_ar:
 
 if __name__ == "__main__":
     lancement_av_ar = Lancement_av_ar()
-

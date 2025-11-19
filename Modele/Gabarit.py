@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 """
 Gabarit — crée le gabarit de la jaquette à découper sous forme de PDF.
 Version avec titres horizontaux visibles, en haut des faces avant et arrière.

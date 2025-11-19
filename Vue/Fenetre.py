@@ -109,7 +109,6 @@ class Fenetre(QMainWindow):
         for a in (self.act_recup_tags, self.act_tags_rw,
                 self.act_recup_images, self.act_faces, self.act_pdf):
             a.setEnabled(False)
-        
         # Connexions Vue → Controle
         self.act_titre.triggered.connect(self.demande_saisie_titre.emit)
         self.act_recup_tags.triggered.connect(self.demande_ouvrir_recuperation_tags.emit)
@@ -126,8 +125,6 @@ class Fenetre(QMainWindow):
         chemin_tags = self.tags_txt
         self.recup_donnees = Haut_gauche()
         self.recup_donnees.charger_depuis_fichier()  
-        print("tableau chargé:", self.recup_donnees.tableau)
-        print("tableau chargé:", self.recup_donnees.tableau)
         self.liste = QListWidget()
         self.liste.setStyleSheet("""
             QListWidget {
@@ -200,21 +197,11 @@ class Fenetre(QMainWindow):
     def on_item_clicked(self, item: QListWidgetItem)->None:
         """méthode lancée suite à un clic sur un élément de la liste"""
         cle = item.text()
-        print("Clic sur :", cle)
         # récupération des infos
         infos = self.recup_donnees.albums.get(cle)
         if not infos:        
             return
         self.recup_donnees.album_selectionne.emit(infos)  # émémission de infos
-
-        # affichage des différentes données
-        print("   artiste   :", infos.get("artiste"))
-        print("   album     :", infos.get("album"))
-        print("   annee     :", infos.get("annee"))
-        print("   genre     :", infos.get("genre"))
-        print("   couverture:", infos.get("couverture"))
-        for t in infos.get("chansons", []):
-            print("   ", t["numero"], "-", t["titre"])
 
     def information(self) -> None:
         """Ouvre la fenêtre 'À propos'."""

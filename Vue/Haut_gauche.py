@@ -25,7 +25,6 @@ class Haut_gauche(QObject):
         self.tableau.clear()
         self.albums.clear()
         albums = {}
-
         # Sélection du fichier existant
         if self.fichier_tags_principal.exists():
             print(f"Fichier trouvé : {self.fichier_tags_principal}")
@@ -36,15 +35,13 @@ class Haut_gauche(QObject):
         else:
             print("Aucun fichier tags.txt trouvé.")
             return {}
-
         # Lecture du fichier choisi
         with open(self.fichier_tags, encoding="utf-8") as f:
             lignes = [l.strip() for l in f.readlines()]
-
+        # initialisation
         artiste = album = None
         annee = genre = couverture = None
         chansons = []
-
         # Analyse ligne par ligne du fichier
         for ligne in lignes + [""]:  # la ligne vide force l'enregistrement du dernier album
             if ligne.startswith("C:"):
@@ -58,7 +55,6 @@ class Haut_gauche(QObject):
             elif " - " in ligne:
                 left, right = ligne.split(" - ", 1)
                 left, right = left.strip(), right.strip()
-
                 # Ligne de type "1987 - Rock" ou "01 - Song Title"
                 if left.isdigit() and len(left) == 4:
                     try:
@@ -77,11 +73,10 @@ class Haut_gauche(QObject):
                 # Fin d'un bloc album : on enregistre les données collectées
                 if artiste and album:
                     cle = f"{artiste} - {album}"
-
                     # Si aucune couverture trouvée, on la déduit automatiquement
                     if not couverture:
                         couverture = f"{artiste} - {album}.jpg"
-
+                    # ajouter la cle atabldeu self.tableau
                     self.tableau.append(cle)
                     albums[cle] = {
                         "artiste": artiste,
@@ -91,21 +86,12 @@ class Haut_gauche(QObject):
                         "couverture": couverture,
                         "chansons": chansons,
                     }
-
                 # Réinitialisation pour l'album suivant
                 artiste = album = annee = genre = couverture = None
                 chansons = []
 
         self.albums = albums
         return albums
-
-    def afficher(self) -> None:
-        """Affiche dans la console la liste des albums chargés (pour debug)."""
-        for cle, infos in self.albums.items():
-            print(cle, "=>", infos["annee"], infos["genre"])
-            for t in infos["chansons"]:
-                print("   ", t["numero"], "-", t["titre"])
-            print(infos["couverture"])
 
     @Slot(str)
     def selectionner_album(self, cle: str) -> None:

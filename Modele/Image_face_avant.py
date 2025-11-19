@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+
 """
 Face_avant — créer l'image de la face avant de la jaquette
 Auteur : Gérard Le Rest (2025)
 """
-
 import os
 import tkinter.messagebox
 from math import ceil, sqrt
@@ -21,7 +21,7 @@ class Image_face_avant:
     def __init__(self, largeur=300, hauteur=300, env_home=None, repertoire=None):
         self.largeur = largeur
         self.hauteur = hauteur
-        #dossiers
+        #dossier utilisateur
         dossier_utilisateur = Path.home()
         # Dossier de travail de l'appli
         self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
@@ -45,6 +45,14 @@ class Image_face_avant:
         self.Larg_Im_fin = self.NiL * self.largeur + (self.NiL + 1) * 10
         self.Haut_Im_fin = self.NiH * self.hauteur + (self.NiH + 1) * 10
 
+    def rendre_carre(self, img):
+        """rendre l'image carré sans transformation"""
+        w, h = img.size
+        s = min(w, h)
+        x = (w - s) // 2
+        y = (h - s) // 2
+        return img.crop((x, y, x + s, y + s))
+
     def assemblage_photos(self) -> None:
         """Assemble les miniatures du dossier thumbnails pour créer la jaquette."""
         try:
@@ -54,11 +62,13 @@ class Image_face_avant:
                 for i in range(self.NiL):
                     if index >= len(self.fichiers):
                         break
-
-                    # ouverture de l’image à coller
+                    # chemin de l’image à insérer
                     chemin_image = self.thumbnail_path / self.fichiers[index]
                     into = Image.open(chemin_image)
-
+                    # recadrage carré centré
+                    into = self.rendre_carre(into)
+                    # redimensionnement EXACT à la taille de la grille
+                    into = into.resize((self.largeur, self.hauteur), Image.LANCZOS)
                     # si dernière ligne incomplète, centrer horizontalement
                     if j == self.NiH - 1 and self.NiD != 0:
                         marge = int((self.Larg_Im_fin - self.NiD * (self.largeur + 10) + 10) / 2)
@@ -67,20 +77,12 @@ class Image_face_avant:
                         x = 10 + (self.largeur + 10) * i
 
                     y = 10 + (self.hauteur + 10) * j
-
-                    # assure l’égalité entre la largeur et la hauteur
-                    if into.size != (self.largeur, self.hauteur):
-                        into = into.resize((self.largeur, self.hauteur), Image.LANCZOS)
-                    if into.mode != "RGB":
-                        into = into.convert("RGB")
-
+                    # collage sur l'image finale
                     im.paste(into, (x, y, x + self.largeur, y + self.hauteur))
                     index += 1
-
             # sauvegarde de la mosaïque finale
             sortie = self.dossier_pycdcover / "Image_thumbnails.jpeg"
             im.save(sortie, "jpeg")
-
         except ZeroDivisionError:
             tkinter.messagebox.showinfo("Info", "Aucune image trouvée")
     

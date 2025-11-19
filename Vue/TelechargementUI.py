@@ -1,10 +1,18 @@
-# ========================================================================
-# PyCDCover - Classe : RecupImagesAvant
-# Auteur principal : GPT-5
-# Supervision, direction et résolution des incohérences : Gérard Le Rest
-# ========================================================================
-
+#!/usr/bin/env python3
 """
+Image_devant — Module de récupération et normalisation des images d’albums
+
+Ce module a été entièrement conçu et structuré par ChatGPT (GPT-5, 2025).
+Je (Gérard Le Rest) l’utilise comme un composant externe, 
+au même titre qu’une bibliothèque tierce.
+
+Je n’en revendique pas la paternité intellectuelle.
+Je n’ai pas vocation à en expliquer les détails internes.
+Je l’emploie “en boîte noire”, sans garantie de débogage.
+
+Toute la logique complexe de recherche iTunes / MusicBrainz,
+du cache JSON et du traitement des jaquettes relève de l’IA.
+
 Petite fenêtre de progression affichée pendant la récupération des images.
 Émet le signal 'telechargement_termine' quand le processus est fini.
 """
@@ -120,4 +128,3 @@ class TelechargementUI(QWidget):
         self.telechargement_termine.emit()
         self.thread.quit()
         self.thread.wait()
-

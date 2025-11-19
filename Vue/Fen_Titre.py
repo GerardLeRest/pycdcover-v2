@@ -94,4 +94,3 @@ if __name__ == "__main__":
         print("Annulé.")
     # on peut quitter proprement (évite de bloquer sur application.exec())
     sys.exit(0)
-

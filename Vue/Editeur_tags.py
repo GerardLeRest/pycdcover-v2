@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
+
 """
 Editeur.py: Editer/mofier les tags dans une fenêtre
 Auteur : Gérard Le Rest (2025)
 """
 
-from PySide6.QtWidgets import (QMainWindow, QPushButton, QTextEdit, QLabel,
+from PySide6.QtWidgets import (QMainWindow, QPushButton, QTextEdit,
                                QVBoxLayout, QHBoxLayout, QWidget, QApplication)
 from PySide6.QtCore import Qt
 from pathlib import Path

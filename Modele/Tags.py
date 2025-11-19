@@ -36,7 +36,7 @@ class Tags(QMainWindow):
         self.setCentralWidget(widget)
 
     def recuperer_tags(self)->None:
-        """Sélectionne un dossier et détecte les albums simples ou multiples (CD1, CD2...), puis extrait les tags."""
+        """Créer la lsites des albums (dictionnaires) * artistes et albums - liste d'objets Path"""
         # fenetre du choix du dossier des albums
         chemin = QFileDialog.getExistingDirectory(self, "Choisir le répertoire du CD", "/media")
         if not chemin:
@@ -52,10 +52,9 @@ class Tags(QMainWindow):
                 albums.extend(sous_dossiers)  # CD1, CD2, etc.
             else:
                 albums.append(d)
-        # cas des maquettes
+        # cas des maquettes -on force le lecteur comme unique album
         if not albums:
             albums = [lecteur]
-
         total = sum(len(list(a.glob("*.mp3"))) for a in albums)
         if total == 0:
             QMessageBox.information(self, "Aucun MP3", "Aucune piste MP3 trouvée.")
@@ -66,7 +65,6 @@ class Tags(QMainWindow):
         QApplication.processEvents()
         # 👇 Ici on appelle directement la suite
         self.fichier_sortie(albums)
-
         
     def fichier_sortie(self, albums:list)->None:
         # Fichier de sortie
@@ -121,10 +119,8 @@ class Tags(QMainWindow):
 # ------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    application = QApplication(sys.argv)
+    app = QApplication(sys.argv)
     tags = Tags()
     tags.show()
-    albums = tags.recuperer_tags()
-    tags.fichier_sortie(albums)
-    # on réfère sys.exit(app.exec()) à app.exec()
-    sys.exit(application.exec()) # adapté à windows (sorte 0:ok 1:nok -plus propre)
+    tags.recuperer_tags()   # ← on redemande le dossier
+    sys.exit(app.exec())

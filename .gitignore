@@ -1,36 +1,28 @@
-# Python cache
+# Python
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
 
 # Environnements virtuels
-mon_env/
 venv/
 env/
-.venv/
+mon_env/
 
-# PyInstaller
-build/
-dist/
-*.spec
-
-# Dossier de génération propre au projet
-output/
-
-# Exécutables / installateurs
-*.exe
-*.msi
-*.flatpak
+# AppImage build directories
+AppImage/
+squashfs-root/
 *.AppImage
-*.deb
+appimagetool*
+*.AppDir
+build/
+build-dir/
 
-# Fichiers temporaires
+# Flatpak
+flatpak/
+flatpack/
+.flatpak-builder/
+
+# Divers
 *.log
-*.tmp
-
-# Système
-Thumbs.db
-.DS_Store
-
-# VSCodeCounter
-.VSCodeCounter/
+*.bak

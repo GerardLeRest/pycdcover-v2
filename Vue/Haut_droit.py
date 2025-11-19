@@ -71,11 +71,9 @@ class Haut_droit(QWidget):
         layout_principal = QVBoxLayout(self)
         layout_principal.setContentsMargins(8, self.TOP, 8, 8)  # TOP applique le décalage
         layout_principal.setSpacing(self.GAP)
-        
         # blocs simples
         layout_principal.addWidget(self.bloc("Artiste", self.nom_artiste))
         layout_principal.addWidget(self.bloc("Album", self.album))
-
         # bloc " Année - Genre"
         ligne = QWidget(self)
         hbox = QHBoxLayout(ligne)
@@ -84,7 +82,6 @@ class Haut_droit(QWidget):
         hbox.addWidget(self.bloc("Année", self.annee))
         hbox.addWidget(self.bloc("Genre", self.genre))
         layout_principal.addWidget(ligne)
-
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
 
     def MAJ_haut_droit(self, infos:dict[str, Any]) -> None:

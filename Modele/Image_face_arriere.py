@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 """
 Face_arriere — crée l'image de la face arrière de la jaquette
 Auteur : Gérard Le Rest (2025)
@@ -33,7 +33,6 @@ class Image_face_arriere:
         fichier_tags = self.dossier_pycdcover / "tags.txt"
         # Détermination du nombre d'images dans le dossier thumbnails
         self.nb_fichiers = sum(1 for f in self.dossier_thumbnails.iterdir() if f.is_file())
-        print(f"nombre de fichiers {self.nb_fichiers}")
         if not fichier_tags.exists():
             print("Fichier tags.txt introuvable.")
             return
@@ -52,7 +51,6 @@ class Image_face_arriere:
 
     def configuration(self, hauteur: float) -> None:
         """Configure les polices et les positions de départ selon la hauteur."""
-        print(f"self.nb_fichiers: {self.nb_fichiers}")
         # Calculs de base 
         nbre_colonnes = 3
         nbre_lignes = len(self.lignes)
@@ -60,11 +58,9 @@ class Image_face_arriere:
         self.taille = 890 / ((nbre_lignes + 1) / nbre_colonnes)
         if self.taille > 26:
             self.taille = 26
-        print(f"Taille de police calculée : {self.taille:.2f}")
         # Chargement des polices
         self.font_police = ImageFont.truetype(self.police_normale, int(self.taille))
         self.font_police_grasse = ImageFont.truetype(self.police_grasse, int(self.taille))
-
         # Position de départ et limites
         self.x, self.y = 20, 20
         self.ligne_max = hauteur - 5
@@ -78,48 +74,36 @@ class Image_face_arriere:
             ligne = ligne.strip()
             if not ligne:
                 continue
-
+            # Chanteur(s)
             if ligne.startswith("C: "):
                 # Extraction du nom d’artiste
                 self.artiste = ligne[3:].strip()
                 continue
-
+            # Albums
             elif ligne.startswith("A: "):
                 # Extraction du nom d’album
                 self.album = ligne[3:].strip()
-                self.taille = 45
-
                 # Police grasse avec repli sur défaut
-                try:
-                    self.font_police_grasse = ImageFont.truetype(self.police_grasse, int(self.taille))
-                except OSError:
-                    self.font_police_grasse = ImageFont.load_default()
-
-                couleur = "darkblue"
-                texte = self.album
-
-                # Exemple d’affichage possible (à adapter selon ton contexte)
-                # draw.text((self.x, self.y), texte, font=self.font_police_grasse, fill=couleur)
-                
-            elif i == 2:  # année et genre
+                self.dessiner(50, self.album, "blue", self.font_police_grasse)
+                self.y += 80
                 continue
-            # gestion de l'espace entre le titre de l'album et la première chanson
-            if nbre_chansons == 0:  # première chanson
-                self.y += 40
-            # Chanson suivante
-            nbre_chansons += 1
-            self.taille = 35
-            self.font_police = ImageFont.truetype(self.police_grasse, int(self.taille))
-            texte = ligne
-            font = self.font_police
-            couleur = "gray"
-            # Cenrage sur X
-            largeur_texte = draw.textlength(texte, font=font)
-            x = (self.image.width - largeur_texte) // 2
-            # dessin du texte
-            draw.text((x, self.y), texte, fill=couleur, font=font)
-            self.y += 45  # Décalage entre les lignes
-            self.changer_titres_verticaux()
+            elif i>=2:
+                # Chanson suivante
+                self.dessiner(35, ligne, "gray", self.font_police)
+                self.y += 48  # Décalage entre les lignes
+                continue
+        self.changer_titres_verticaux()
+
+    def dessiner(self, taille: int, texte: str, couleur: str, font: ImageFont.FreeTypeFont) -> None:
+        """Dessine une ligne avec une taille ajustée sans modifier les polices originales."""
+        # Crée une police temporaire avec la même famille, et la taille demandée
+        police_temp = ImageFont.truetype(font.path, taille)
+        # Centrage horizontal
+        largeur_texte = self.draw.textlength(texte, font=police_temp)
+        x = (self.image.width - largeur_texte) // 2
+        # Dessin
+        self.draw.text((x, self.y), texte, fill=couleur, font=police_temp)
+        
 
     def changer_titres_verticaux(self) -> None:
         "Changer les titres verticaux : artiste - album"
@@ -152,18 +136,12 @@ class Image_face_arriere:
                 couleur = "darkblue"
             else:  # chanson
                 texte = ligne
-                #texte = self.couper_titre (texte, self.largeur_colonne)
                 font = self.font_police
                 couleur = "gray"
-            # --- Ajustement si le texte dépasse la largeur de la colonne ---
-            # while draw.textbbox((0, 0), texte, font=font)[2] > (self.largeur_colonne - 10):
-            #     texte = texte[:-1]
-            # --- Dessin du texte ---
             draw.text((self.x, self.y), texte, fill=couleur, font=font)
-
-            # --- Ligne suivante ---
+            # Ligne suivante
             self.y += self.taille
-            # --- Changement de colonne ---
+            # Changement de colonne
             if self.y > self.ligne_max - self.taille:
                 self.y = 20
                 self.x += self.largeur_colonne + 10
@@ -172,12 +150,11 @@ class Image_face_arriere:
         """Sauvegarde de l'image générée."""
         chemin_sortie = self.dossier_pycdcover / "Image_Back_Cover.png"
         self.image.save(chemin_sortie, "PNG")
-        print(f"Image arrière enregistrée : {chemin_sortie}")
-
 
 # ------------------------------------------------------------------------------
 # Programme principal de test
 # ------------------------------------------------------------------------------
+
 if __name__ == "__main__":
     face_arriere = Image_face_arriere()
     draw1 = face_arriere.creer_image_blanche()

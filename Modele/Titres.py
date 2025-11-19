@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 Titre.py - Crée les images des titres (horizontal et verticaux) pour la jaquette CD
 Auteur : Gérard Le Rest (2025)
@@ -25,7 +26,6 @@ class Titres:
 
     def titre_horizontal(self) -> None:
         """Création de l'image horizontale du titre"""
-        print("titre_horizontal")
         imageH = Image.new("RGB", (self.L_devant, 220), "white")
         draw = ImageDraw.Draw(imageH)
         police1 = self.dossier_polices / "FreeSerif.ttf"
