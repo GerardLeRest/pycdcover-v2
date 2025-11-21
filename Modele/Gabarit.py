@@ -22,6 +22,7 @@ class Gabarit:
         self.L_back_cover = L_back_cover
         self.H_back_cover = H_back_cover
         self.coefficient = coefficient
+        self.canv = None
         # dossier utilisateur
         dossier_utilisateur = Path.home()
         # Dossier de travail de l'appli

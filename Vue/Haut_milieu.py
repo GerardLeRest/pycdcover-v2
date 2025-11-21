@@ -66,24 +66,24 @@ class Haut_milieu(QWidget):
         """)
         layout.addWidget(self.label_image, alignment=Qt.AlignHCenter)
         # Bouton "Changer"
-        self.bouton_changer = QPushButton("Changer", self)
-        self.bouton_changer.setFixedSize(140, 40)
-        self.bouton_changer.setStyleSheet("""
-            QPushButton {
-                color: #4e3728;
-                border: 1px solid #6b5e4f;
-                border-radius: 8px;
-                padding: 6px 16px;
-                background-color: white;
-                font-weight: normal;
-            }
-            QPushButton:hover {
-                background-color: #ffaa43;
-                color: white;
-            }
-        """)
-        layout.addWidget(self.bouton_changer, alignment=Qt.AlignHCenter)
-        self.bouton_changer.clicked.connect(self.action_changer)
+        # self.bouton_changer = QPushButton("Changer", self)
+        # self.bouton_changer.setFixedSize(140, 40)
+        # self.bouton_changer.setStyleSheet("""
+        #     QPushButton {
+        #         color: #4e3728;
+        #         border: 1px solid #6b5e4f;
+        #         border-radius: 8px;
+        #         padding: 6px 16px;
+        #         background-color: white;
+        #         font-weight: normal;
+        #     }
+        #     QPushButton:hover {
+        #         background-color: #ffaa43;
+        #         color: white;
+        #     }
+        # """)
+        # layout.addWidget(self.bouton_changer, alignment=Qt.AlignHCenter)
+        # self.bouton_changer.clicked.connect(self.action_changer)
 
 
     def charger_photo(self, infos_album) -> None:
@@ -103,24 +103,24 @@ class Haut_milieu(QWidget):
             self.label_image.clear()
             self.pixmap_actuelle = None
 
-    @Slot()
-    def action_changer(self) -> None:
-        """Permet de choisir une nouvelle image via une boîte de dialogue."""
-        fichier, _ = QFileDialog.getOpenFileName(
-            self,
-            "Choisir une nouvelle jaquette",
-            "",
-            "Images (*.png *.jpg *.jpeg *.bmp *.gif)"
-        )
-        if not fichier:
-            return
-        # Charger et afficher l'image
-        self.couverture = Path(fichier).name
-        pixmap = QPixmap(fichier).scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        self.label_image.setPixmap(pixmap)
-        self.pixmap_actuelle = pixmap   # empêche sa suppression
-        # Notifier le contrôleur
-        self.demande_image_changee.emit(self.couverture)
+    # @Slot()
+    # def action_changer(self) -> None:
+    #     """Permet de choisir une nouvelle image via une boîte de dialogue."""
+    #     fichier, _ = QFileDialog.getOpenFileName(
+    #         self,
+    #         "Choisir une nouvelle jaquette",
+    #         "",
+    #         "Images (*.png *.jpg *.jpeg *.bmp *.gif)"
+    #     )
+    #     if not fichier:
+    #         return
+    #     # Charger et afficher l'image
+    #     self.couverture = Path(fichier).name
+    #     pixmap = QPixmap(fichier).scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+    #     self.label_image.setPixmap(pixmap)
+    #     self.pixmap_actuelle = pixmap   # empêche sa suppression
+    #     # Notifier le contrôleur
+    #     self.demande_image_changee.emit(self.couverture)
 
     def MAJ_haut_milieu(self, infos: dict[str, Any]) -> None:
         """Met à jour les labels artiste et album, et recharge la jaquette."""

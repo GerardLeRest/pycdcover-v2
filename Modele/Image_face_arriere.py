@@ -20,7 +20,7 @@ class Image_face_arriere:
         dossier_utilisateur = Path.home()
         self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
         self.dossier_thumbnails = self.dossier_pycdcover / "thumbnails"
-        os.chdir(self.dossier_pycdcover)
+        self.fichier_tags = self.dossier_pycdcover / "tags.txt"
         # --- Chemins vers les fichiers .ttf ---
         self.dossier_polices = os.path.join(self.dossier_racine, "ressources", "polices")
         self.police_normale = f"{self.dossier_polices}/DejaVuSans.ttf"
@@ -28,27 +28,24 @@ class Image_face_arriere:
         self.artiste = ""
         self.album = ""
 
-    def creer_image_blanche(self)->None:
-        """Lit tags.txt et génère l’image arrière."""
-        fichier_tags = self.dossier_pycdcover / "tags.txt"
-        # Détermination du nombre d'images dans le dossier thumbnails
-        self.nb_fichiers = sum(1 for f in self.dossier_thumbnails.iterdir() if f.is_file())
-        if not fichier_tags.exists():
-            print("Fichier tags.txt introuvable.")
-            return
-        # Lecture du fichier (on conserve les lignes vides)
-        # on enlève \n à chaque ligne
-        with open(fichier_tags, "r") as f:
+    def creer_image_blanche(self):
+        """Lit tags.txt, choisit la taille, crée l'image blanche et renvoie draw."""
+        # Lire les lignes du fichier
+        with open(self.fichier_tags, "r") as f:
             self.lignes = [ligne.rstrip("\n") for ligne in f.readlines()]
-        # Création de l'image blanche
-        if self.nb_fichiers >= 1:  # mode multi-albums
+        # Nombre d'images dans thumbnails
+        self.nb_fichiers = sum(1 for f in self.dossier_thumbnails.iterdir() if f.is_file())
+        # Deux tailles différentes
+        if self.nb_fichiers > 1:
             largeur, hauteur = 1380, 930
-        else:  # maquette simple
+        else:
             largeur, hauteur = 460, 460
+        # Image blanche
         self.image = Image.new("RGB", (largeur, hauteur), "white")
-        self.draw = ImageDraw.Draw(self.image)
-        return self.draw
+        draw = ImageDraw.Draw(self.image)
+        return draw
 
+    
     def configuration(self, hauteur: float) -> None:
         """Configure les polices et les positions de départ selon la hauteur."""
         # Calculs de base 
@@ -67,43 +64,58 @@ class Image_face_arriere:
         self.largeur_colonne = 1340 / nbre_colonnes - 10
 
     def cd_maquette(self, draw: ImageDraw.ImageDraw) -> None:
-        """Affiche un album unique centré."""
-        self.y = 100
-        nbre_chansons = 0
+        """Affiche un album unique centré avec ajustement automatique entre les lignes."""
+        self.y = 30
+        # On compte le nombre de chansons
+        chansons = []
+        for i, ligne in enumerate(self.lignes):
+            ligne = ligne.strip()
+            if not ligne:
+                continue
+            if i >= 2:
+                chansons.append(ligne)
+        nbre_chansons = len(chansons)
+        # Ajustement automatique de l'espacement
+        # (Evite que les titres débordent dans la zone du bas)
+        if nbre_chansons <= 8:
+            espace = 36
+        elif nbre_chansons <= 12:
+            espace = 30
+        else:
+            espace = 20
+        # Deuxième parcours pour affichage
         for i, ligne in enumerate(self.lignes):
             ligne = ligne.strip()
             if not ligne:
                 continue
             # Chanteur(s)
             if ligne.startswith("C: "):
-                # Extraction du nom d’artiste
                 self.artiste = ligne[3:].strip()
                 continue
-            # Albums
+            # Album
             elif ligne.startswith("A: "):
-                # Extraction du nom d’album
                 self.album = ligne[3:].strip()
-                # Police grasse avec repli sur défaut
-                self.dessiner(50, self.album, "blue", self.font_police_grasse)
-                self.y += 80
+                self.taille = 20
+                self.dessiner( self.taille, self.album, "blue", self.font_police_grasse )
+                self.y += 36
                 continue
-            elif i>=2:
-                # Chanson suivante
-                self.dessiner(35, ligne, "gray", self.font_police)
-                self.y += 48  # Décalage entre les lignes
+            # Chansons
+            elif i > 2: # on évite le genre et l'annnée
+                self.taille = 16
+                self.dessiner(self.taille, ligne, "gray", self.font_police)
+                self.y += espace
                 continue
         self.changer_titres_verticaux()
 
     def dessiner(self, taille: int, texte: str, couleur: str, font: ImageFont.FreeTypeFont) -> None:
         """Dessine une ligne avec une taille ajustée sans modifier les polices originales."""
-        # Crée une police temporaire avec la même famille, et la taille demandée
+        # Crée une police temporaire avec la même famille et la taille demandée
         police_temp = ImageFont.truetype(font.path, taille)
         # Centrage horizontal
         largeur_texte = self.draw.textlength(texte, font=police_temp)
         x = (self.image.width - largeur_texte) // 2
         # Dessin
         self.draw.text((x, self.y), texte, fill=couleur, font=police_temp)
-        
 
     def changer_titres_verticaux(self) -> None:
         "Changer les titres verticaux : artiste - album"
@@ -123,15 +135,13 @@ class Image_face_arriere:
             if not ligne:
                 self.y += espace_inter_album
                 continue
-            # --- Type de ligne ---
-            if ligne.startswith("C: "):  # artiste
+            # Type de ligne 
+            if ligne.startswith("C:"):   # artiste
                 texte = ligne[3:]
-                #texte = self.couper_titre (texte, self.largeur_colonne)
                 font = self.font_police_grasse
                 couleur = "black"
-            elif ligne.startswith("A: "):  # album
+            elif ligne.startswith("A:"):  # album
                 texte = ligne[3:]
-                #texte = self.couper_titre (texte, self.largeur_colonne)
                 font = self.font_police_grasse
                 couleur = "darkblue"
             else:  # chanson
@@ -145,7 +155,8 @@ class Image_face_arriere:
             if self.y > self.ligne_max - self.taille:
                 self.y = 20
                 self.x += self.largeur_colonne + 10
-    
+
+        
     def sauvegarde_image(self) -> None:
         """Sauvegarde de l'image générée."""
         chemin_sortie = self.dossier_pycdcover / "Image_Back_Cover.png"

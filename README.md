@@ -1,4 +1,4 @@
-## Aperçu du logiciel
+# Aperçu du logiciel
 
 ![Interface](ressources/interface.png)
 
@@ -16,107 +16,145 @@ Elles sont distribuées à titre non commercial et en basse résolution.
 
 ![Jaquette_multi-albums](ressources/jaquette-multi-albums.png)
 
+---
+
 # 1. Présentation
 
-**PyCDCover** est un logiciel qui permet de créer une jaquette regroupant les différentes informations d’un album (auteur, titre, année, genre, image).
+**PyCDCover** est un logiciel permettant de créer une jaquette regroupant les informations d’un album (auteur, titre, année, genre, image).
 
 Le logiciel récupère automatiquement :
 
-- les **tags** depuis les fichiers audio du CD,
+- les **tags** depuis les fichiers audio du CD ;
+- les **images d’albums** sur iTunes ou MusicBrainz, à partir des tags (artiste – album).
 
-- les **images d’albums** sur les sites iTunes ou MusicBrainz, à partir des tags (auteur – album).
-
-Si aucune image n’est trouvée, elle est remplacée par une **image orange** portant le nom de l’artiste et de l’album.
-Vous pouvez aussi **modifier librement les images** (bouton Changer) et **éditer/modifier les tags** à votre convenance.
+Si aucune image n’est trouvée, elle est remplacée par une **image orange** portant le nom de l’artiste et de l’album.  
+Vous pouvez remplacer cette image par celle de votre choix (cadrée de préférence).
 
 ---
 
-## 2. Installation de l’environnement
+# 2. Installations automatiques
 
-## 2.1. GNU/Linux
+## 2.1. Sous Windows
 
-### a) Installer Python et les outils nécessaires
+La dernière version stable de **PyCDCover** est disponible ici :  
+➡️ [Télécharger PyCDCover.exe — v2.0.0
+
+(https://github.com/gerardlerest/pycdcover/releases/tag/v2.0.0)
+
+Vous pouvez ensuite passer à la section 4.]
+
+---
+
+## 2.2. Sous GNU/Linux
+
+➡️ **PyCDCover est disponible au format Flatpak.**
+
+Installation :
+
+```bash
+flatpak install fr.gerardlerest.PyCDCover
+```
+
+Lancement :
+
+```bash
+flatpak run fr.gerardlerest.PyCDCover
+```
+
+Vous pouvez ensuite passer à la section 4.
+
+---
+
+# 3. Utilisation Python — GNU/Linux
+
+*(Pour les utilisateurs souhaitant lancer PyCDCover depuis les sources.)*
+
+## 3.1. Installer Python et les outils nécessaires
 
 ```bash
 sudo apt update
 sudo apt install python3 python3-pip python3-venv -y
 ```
 
-### b) Téléchargement du programme
-Ouvrez un terminal et placez-vous dans le répertoire de travail (~/Bureau par exemple):
+## 3.2. Télécharger le programme
 
 ```bash
 git clone git@github.com:GerardLeRest/pycdcover-v2.git
 cd pycdcover-v2
 ```
 
-### c) Créer un environnement virtuel
+## 3.3. Créer un environnement virtuel
 
 ```bash
 python3 -m venv mon_env
 ```
 
-### d) Activer l’environnement
+### Activer l’environnement
 
 ```bash
 source mon_env/bin/activate
 ```
 
-### e) Installer les dépendances
+### Installer les dépendances
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Le fichier `requirements.txt` contient la liste des paquets nécessaires au projet.
+## 3.4. Lancement
 
-### f) Lancement
-
-Dans le répertoire du projet, exécutez :
-```python
+```bash
 python3 Main.py
 ```
 
-## 2.2. Sous Windows
+---
 
-### Téléchargement (version 9.0.0)
+# 4. Fonctionnement du programme
 
-La dernière version stable de **PyCDCover** est disponible ici :
-➡️ [Télécharger PyCDCover.exe — v9.0.0](https://github.com/gerardlerest/pycdcover/releases/tag/v9.0.0)
+## 4.1. Fonctionnement avec recherche automatique des images
 
-Cette version inclut toutes les dernières "optimisations majeures" du projet.
+1. Insérez le CD contenant les fichiers correctement tagués.  
+2. Créez le **titre du CD** (1ʳᵉ icône à gauche).  
+3. **Récupérez les tags et les images** via MusicBrainz (2ᵉ icône).  
+4. **Éditez les tags** si nécessaire (3ᵉ icône).  **TRES IMPORTANT***: C'est ici que vous couperez les titres trop longs selon vos souhaits
+5. **Créez les images avant et arrière** (4ᵉ icône).  
+6. **Générez le PDF** découpable et imprimable.
 
 ---
 
-## 3. Fonctionnement du programme
+## 4.2. Jaquette non référencée sur le web
 
-1. Insérez le CD avec les fichiers correctement tagués.
-2. Créez le **titre du CD** (1ʳᵉ icône à gauche).
-3. **Récupérez les tags et les images** sur Internet via *MusicBrainz* (2ᵉ icône).
-4. **Éditez ou modifiez les tags** si nécessaire (3ᵉ icône).
-5. **Créez les images avant et arrière du CD** (4ᵉ icône).
-6. **Générez le fichier PDF** découpable et imprimable.
+Si une mauvaise image apparaît, voici la procédure :
+
+1. Trouvez la bonne pochette sur Internet (512×512 recommandé).  
+2. Enregistrez-la dans le dossier **thumbnails**,  
+   → avec **exactement le même nom** que l’image incorrecte.  
+3. Recréez la face avant puis la face arrière.  
+4. Générez le PDF final.
+
+**Remarque importante :**  
+Ne cliquez pas sur “Récupérer les images”. Cela réinstallerait l’ancienne pochette.
 
 ---
 
-## 5. Informations et Licences
+# 5. Informations et licences
 
-**Informations sur le logiciel**
+**PyCDCover – Générateur de jaquettes de CD audio**  
+Auteur : Gérard LE REST  
+Licence : GNU GPL v3  
+© Gérard LE REST  
+Email : gerard.lerest@orange.fr  
+Créé le : 01-04-2010  
+Dernière mise à jour : 2025-10-18  
 
-PyCDCover – Générateur de jaquettes de CD audio
-Auteur : Gérard LE REST
-Licence : GNU GPL v3
-© Gérard LE REST
-Email : gerard.lerest@orange.fr
-"Créé le" 01-04-2010
-Dernière mise à jour : 2025-10-18
+---
 
-**Licence** :
+## Licence
 
-- **Licence libre : GNU GPL v3 (ou version ultérieure)**  
-  Ce programme est un logiciel libre : vous pouvez le modifier et le redistribuer
-  selon les termes de la Licence publique générale GNU (GPL-V3),
-  version 3 ou toute version ultérieure.  
-  Il est fourni sans aucune garantie,
-  ni de valeur commerciale, ni d’adéquation à un usage particulier.  
-  [Consulter la licence GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html)
+**Licence libre : GNU GPL v3 (ou version ultérieure)**  
+
+Ce programme est un logiciel libre : vous pouvez le modifier et le redistribuer selon les termes de la Licence publique générale GNU (GPL v3), version 3 ou toute version ultérieure.  
+
+Il est fourni sans aucune garantie — ni implicite ni explicite — concernant une valeur commerciale ou une adéquation à un usage particulier.  
+
+[Consulter la licence GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html)

@@ -21,6 +21,17 @@ class Image_face_avant:
     def __init__(self, largeur=300, hauteur=300, env_home=None, repertoire=None):
         self.largeur = largeur
         self.hauteur = hauteur
+        self.nb_fichiers = 0
+        self.lignes = []
+        self.image = None
+        self.draw = None
+        self.taille = 0
+        self.x = 0
+        self.y = 0
+        self.ligne_max = 0
+        self.largeur_colonne = 0
+        self.font_police = None
+        self.font_police_grasse = None
         #dossier utilisateur
         dossier_utilisateur = Path.home()
         # Dossier de travail de l'appli

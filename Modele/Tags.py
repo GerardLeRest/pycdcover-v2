@@ -34,6 +34,7 @@ class Tags(QMainWindow):
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
+        self.fichier_tags = Path.home() / "PyCDCover" / "tags.txt" # fichier des tags
 
     def recuperer_tags(self)->None:
         """Créer la lsites des albums (dictionnaires) * artistes et albums - liste d'objets Path"""
@@ -66,33 +67,64 @@ class Tags(QMainWindow):
         # 👇 Ici on appelle directement la suite
         self.fichier_sortie(albums)
         
-    def fichier_sortie(self, albums:list)->None:
-        # Fichier de sortie
-        fichier = Path.home() / "PyCDCover" / "tags.txt"
-        fichier.parent.mkdir(exist_ok=True)
+    def fichier_sortie(self, albums: list) -> None:
+        """écrire le fichier tags.txt"""
         count = 0
-        with open(fichier, "w", encoding="utf-8") as f:
-            for album in albums:
+        self.nbre_albums = 0
+        with open(self.fichier_tags, "w", encoding="utf-8") as f:
+            for i, album in enumerate (albums):
                 mp3s = self._mp3s_tries_par_piste(album)
-                if not mp3s: # fichier .jpeg, etc...
+                if not mp3s:
                     continue
-                # information du de l'album
+                # récupération des méta-données
                 info0 = MutaFile(mp3s[0], easy=True)
                 artiste = info0.get("artist", ["Inconnu"])[0]
+                f.write(f"C: {artiste} \n")
                 nom_album = info0.get("album", ["Inconnu"])[0]
+                chemin =nom_album
+                album = Path(chemin).name
+                f.write(f"A: {album} \n")
                 genre = info0.get("genre", ["Inconnu"])[0]
                 annee = self._annee(info0)
-                f.write(f"C: {artiste}\nA: {nom_album}\n{annee} - {genre}\n")
-                # Numérotation des titres
-                for i, mp3 in enumerate(mp3s, 1):
+                f.write(f"{annee} - {genre} \n")
+                # comprage des albums
+                self.nbre_albums = i + 1
+                # traitement des textes des chansons
+                for j, mp3 in enumerate(mp3s, 1):
                     titre = MutaFile(mp3, easy=True).get("title", [mp3.stem])[0]
-                    f.write(f"{i} - {titre}\n")
+                    ligne = f"{j} - {titre}"
+                    f.write(f"{ligne} \n")
                     count += 1
                     self.progress.setValue(count)
                     QApplication.processEvents()
                 f.write("\n")
-        self.tags_termines.emit() # emission signal
+        # couper les lignes rop longues
+        self.couper_texte(self.nbre_albums)
+        # indiquent que les tags ont écrits        
+        self.tags_termines.emit()
 
+    def couper_texte(self, nbre_albums: int) -> int:
+        """couper ici pour être plus rapide:
+        1. extraction e tenregistrement des méta-données - recuperer_tags
+        2. couper les lignes trop longues et pas aumiliue d'un mot""" 
+        # récupération des lignes du fichier tags.txt
+        lignes = []
+        with open(self.fichier_tags, "r") as f:
+            lignes = [ligne.rstrip("\n") for ligne in f.readlines()]
+        # coupe des lignes trop longues
+        with open(self.fichier_tags, "w", encoding="utf-8") as f:
+            for ligne in lignes:
+                if nbre_albums < 8:
+                    pos = ligne.rfind(" ", 0, 30)
+                else:
+                    pos = ligne.rfind(" ", 0, 40)
+                if pos == -1:
+                    # pas d'espace → on n'essaye même pas de couper
+                    f.write(ligne + "\n")
+                else:
+                    # on coupe au dernier espace avant 30 ou 40 caractères    
+                    f.write(ligne[:pos] + "\n")
+        
     def _mp3s_tries_par_piste(self, dossier: Path) -> list[Path]:
         """Retourne la liste des fichiers MP3 triés par numéro de piste."""
         fichiers = []
