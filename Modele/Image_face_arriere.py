@@ -15,18 +15,29 @@ class Image_face_arriere:
     """Crée la face arrière d'une jaquette à partir du fichier tags.txt."""
 
     def __init__(self):
-        # Dossier de travail : ~/PyCDCover/thumbnails
-        self.dossier_racine = Path(__file__).parent.parent
-        dossier_utilisateur = Path.home()
-        self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
-        self.dossier_thumbnails = self.dossier_pycdcover / "thumbnails"
-        self.fichier_tags = self.dossier_pycdcover / "tags.txt"
-        # --- Chemins vers les fichiers .ttf ---
-        self.dossier_polices = os.path.join(self.dossier_racine, "ressources", "polices")
-        self.police_normale = f"{self.dossier_polices}/DejaVuSans.ttf"
-        self.police_grasse = f"{self.dossier_polices}/DejaVuSans-Bold.ttf"
-        self.artiste = ""
-        self.album = ""
+        '''initialisation'''
+        # Dossiers principaux
+        self.dossier_racine: Path = Path(__file__).parent.parent
+        dossier_utilisateur: Path = Path.home()
+        self.dossier_pycdcover: Path = dossier_utilisateur / "PyCDCover"
+        self.dossier_thumbnails: Path = self.dossier_pycdcover / "thumbnails"
+        self.fichier_tags: Path = self.dossier_pycdcover / "tags.txt"
+        # Polices
+        self.dossier_polices: str = os.path.join(self.dossier_racine, "ressources", "polices")
+        self.police_normale: str = f"{self.dossier_polices}/DejaVuSans.ttf"
+        self.police_grasse: str = f"{self.dossier_polices}/DejaVuSans-Bold.ttf"
+        # Métadonnées du CD
+        self.artiste: str | None = None
+        self.album: str | None = None
+        self.lignes: list[str] = []
+        self.nb_fichiers: int = 0
+        # Dessin
+        self.image: Image.Image | None = None
+        self.draw: ImageDraw.ImageDraw | None = None
+        self.taille: int = 0
+        self.x: int = 0
+        self.y: int = 0
+            
 
     def creer_image_blanche(self):
         """Lit tags.txt, choisit la taille, crée l'image blanche et renvoie draw."""
@@ -42,8 +53,8 @@ class Image_face_arriere:
             largeur, hauteur = 460, 460
         # Image blanche
         self.image = Image.new("RGB", (largeur, hauteur), "white")
-        draw = ImageDraw.Draw(self.image)
-        return draw
+        self.draw = ImageDraw.Draw(self.image)
+        return self.draw
 
     
     def configuration(self, hauteur: float) -> None:
@@ -104,7 +115,6 @@ class Image_face_arriere:
                 self.taille = 16
                 self.dessiner(self.taille, ligne, "gray", self.font_police)
                 self.y += espace
-                continue
         self.changer_titres_verticaux()
 
     def dessiner(self, taille: int, texte: str, couleur: str, font: ImageFont.FreeTypeFont) -> None:
@@ -126,10 +136,9 @@ class Image_face_arriere:
 
     def cd_multiples(self, draw) -> None:
         """Affiche plusieurs albums ; passe à la colonne suivante dès que la hauteur est dépassée."""
-        lignes = self.lignes
         espace_inter_album = self.taille * 1.2  # espace vertical entre albums
         # parcours des lignes
-        for ligne in lignes:
+        for ligne in self.lignes:
             ligne = ligne.rstrip("\n")
             # Ligne vide → espace inter-album
             if not ligne:

@@ -19,8 +19,10 @@ class Editeur_tags(QMainWindow):
         super().__init__()
         self.setWindowTitle("Éditeur de tags")
         self.resize(300, 400)
-        # Chemin du fichier tags.txt
-        self.chemin_tags = Path.home() / "PyCDCover" / "tags.txt"
+        # fichier tags
+        self.chemin_tags: Path = Path.home() / "PyCDCover" / "tags.txt"
+        self.text_edit: QTextEdit | None = None
+        self.modifie: bool = False
         self.interface()
     
     def interface(self) -> None:

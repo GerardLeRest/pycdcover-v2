@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 Tags.py — Récupère les tags MP3 d’un CD et les enregistre dans ~/PyCDCover/tags.txt
 Auteur : Gérard Le Rest (2025)
@@ -27,14 +28,17 @@ class Tags(QMainWindow):
         # interface
         layout = QVBoxLayout()
         self.label = QLabel("Prêt à extraire les tags.")
-        self.progress = QProgressBar() # barre de progression
+        self.fichier_tags = Path.home() / "PyCDCover" / "tags.txt" # fichier des tags
+        self.progress: QProgressBar | None = None
+        self.nbre_albums = 0 # nbre albums
         layout.addWidget(self.label)
+        self.progress = QProgressBar()
         layout.addWidget(self.progress)
         layout.setContentsMargins(20, 10, 20, 20)  # gauche, haut, droite, bas
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
-        self.fichier_tags = Path.home() / "PyCDCover" / "tags.txt" # fichier des tags
+        
 
     def recuperer_tags(self)->None:
         """Créer la lsites des albums (dictionnaires) * artistes et albums - liste d'objets Path"""
@@ -115,7 +119,7 @@ class Tags(QMainWindow):
         with open(self.fichier_tags, "w", encoding="utf-8") as f:
             for ligne in lignes:
                 if nbre_albums < 8:
-                    pos = ligne.rfind(" ", 0, 30)
+                    pos = ligne.rfind(" ", 0, 30) # 30: espace avant le 40ème caractère
                 else:
                     pos = ligne.rfind(" ", 0, 40)
                 if pos == -1:

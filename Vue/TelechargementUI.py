@@ -1,21 +1,8 @@
-#!/usr/bin/env python3
-"""
-Image_devant — Module de récupération et normalisation des images d’albums
-
-Ce module a été entièrement conçu et structuré par ChatGPT (GPT-5, 2025).
-Je (Gérard Le Rest) l’utilise comme un composant externe, 
-au même titre qu’une bibliothèque tierce.
-
-Je n’en revendique pas la paternité intellectuelle.
-Je n’ai pas vocation à en expliquer les détails internes.
-Je l’emploie “en boîte noire”, sans garantie de débogage.
-
-Toute la logique complexe de recherche iTunes / MusicBrainz,
-du cache JSON et du traitement des jaquettes relève de l’IA.
-
-Petite fenêtre de progression affichée pendant la récupération des images.
-Émet le signal 'telechargement_termine' quand le processus est fini.
-"""
+# ========================================================================
+# PyCDCover - Classe : RecupImagesAvant (version optimisée)
+# Auteur principal : GPT-5 (optimisation)
+# Supervision, direction et cohérence : Gérard Le Rest
+# ========================================================================
 
 from __future__ import annotations
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar
@@ -27,60 +14,89 @@ from typing import Any
 
 
 # ========================================================================
-# --- Thread worker ------------------------------------------------------
+# --- Thread worker optimisé ---------------------------------------------
 # ========================================================================
 
 class WorkerTelechargement(QObject):
     """
-    Télécharge les jaquettes (ou les crée) dans un thread séparé.
-    Émet deux signaux :
-      - progression(index, total)
-      - telechargement_termine()
+    Thread de récupération des jaquettes.
+    Améliorations :
+      - Détection intelligente des doublons (dictionnaire)
+      - Vérification de la jaquette déjà existante avant création
+      - Robustesse en cas d'erreurs
+      - Code plus lisible et plus compact
     """
+
     telechargement_termine: Signal = Signal()
     progression: Signal = Signal(int, int)
 
     def __init__(self, albums: list[dict[str, Any]]) -> None:
         super().__init__()
-        self.albums: list[dict[str, Any]] = albums
+        self.albums = albums
 
+        # Cache anti-doublons : évite de créer 2 fois la même jaquette
+        self._albums_traités: set[str] = set()
+
+        # Dossier thumbnails
+        self.dossier_thumbnails = Path.home() / "PyCDCover" / "thumbnails"
+        self.dossier_thumbnails.mkdir(parents=True, exist_ok=True)
+
+    # --------------------------------------------------------------------
+    def _normaliser_titre(self, titre: str) -> str:
+        """Supprime les annotations du type '(I)', 'Disc 2', etc."""
+        titre = re.sub(r"\s*\(.*?\)", "", titre)
+        titre = re.sub(r"disc\s*\d+", "", titre, flags=re.IGNORECASE)
+        return titre.strip().lower()
+
+    # --------------------------------------------------------------------
+    def _thumbnail_existe(self, artiste: str, titre: str) -> bool:
+        """Vérifie si une miniature existe déjà."""
+        nom = f"{artiste}-{titre}".replace("/", "_").replace(" ", "_").lower()
+        fichier = self.dossier_thumbnails / f"{nom}.jpeg"
+        return fichier.exists()
+
+    # --------------------------------------------------------------------
     def run(self) -> None:
-        """Boucle principale de téléchargement."""
-        dossier_thumbnails: Path = Path.home() / "PyCDCover" / "thumbnails"
-        dossier_thumbnails.mkdir(parents=True, exist_ok=True)
+        """Boucle principale du thread."""
+        total = len(self.albums)
 
-        total: int = len(self.albums)
-        precedent: str | None = None  # pour éviter les doublons (ex : The Wall (I)/(II))
-
-        for i, album in enumerate(self.albums, start=1):
+        for index, album in enumerate(self.albums, start=1):
             try:
-                artiste: str = album["artiste"]
-                titre: str = album["album"]
+                artiste = album["artiste"]
+                titre = album["album"]
 
-                # Supprime les parenthèses (I)/(II) pour comparer
-                base_titre: str = re.sub(r"\s*\(.*?\)", "", titre).strip()
+                titre_normalisé = self._normaliser_titre(titre)
 
-                # Si c’est le même album que le précédent → on saute
-                if base_titre == precedent:
-                    print(f"↩ Jaquette déjà créée pour : {base_titre}")
-                    self.progression.emit(i, total)
+                # Déjà traité ? → on skip
+                if titre_normalisé in self._albums_traités:
+                    print(f"↩ Déjà traité : {titre}")
+                    self.progression.emit(index, total)
                     continue
 
-                # Crée ou télécharge la jaquette
+                # Déjà présent sur disque ? → pas besoin de créer
+                if self._thumbnail_existe(artiste, titre):
+                    print(f"✓ Miniature déjà présente : {titre}")
+                    self._albums_traités.add(titre_normalisé)
+                    self.progression.emit(index, total)
+                    continue
+
+                # Création réelle de la miniature
                 image = Image_devant(artiste, titre)
                 image.creer()
 
-                precedent = base_titre
-                self.progression.emit(i, total)
+                # Marqué comme traité
+                self._albums_traités.add(titre_normalisé)
+                self.progression.emit(index, total)
 
             except Exception as e:
                 print(f"⚠ Erreur sur l'album {album}: {e}")
-                self.progression.emit(i, total)
+                self.progression.emit(index, total)
                 continue
 
-        # Tous les téléchargements terminés
-        self.telechargement_termine.emit()
+        # Fin du processus
         print("Téléchargement terminé pour tous les albums.")
+        self.telechargement_termine.emit()
+
 
 
 # ========================================================================
@@ -117,13 +133,13 @@ class TelechargementUI(QWidget):
 
         self.thread.start()
 
+    # ------------------------------------------------------------------
     def _mettre_a_jour_progression(self, index: int, total: int) -> None:
-        """Met à jour la barre de progression et le texte."""
         self.progress.setValue(index)
         self.label.setText(f"Téléchargement {index}/{total}")
 
+    # ------------------------------------------------------------------
     def _telechargement_fini(self) -> None:
-        """Méthode appelée quand tous les téléchargements sont terminés."""
         self.label.setText("Téléchargement terminé")
         self.telechargement_termine.emit()
         self.thread.quit()

@@ -20,13 +20,11 @@ class Haut_droit(QWidget):
     def __init__(self, nom_artiste: str, album: str, annee: str, genre: str):
         super().__init__()
         # chaines de caractère
-        self.nom_artiste = nom_artiste
-        self.album = album
-        self.annee = annee
-        self.genre = genre  
-
-        self.tableau=[] # mémorise les labels (uniquement les valeurs, pas les titres)
-
+        self.nom_artiste: str = nom_artiste
+        self.album: str = album
+        self.annee: str = annee
+        self.genre: str = genre  
+        self.tableau: list[object] = []
         # construire l'UI
         self.assembler_elements()
 
@@ -88,7 +86,6 @@ class Haut_droit(QWidget):
         """Mise à jour les labels"""
         # ordre des labels dans self.tableau :
         # [0] = artiste, [1] = album, [2] = annee, [3] = genre
-        print(self.tableau)
         if len(self.tableau) >= 4:
             self.tableau[0].setText(infos.get('artiste', ""))
             self.tableau[1].setText(infos.get('album', ""))

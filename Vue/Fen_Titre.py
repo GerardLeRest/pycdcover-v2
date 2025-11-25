@@ -19,7 +19,8 @@ class Fen_Titre(QDialog):
 
     def __init__(self):
         super().__init__()
-        self.titre="" # titre du cd
+        self.titre: str | None = None # titre du cd
+        self.champ: QLineEdit | None = None # champ de la fenètre
         self.initialiser()
 
     def initialiser(self)->None:

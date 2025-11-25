@@ -14,15 +14,18 @@ class Titres:
     """Crée les images des titres (horizontal et verticaux) pour la jaquette CD."""
 
     def __init__(self, L_devant: int, H_back_cover: int, titre: str) -> None:
-        self.titre = titre
-        self.L_devant = L_devant
-        self.H_back_cover = H_back_cover
-        self.x = 0
-        self.y = 0
-        # dossiers
-        self.dossier_racine = Path(__file__).parent.parent
-        self.dossier_polices = self.dossier_racine / "ressources" / "polices"
-        self.dossier_pycdcover = Path.home() / "PyCDCover"
+        self.titre: str = titre
+        self.L_devant: int = L_devant
+        self.H_back_cover: int = H_back_cover
+
+        # Dossiers
+        self.dossier_racine: Path = Path(__file__).parent.parent
+        self.dossier_polices: Path = self.dossier_racine / "ressources" / "polices"
+        self.dossier_pycdcover: Path = Path.home() / "PyCDCover"
+
+        # Image verticale
+        self.imageV: Image.Image | None = None
+
 
     def titre_horizontal(self) -> None:
         """Création de l'image horizontale du titre"""

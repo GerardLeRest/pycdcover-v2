@@ -30,12 +30,9 @@ class Application(QWidget):
         """initialisation"""
         super().__init__()
         self.reinitialiser_dossier_pycdcover()
+        # Toutes les méthodes et variables d’instance de Fenetre sont accessibles via :
         self.vue = Fenetre()
         self.dossier_pycdcover = Path.home() / "PyCDCover"
-        self.fen_titre = None
-        self.tags = None
-        self.editeur_tags = None
-        self.telechargement_ui = None
         # Connexions Vue → Contrôleur - BP menu
         self.vue.demande_saisie_titre.connect(self.action_titre)
         self.vue.demande_ouvrir_recuperation_tags.connect(self.action_recuperer_tags)

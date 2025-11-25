@@ -21,10 +21,11 @@ class Bas(QWidget):
     def __init__(self, chansons: list, album: str, artiste: str, annee: int):
         """initialisation"""
         super().__init__()
-        self.chansons = chansons
-        self.album = album
-        self.artiste = artiste
-        self.annee = str(annee)  # toujours stockée comme chaîne
+        self.chansons: list[dict[str, Any]] = chansons
+        self.album: str = album
+        self.artiste: str  = artiste
+        self.annee: int = annee   
+        self.table: QTableWidget | None =None
         self.initialiser()
 
     def initialiser(self) -> None:

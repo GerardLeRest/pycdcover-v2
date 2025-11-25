@@ -5,7 +5,7 @@ Gabarit — crée le gabarit de la jaquette à découper sous forme de PDF.
 Version avec titres horizontaux visibles, en haut des faces avant et arrière.
 """
 
-from reportlab.pdfgen import canvas
+from reportlab.pdfgen.canvas import Canvas
 from PIL import Image, ImageDraw
 from pathlib import Path
 import os
@@ -15,20 +15,20 @@ import glob
 class Gabarit:
     """Créer un gabarit pour une jaquette CD à découper - format PDF"""
 
-    def __init__(self, coefficient, L_devant, H_devant, L_back_cover, H_back_cover):
+    def __init__(self, coefficient: float, L_devant: float, H_devant: float, L_back_cover:float, H_back_cover: float):
         """initialisation"""
-        self.L_devant = L_devant
-        self.H_devant = H_devant
-        self.L_back_cover = L_back_cover
-        self.H_back_cover = H_back_cover
-        self.coefficient = coefficient
-        self.canv = None
+        self.L_devant:float = L_devant
+        self.H_devant: float = H_devant
+        self.L_back_cover:float = L_back_cover
+        self.H_back_cover:float = H_back_cover
+        self.coefficient: float = coefficient
+        # Canvas Reportlab
+        self.canv: Canvas | None = None
         # dossier utilisateur
         dossier_utilisateur = Path.home()
         # Dossier de travail de l'appli
         self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
-        # Se placer dans le dossier thumbnails
-        os.chdir(self.dossier_pycdcover)
+
 
     def compter_images_thumbnails(self) -> int:
         """Compte les images présentes dans ~/PyCDCover/thumbnails/."""
@@ -41,7 +41,7 @@ class Gabarit:
 
     def lignes_pointillees(self) -> None:
         """dessiner les lignes"""
-        self.canv = canvas.Canvas("image_impression.pdf") # instantation d'un objet canevas reportlab
+        self.canv = Canvas("image_impression.pdf") # instantation d'un objet canevas reportlab
         self.canv.setLineWidth(1)
         self.canv.setDash(6,3)
         # création des lignes en pointillés de découpage

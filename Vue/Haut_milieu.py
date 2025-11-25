@@ -20,16 +20,23 @@ class Haut_milieu(QWidget):
         
     demande_image_changee = Signal(str) # quand l'image est affichée (demande d'enregistrement)
 
-    def __init__(self, nom_artiste: str, nom_album: str, chemin_photo_artiste: str):
+    def __init__(self, nom_artiste: str, nom_album: str, chemin_photo_artiste: Path):
         """Initialise la zone avec artiste, album et image."""
         super().__init__()
-        self.nom_artiste = nom_artiste
-        self.nom_album = nom_album
-        self.chemin_photo_artiste = chemin_photo_artiste
-        self.label_artiste = QLabel()
-        self.label_album = QLabel()
-        self.label_image = QLabel()
-        self.dossier_pycdcover = Path.home() / "PyCDCover"
+        # Données affichées
+        self.nom_artiste: str = nom_artiste
+        self.nom_album: str = nom_album
+        self.chemin_photo_artiste: Path = chemin_photo_artiste
+        # Labels des informations
+        self.label_artiste: QLabel | None = None
+        self.label_album: QLabel | None = None
+        self.label_image: QLabel | None = None
+        # Chemins
+        self.dossier_pycdcover: Path = Path.home() / "PyCDCover"
+        self.dossier_thumbnails: Path | None = None
+        # État interne
+        self.pixmap_actuelle: QPixmap | None = None
+        self.infos_album: dict[str, Any] | None = None
 
     def assembler_elements(self) -> None:
         """Assemble les labels et le bouton dans un layout vertical."""
@@ -86,7 +93,7 @@ class Haut_milieu(QWidget):
         # self.bouton_changer.clicked.connect(self.action_changer)
 
 
-    def charger_photo(self, infos_album) -> None:
+    def charger_photo(self, infos_album: dict[str, Any]) -> None:
         """Charge la jaquette depuis le nom ou le dictionnaire fourni."""
         couverture = infos_album if isinstance(infos_album, str) else infos_album.get("couverture")
         self.dossier_thumbnails = self.dossier_pycdcover / "thumbnails"

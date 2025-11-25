@@ -21,9 +21,14 @@ class FenetreAPropos(QDialog):
         self.setMinimumSize(330, 450)
         self.setMaximumSize(550, 550)
         self.setWindowTitle("PyCDCover")
+        self.titre: QLabel | None = None
+        self.texte_haut: QLabel | None = None
+        self.texte_bas: QLabel | None = None
+        self.bouton_fermer: QPushButton | None = None
+        self.label_image: QLabel | None = None
         # chemin des images:
-        self.racine_fichier = Path(__file__).resolve().parent # .../Vue
-        self.racine_projet = self.racine_fichier.parent # .../pycdcover-v2
+        self.racine_fichier: Path = Path(__file__).resolve().parent # .../Vue
+        self.racine_projet: Path = self.racine_fichier.parent # .../pycdcover-v2
         # construction des éléments
         self.preparation_titre()
         self.preparation_texte_haut()
@@ -32,6 +37,7 @@ class FenetreAPropos(QDialog):
         self.preparation_bouton_fermer()
         # mise en page
         self.layouts()
+
 
     def preparation_titre(self) -> None:
         """construction du label du titre"""
