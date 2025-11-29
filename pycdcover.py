@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 # Point d'entrée du logiciel PyCDCover
 # Auteur : Gérard Le Rest (2025)
 """

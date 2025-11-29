@@ -9,6 +9,7 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 import os
 from pathlib import Path
+from Vue.utils import centrer_fenetre # fonction
 
 class FenetreAPropos(QDialog):
     """fentetre d'information sur le logiciel"""
@@ -32,13 +33,15 @@ class FenetreAPropos(QDialog):
         # construction des éléments
         self.preparation_titre()
         self.preparation_texte_haut()
-        self.label_image = self.preparation_image(self.racine_projet, 128, 128, "icone_128x128.png")
+        fichier_image = self.racine_projet / "ressources" / "icones" / "icone_128x128.png"
+        self.label_image = self.preparation_image(128, 128, fichier_image)
         self.preparation_texte_bas()
         self.preparation_bouton_fermer()
         # mise en page
-        self.layouts()
-
-
+        self.layouts() 
+         # voir le fichier utilis.py dans Vue
+        centrer_fenetre(self) 
+        
     def preparation_titre(self) -> None:
         """construction du label du titre"""
         self.titre = QLabel("PyCDCover", self)

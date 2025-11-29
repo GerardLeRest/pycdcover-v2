@@ -17,6 +17,8 @@ from Vue.Haut_droit import Haut_droit
 from Vue.Bas import Bas
 from Vue.A_propos import FenetreAPropos
 import sys
+from Vue.utils import centrer_fenetre
+
 
 
 class Fenetre(QMainWindow):
@@ -63,6 +65,8 @@ class Fenetre(QMainWindow):
         self.panneau_droit()
         self.panneau_bas()
         self.connexions_donnees()
+        # voir le fichier utilis.py dans Vue
+        centrer_fenetre(self) 
 
     def menu(self) -> None:
         """Construit le menu principal."""

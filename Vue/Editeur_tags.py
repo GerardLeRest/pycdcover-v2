@@ -9,7 +9,9 @@ from PySide6.QtWidgets import (QMainWindow, QPushButton, QTextEdit,
                                QVBoxLayout, QHBoxLayout, QWidget, QApplication)
 from PySide6.QtCore import Qt
 from pathlib import Path
+from Vue.utils import centrer_fenetre
 import sys
+
 
 
 class Editeur_tags(QMainWindow):
@@ -55,6 +57,7 @@ class Editeur_tags(QMainWindow):
         self.setCentralWidget(conteneur)
         self.text_edit.textChanged.connect(self.marquer_modifie)
         self.modifie = False
+        centrer_fenetre(self)
 
     def habillage_bouton(self, bouton: QPushButton) -> None:
             bouton.setStyleSheet("""

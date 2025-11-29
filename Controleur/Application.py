@@ -5,7 +5,7 @@ Application.py — Récupère les tags MP3 d’un CD et les enregistre dans ~/Py
 Auteur : Gérard Le Rest (2025)
 """
 
-import os, sys, shutil, platform, subprocess
+import os, sys, shutil, platform, subprocess, webbrowser
 from pathlib import Path
 from PySide6.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog
 from PySide6.QtCore import Slot
@@ -158,7 +158,7 @@ class Application(QWidget):
             elif systeme == "Darwin":  # macOS
                 subprocess.run(["open", chemin_pdf])
             else:  # Linux ou autre Unix
-                subprocess.run(["xdg-open", chemin_pdf])
+                webbrowser.open(chemin_pdf.as_uri())
         except Exception as e:
             print(f"Erreur lors de l'ouverture du PDF : {e}")
 

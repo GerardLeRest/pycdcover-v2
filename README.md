@@ -83,10 +83,7 @@ git clone git@github.com:GerardLeRest/pycdcover-v2.git
 cd pycdcover-v2
 ```
 
-## 3.3. Créer un environnement virtuel
-
-```bash
-python3 -m venv mon_env
+## 3.3. Créer un environnement
 ```
 
 ### Activer l’environnement
