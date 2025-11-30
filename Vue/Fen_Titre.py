@@ -73,6 +73,8 @@ class Fen_Titre(QDialog):
         """Centrage automatique à l'affichage du dialogue."""
         super().showEvent(event)
         centrer_fenetre(self) # voir Vue/utils.py
+        self.champ.setFocus() # positionement du curseur dans le champ
+
 
     def emission_titre (self) -> None:
         """vérifie la validité du champ"""

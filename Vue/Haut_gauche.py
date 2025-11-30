@@ -17,7 +17,7 @@ class Haut_gauche(QObject):
         """initialisation"""
         super().__init__()
          # ex: [ "Radiohead - OK Computer", "Pink Floyd - Animals"]
-        self.tableau: list[object] = []
+        self.tableau: list[object] = [] # clé: ariste-aflbum de self.tableau
         # ex: {"Radiohead - OK Computer": {...},"Pink Floyd - Animals": {...}}
         self.albums: dict[str, dict] = {}
         self.fichier_tags_principal: Path = Path.home() / "PyCDCover" / "tags.txt"
@@ -34,7 +34,24 @@ class Haut_gauche(QObject):
             return {}
         lignes = self.lire_lignes(fichier)
         self.parser_fichier(lignes)
+        self.nettoyer_photos_non_utilisees()
         return self.albums
+    
+    def nettoyer_photos_non_utilisees(self) -> None:
+        """Supprime les photos dans thumbnails/ qui ne sont plus dans le dictionnaire self.albums."""
+        thumbnails = Path.home() / "PyCDCover" / "thumbnails"
+        if not thumbnails.exists():
+            return
+        # Images encore utilisées d'après tags.txt
+        images_valides = { album["couverture"] for album in self.albums.values() }
+        # Parcours du dossier thumbnails
+        for fichier in thumbnails.iterdir():
+            if fichier.is_file() and fichier.name not in images_valides:
+                try:
+                    fichier.unlink()
+                    print(f"[SUPPRIMÉ] {fichier.name}")
+                except Exception as e:
+                    print(f"[ERREUR] Impossible de supprimer {fichier.name} : {e}")
 
     def choisir_fichier_tags(self) -> Path | None:
         """Choisir le fichier tags.txt (principal ou secours)."""
@@ -106,7 +123,6 @@ class Haut_gauche(QObject):
             "couverture": couverture,
             "chansons": chansons,
         }
-
 
     @Slot(str)
     def selectionner_album(self, cle: str) -> None:

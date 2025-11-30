@@ -106,6 +106,10 @@ class Tags(QMainWindow):
         self.couper_texte(self.nbre_albums)
         # indiquent que les tags ont écrits        
         self.tags_termines.emit()
+        # Barre de progression
+        self.progress.setValue(self.progress.maximum())  # sécurité : barre à 100 %
+        QApplication.processEvents()                      # rafraîchissement immédiat
+        self.close()                                      # FERMETURE AUTOMATIQUE
 
     def couper_texte(self, nbre_albums: int) -> int:
         """couper ici pour être plus rapide:

@@ -21,6 +21,7 @@ from Modele.Tags import Tags
 from Modele.recup_images_avant import lire_tags
 from Modele.Lancement_av_ar import Lancement_av_ar
 from Modele.Gabarit import Gabarit
+from Vue.Haut_gauche import Haut_gauche
 
 import os, sys, shutil, platform, subprocess
 
@@ -31,6 +32,7 @@ class Application(QWidget):
         super().__init__()
         self.reinitialiser_dossier_pycdcover()
         # Toutes les méthodes et variables d’instance de Fenetre sont accessibles via :
+        self.haut_gauche = Haut_gauche()
         self.vue = Fenetre()
         self.dossier_pycdcover = Path.home() / "PyCDCover"
         # Connexions Vue → Contrôleur - BP menu
@@ -101,13 +103,15 @@ class Application(QWidget):
     @Slot()
     def action_ouvrir_editeur_tags(self) -> None:
         """Ouvre la fenêtre d'édition du fichier tags.txt."""
-        # Instanciation 
-        self.editeur_tags = Editeur_tags() 
+        print(">>> action_ouvrir_editeur_tags appelée")
+        # Fenêtre d’édition SANS parent pour éviter les histoires d’empilement
+        self.editeur_tags = Editeur_tags()  
+        # Quand on ferme/valide, on recharge les albums
+        self.editeur_tags.tags_enregistres.connect(self.haut_gauche.charger_depuis_fichier)
         self.editeur_tags.show()
-        # Activation du bouton suivant ("Récupérer les images")
+        # Bouton suivant activé
         self.vue.act_recup_images.setEnabled(True)
-
-
+        
     @Slot()
     def action_recuperer_images(self) -> None:
         """Récupère les images à partir du fichier tags.txt."""
@@ -168,6 +172,10 @@ class Application(QWidget):
         # 🔹 Relance la mise à jour de la vue
         self.donnees["couverture"] = nom_image
         self.vue.haut_milieu.MAJ_haut_milieu(self.donnees)
+
+    def mettre_a_jour_liste_albums(self) -> None:
+        """Recharge les données albums après modification des tags."""
+        self.haut_gauche.charger_depuis_fichier()
 
 
 # ------------------------------------------------------------------------------
