@@ -103,7 +103,6 @@ class Application(QWidget):
     @Slot()
     def action_ouvrir_editeur_tags(self) -> None:
         """Ouvre la fenêtre d'édition du fichier tags.txt."""
-        print(">>> action_ouvrir_editeur_tags appelée")
         # Fenêtre d’édition SANS parent pour éviter les histoires d’empilement
         self.editeur_tags = Editeur_tags()  
         # Quand on ferme/valide, on recharge les albums

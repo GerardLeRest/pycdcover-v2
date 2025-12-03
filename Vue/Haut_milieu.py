@@ -104,9 +104,7 @@ class Haut_milieu(QWidget):
             pixmap = QPixmap(str(chemin)).scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.label_image.setPixmap(pixmap)
             self.pixmap_actuelle = pixmap
-            print(f"Couverture chargée : {chemin}")
         else:
-            print(f"Couverture introuvable : {chemin}")
             self.label_image.clear()
             self.pixmap_actuelle = None
 
@@ -136,4 +134,3 @@ class Haut_milieu(QWidget):
         self.label_album.setText(infos.get('album') or "")
         couverture = infos.get("couverture", "")
         self.charger_photo(couverture)
-        print("Chargement de :", couverture)

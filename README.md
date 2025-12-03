@@ -37,7 +37,7 @@ Vous pouvez remplacer cette image par celle de votre choix (cadrée de préfére
 ## 2.1. Sous Windows
 
 La dernière version stable de **PyCDCover** est disponible ici :  
-➡️ [Télécharger PyCDCover.exe — v2.0.0
+[Télécharger PyCDCover.Setup.exe et installer-le
 
 (https://github.com/gerardlerest/pycdcover/releases/tag/v2.0.0)
 
@@ -47,18 +47,18 @@ Vous pouvez ensuite passer à la section 4.]
 
 ## 2.2. Sous GNU/Linux
 
-➡️ **PyCDCover est disponible au format Flatpak.**
+➡️ **PyCDCover est disponible au format *AppImage***.
 
-Installation :
+Installation : Télécharger PyCDCover_2.0.0_x86_64.AppImage (ou X.X.X représente le numéro de version. Se rendre dans le dossier de cette image et rendez le fichier exécutable
 
 ```bash
-flatpak install fr.gerardlerest.PyCDCover
+chmod +x PyCDCover_2.0.0_x86_64.AppImage
 ```
 
 Lancement :
 
 ```bash
-flatpak run fr.gerardlerest.PyCDCover
+./PyCDCover_2.0.0_x86_64.AppImage
 ```
 
 Vous pouvez ensuite passer à la section 4.
@@ -84,8 +84,8 @@ cd pycdcover-v2
 ```
 
 ## 3.3. Créer un environnement
-```
 
+```
 ### Activer l’environnement
 
 ```bash
@@ -112,7 +112,7 @@ python3 Main.py
 
 1. Insérez le CD contenant les fichiers correctement tagués.  
 2. Créez le **titre du CD** (1ʳᵉ icône à gauche).  
-3. **Récupérez les tags et les images** via MusicBrainz (2ᵉ icône).  
+3. **Récupérez les tags et les images** via MusicBrainz ou Itunes (2ᵉ icône).  
 4. **Éditez les tags** si nécessaire (3ᵉ icône).  **TRES IMPORTANT***: C'est ici que vous couperez les titres trop longs selon vos souhaits
 5. **Créez les images avant et arrière** (4ᵉ icône).  
 6. **Générez le PDF** découpable et imprimable.
@@ -126,8 +126,9 @@ Si une mauvaise image apparaît, voici la procédure :
 1. Trouvez la bonne pochette sur Internet (512×512 recommandé).  
 2. Enregistrez-la dans le dossier **thumbnails**,  
    → avec **exactement le même nom** que l’image incorrecte.  
-3. Recréez la face avant puis la face arrière.  
-4. Générez le PDF final.
+3. Sélectionnez les albums modifiés
+4. Recréez la face avant et la face arrière.  
+5. Générez le PDF final.
 
 **Remarque importante :**  
 Ne cliquez pas sur “Récupérer les images”. Cela réinstallerait l’ancienne pochette.

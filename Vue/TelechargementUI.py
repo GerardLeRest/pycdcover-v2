@@ -69,13 +69,11 @@ class WorkerTelechargement(QObject):
 
                 # Déjà traité ? → on skip
                 if titre_normalisé in self._albums_traités:
-                    print(f"↩ Déjà traité : {titre}")
                     self.progression.emit(index, total)
                     continue
 
                 # Déjà présent sur disque ? → pas besoin de créer
                 if self._thumbnail_existe(artiste, titre):
-                    print(f"✓ Miniature déjà présente : {titre}")
                     self._albums_traités.add(titre_normalisé)
                     self.progression.emit(index, total)
                     continue
@@ -89,12 +87,10 @@ class WorkerTelechargement(QObject):
                 self.progression.emit(index, total)
 
             except Exception as e:
-                print(f"⚠ Erreur sur l'album {album}: {e}")
                 self.progression.emit(index, total)
                 continue
 
         # Fin du processus
-        print("Téléchargement terminé pour tous les albums.")
         self.telechargement_termine.emit()
 
 
@@ -144,3 +140,5 @@ class TelechargementUI(QWidget):
         self.telechargement_termine.emit()
         self.thread.quit()
         self.thread.wait()
+        # Fermeture automatique de la fenêtre
+        self.close()

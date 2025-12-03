@@ -25,7 +25,6 @@ class Lancement_av_ar:
         draw1 = face_arriere.creer_image_blanche()
         face_arriere.configuration(930)
         if draw1 is None:
-            print("Erreur : impossible de créer l’image (vérifie tags.txt et thumbnails/)")
             return
         # Sélection du mode
         if face_arriere.nb_fichiers > 1:

@@ -191,8 +191,7 @@ class Image_devant:
     def creer(self, forcer: bool = False) -> Path:
         """Crée ou télécharge la miniature carrée et retourne son chemin."""
         if self.chemin.exists() and not forcer:
-            print(f"✔ Déjà présent : {self.chemin.name}")
-            return self.chemin
+           return self.chemin
 
         # 1️⃣ Essayer via iTunes
         image_url = get_itunes_cover(self.artiste, self.album)
@@ -215,14 +214,12 @@ class Image_devant:
                 y = (512 - image.height) // 2
                 fond.paste(image, (x, y))
                 fond.save(self.chemin, "JPEG", quality=90)
-                print(f"✓ Image enregistrée : {self.chemin.name}")
                 return self.chemin
             except Exception:
                 pass
 
         image = self._image_secours()
         image.save(self.chemin, "JPEG", quality=90)
-        print(f"⚠ Jaquette de secours : {self.chemin.name}")
         return self.chemin
 
 

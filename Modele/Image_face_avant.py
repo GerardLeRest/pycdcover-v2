@@ -5,7 +5,6 @@ Face_avant — créer l'image de la face avant de la jaquette
 Auteur : Gérard Le Rest (2025)
 """
 import os
-import tkinter.messagebox
 from math import ceil, sqrt
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
@@ -87,7 +86,7 @@ class Image_face_avant:
         return img.crop((x, y, x + s, y + s))
 
     def assemblage_photos(self) -> None:
-        """Assemble les miniatures du dossier thumbnails pour créer la jaquette."""
+        """Assemble les miniatures du dossier thumbnails pour l'image."""
         try:
             # recharge la liste des fichiers
             self.fichiers = os.listdir(self.thumbnail_path)
@@ -107,10 +106,10 @@ class Image_face_avant:
             self.fond.save(sortie, "jpeg")
 
         except ZeroDivisionError:
-            tkinter.messagebox.showinfo("Info", "Aucune image trouvée")
+            print("Info: Aucune image trouvée")
     
     def assemblage_une_image(self) -> None:
-        """CAS 1 SEULE IMAGE : pas de coupure, respect du ratio."""
+        """Cas - 1 seule mag - maquette"""
         # charge l'unique miniature
         chemin_image = self.thumbnail_path / self.fichiers[0]
         img = Image.open(chemin_image)
