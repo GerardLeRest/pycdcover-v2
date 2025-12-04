@@ -20,7 +20,6 @@ import sys
 from Vue.utils import centrer_fenetre
 
 
-
 class Fenetre(QMainWindow):
     """Fenêtre principale de l'application"""
 
@@ -67,6 +66,8 @@ class Fenetre(QMainWindow):
         self.connexions_donnees()
         # voir le fichier utilis.py dans Vue
         centrer_fenetre(self) 
+
+    
 
     def menu(self) -> None:
         """Construit le menu principal."""

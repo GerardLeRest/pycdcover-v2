@@ -42,7 +42,7 @@ class Image_face_arriere:
     def creer_image_blanche(self):
         """Lit tags.txt, choisit la taille, crée l'image blanche et renvoie draw."""
         # Lire les lignes du fichier
-        with open(self.fichier_tags, "r") as f:
+        with open(self.fichier_tags, "r", encoding='utf-8') as f:
             self.lignes = [ligne.rstrip("\n") for ligne in f.readlines()]
         # Nombre d'images dans thumbnails
         self.nb_fichiers = sum(1 for f in self.dossier_thumbnails.iterdir() if f.is_file())
@@ -66,6 +66,9 @@ class Image_face_arriere:
         self.taille = 890 / ((nbre_lignes + 1) / nbre_colonnes)
         if self.taille > 26:
             self.taille = 26
+        # tailles trop petites
+        if self.taille < 10:
+            self.taille = 10
         # Chargement des polices
         self.font_police = ImageFont.truetype(self.police_normale, int(self.taille))
         self.font_police_grasse = ImageFont.truetype(self.police_grasse, int(self.taille))

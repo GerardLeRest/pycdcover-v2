@@ -85,6 +85,9 @@ cd pycdcover-v2
 
 ## 3.3. Créer un environnement
 
+### installation de l'environement
+```bash
+pythpn3 -m venv mon_env
 ```
 ### Activer l’environnement
 

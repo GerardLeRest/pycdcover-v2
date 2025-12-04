@@ -69,6 +69,7 @@ class Fen_Titre(QDialog):
 
         self.setLayout(layoutV)
         
+        
     def showEvent(self, event) -> None:
         """Centrage automatique à l'affichage du dialogue."""
         super().showEvent(event)
@@ -85,6 +86,7 @@ class Fen_Titre(QDialog):
             QMessageBox.warning(self, "Erreur", "Le titre est trop long (> 40 car).")
             return
         else:
+            self.titre = self.champ
             # on doit émettre avant la fermeture de la fenetre
             self.titre_selectionne.emit(self.champ.text())
             self.accept()

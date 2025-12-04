@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Signal
 from pathlib import Path
 from mutagen import File as MutaFile
-import sys
+import sys, unicodedata
 
 class Tags(QMainWindow):
     """Récupérer tous les tags MP3 (artiste, album, année, genre, titres, numéros de piste)
@@ -83,12 +83,16 @@ class Tags(QMainWindow):
                 # récupération des méta-données
                 info0 = MutaFile(mp3s[0], easy=True)
                 artiste = info0.get("artist", ["Inconnu"])[0]
+                # nettoyage avant écriture en utf8
+                artiste = self.clean(artiste)
                 f.write(f"C: {artiste} \n")
                 nom_album = info0.get("album", ["Inconnu"])[0]
-                chemin =nom_album
+                nom_album = self.clean(nom_album)
+                chemin = nom_album
                 album = Path(chemin).name
                 f.write(f"A: {album} \n")
                 genre = info0.get("genre", ["Inconnu"])[0]
+                genre = self.clean(genre)
                 annee = self._annee(info0)
                 f.write(f"{annee} - {genre} \n")
                 # comprage des albums
@@ -97,6 +101,7 @@ class Tags(QMainWindow):
                 for j, mp3 in enumerate(mp3s, 1):
                     titre = MutaFile(mp3, easy=True).get("title", [mp3.stem])[0]
                     ligne = f"{j} - {titre}"
+                    ligne = self.clean(ligne)
                     f.write(f"{ligne} \n")
                     count += 1
                     self.progress.setValue(count)
@@ -111,13 +116,21 @@ class Tags(QMainWindow):
         QApplication.processEvents()                      # rafraîchissement immédiat
         self.close()                                      # FERMETURE AUTOMATIQUE
 
+    def clean(self, s: str) -> str:
+        """nettoyage pou utf-8"""
+        # normalisation unicode
+        s = unicodedata.normalize("NFC", s)
+        # suppression des caractères de contrôle
+        return "".join(c for c in s if c.isprintable())
+            
+    
     def couper_texte(self, nbre_albums: int) -> int:
         """couper ici pour être plus rapide:
         1. extraction e tenregistrement des méta-données - recuperer_tags
         2. couper les lignes trop longues et pas aumiliue d'un mot""" 
         # récupération des lignes du fichier tags.txt
         lignes = []
-        with open(self.fichier_tags, "r") as f:
+        with open(self.fichier_tags, "r", encoding="utf-8") as f:
             lignes = [ligne.rstrip("\n") for ligne in f.readlines()]
         # coupe des lignes trop longues
         with open(self.fichier_tags, "w", encoding="utf-8") as f:

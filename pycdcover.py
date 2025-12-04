@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
+"""
 # Point d'entrée du logiciel PyCDCover
 # Auteur : Gérard Le Rest (2025)
 """
-Point d'entrée du logiciel PyCDCover
-Auteur : Gérard Le Rest (2025)
-"""
+
 
 from PySide6.QtWidgets import QApplication
 from Controleur.Application import Application
