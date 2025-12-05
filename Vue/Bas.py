@@ -66,7 +66,7 @@ class Bas(QWidget):
         header.setFont(font)
         header.setStyleSheet("""
             QHeaderView::section {
-                color: #ffaa43;
+                color: #2c3e50;
                 font-size: 16px;
                 margin: 0px;
                 padding: 4px;
