@@ -77,7 +77,7 @@ class Application(QWidget):
         titres.titre_vertical1()
         titres.titre_vertical2()
         # active le bouton suivant - BP récupération de tags
-        self.vue.act_recup_tags.setEnabled(True)  
+        self.vue.act_recup_tags.setEnabled(True)
 
 
     @Slot(str)

@@ -48,7 +48,7 @@ class Fenetre(QMainWindow):
         self.tags_txt: Path = self.dossier_pycdcover / "tags.txt"
         # tailles de la fenêtre
         self.setMinimumSize(900, 600)
-        self.setMaximumSize(1250, 800)
+        self.setMaximumSize(1000, 720)
         self.resize(1100, 700)
         self.setWindowFlags(
             Qt.Window
@@ -56,6 +56,30 @@ class Fenetre(QMainWindow):
             | Qt.WindowMinimizeButtonHint
             | Qt.WindowCloseButtonHint
         )
+        # déclaration des actions
+        self.act_titre = QAction("Titre", self)
+        self.act_recup_tags = QAction("Récupérer_tags", self)
+        self.act_tags_rw = QAction("Lire/Écrire tags", self)
+        self.act_recup_images = QAction("Récupérer les images", self)
+        self.act_faces = QAction("Créer les deux faces", self)
+        self.act_pdf = QAction("PDF", self)
+
+        # Connexions communes
+        self.act_titre.triggered.connect(self.demande_saisie_titre.emit)
+        self.act_recup_tags.triggered.connect(self.demande_ouvrir_recuperation_tags.emit)
+        self.act_tags_rw.triggered.connect(self.demande_ouvrir_editeur_tags.emit)
+        self.act_recup_images.triggered.connect(self.demande_recuperer_images.emit)
+        self.act_faces.triggered.connect(self.demande_faces.emit)
+        self.act_pdf.triggered.connect(self.demande_pdf.emit)
+
+        # État initial
+        self.act_titre.setEnabled(True)
+        self.act_recup_tags.setEnabled(False)
+        self.act_tags_rw.setEnabled(False)
+        self.act_recup_images.setEnabled(False)
+        self.act_faces.setEnabled(False)
+        self.act_pdf.setEnabled(False)
+
         # construction de l'interface
         self.menu()
         self.barre_d_outils()
@@ -67,11 +91,20 @@ class Fenetre(QMainWindow):
         # voir le fichier utilis.py dans Vue
         centrer_fenetre(self) 
 
-    
-
     def menu(self) -> None:
         """Construit le menu principal."""
         barre = self.menuBar()
+        # menu fichiers
+        menu_fichiers =barre.addMenu("Fichier")
+        menu_fichiers.addAction(self.act_titre)
+        menu_fichiers.addAction(self.act_recup_tags)
+        menu_fichiers.addSeparator()
+        menu_fichiers.addAction(self.act_tags_rw)
+        menu_fichiers.addSeparator()
+        menu_fichiers.addAction(self.act_recup_images)
+        menu_fichiers.addAction(self.act_faces)
+        menu_fichiers.addAction(self.act_pdf)
+        #menu aide
         menu_aide = barre.addMenu("Aide")
         action_a_propos = QAction("À propos", self)
         action_a_propos.triggered.connect(self.information)
@@ -88,17 +121,25 @@ class Fenetre(QMainWindow):
                 color: white;
             }
         """)
-        # icônes
+        # dossier des icones
         self.dossier_icones = Path(__file__).resolve().parent.parent / "ressources" / "icones"
-        self.act_titre = QAction(QIcon(str(self.dossier_icones / "titre.svg")), "Titre", self)
-        self.act_recup_tags = QAction(QIcon(str(self.dossier_icones / "recup_tags.svg")), "Récupérer les tags", self)
-        self.act_tags_rw = QAction(QIcon(str(self.dossier_icones / "tags_rw.svg")), "Lire/Écrire tags", self)
-        self.act_recup_images = QAction(QIcon(str(self.dossier_icones / "recup_images.svg")), "Récupérer les images", self)
-        self.act_faces = QAction(QIcon(str(self.dossier_icones / "deux_faces.svg")), "Générer 2 faces", self)
-        self.act_pdf = QAction(QIcon(str(self.dossier_icones / "pdf.svg")), "PDF", self)
-        for a in (self.act_titre, self.act_recup_tags, self.act_tags_rw,
-                  self.act_recup_images, self.act_faces, self.act_pdf):
-            toolbar.addAction(a)
+
+        # On ajoute des icônes aux **actions déjà existantes**
+        self.act_titre.setIcon(QIcon(str(self.dossier_icones / "titre.svg")))
+        self.act_recup_tags.setIcon(QIcon(str(self.dossier_icones / "recup_tags.svg")))
+        self.act_tags_rw.setIcon(QIcon(str(self.dossier_icones / "tags_rw.svg")))
+        self.act_recup_images.setIcon(QIcon(str(self.dossier_icones / "recup_images.svg")))
+        self.act_faces.setIcon(QIcon(str(self.dossier_icones / "deux_faces.svg")))
+        self.act_pdf.setIcon(QIcon(str(self.dossier_icones / "pdf.svg")))
+        
+        # ajout des actions
+        toolbar.addAction(self.act_titre)
+        toolbar.addAction(self.act_recup_tags)
+        toolbar.addAction(self.act_tags_rw)
+        toolbar.addAction(self.act_recup_images)
+        toolbar.addAction(self.act_faces)
+        toolbar.addAction(self.act_pdf)
+
         # info-bulles
         self.act_titre.setToolTip("Créer le titre")
         self.act_recup_tags.setToolTip("Récupérer les tags")
@@ -106,19 +147,7 @@ class Fenetre(QMainWindow):
         self.act_recup_images.setToolTip("Récupérer les images")
         self.act_faces.setToolTip("Créer les deux faces")
         self.act_pdf.setToolTip("Créer le pdf")
-        # activation des boutons
-        self.act_titre.setEnabled(True)
-        for a in (self.act_recup_tags, self.act_tags_rw,
-                  self.act_recup_images, self.act_faces, self.act_pdf):
-            a.setEnabled(False)
-        # Connexions Vue → Contrôleur
-        self.act_titre.triggered.connect(self.demande_saisie_titre.emit)
-        self.act_recup_tags.triggered.connect(self.demande_ouvrir_recuperation_tags.emit)
-        self.act_tags_rw.triggered.connect(self.demande_ouvrir_editeur_tags.emit)
-        self.act_recup_images.triggered.connect(self.demande_recuperer_images.emit)
-        self.act_faces.triggered.connect(self.demande_faces.emit)
-        self.act_pdf.triggered.connect(self.demande_pdf.emit)
-
+       
     def panneau_gauche(self) -> None:
         """Construit le panneau gauche (liste des albums)."""
         self.recup_donnees = Haut_gauche()
