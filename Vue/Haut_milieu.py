@@ -47,8 +47,8 @@ class Haut_milieu(QWidget):
         self.label_artiste = QLabel(self.nom_artiste, self)
         self.label_artiste.setAlignment(Qt.AlignCenter)
         self.label_artiste.setStyleSheet("""
-            font-size: 28px;
-            color: #4e3728;
+            font-size: 32px;
+            color: #2E2E2E;
             font-weight: 600;
         """)
         layout.addWidget(self.label_artiste, alignment=Qt.AlignHCenter)

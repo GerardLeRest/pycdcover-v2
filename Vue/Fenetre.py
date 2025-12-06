@@ -62,7 +62,8 @@ class Fenetre(QMainWindow):
         self.act_tags_rw = QAction("Lire/Écrire tags", self)
         self.act_recup_images = QAction("Récupérer les images", self)
         self.act_faces = QAction("Créer les deux faces", self)
-        self.act_pdf = QAction("PDF", self)
+        self.act_pdf = QAction("Générer le pdF", self)
+        self.act_quitter = QAction("Quitter")
 
         # Connexions communes
         self.act_titre.triggered.connect(self.demande_saisie_titre.emit)
@@ -71,6 +72,8 @@ class Fenetre(QMainWindow):
         self.act_recup_images.triggered.connect(self.demande_recuperer_images.emit)
         self.act_faces.triggered.connect(self.demande_faces.emit)
         self.act_pdf.triggered.connect(self.demande_pdf.emit)
+        self.act_quitter = QAction(QIcon("ressources/icones/quitter.svg"), "Quitter", self)
+        self.act_quitter.triggered.connect(self.close)
 
         # État initial
         self.act_titre.setEnabled(True)
@@ -79,6 +82,7 @@ class Fenetre(QMainWindow):
         self.act_recup_images.setEnabled(False)
         self.act_faces.setEnabled(False)
         self.act_pdf.setEnabled(False)
+        self.act_quitter.setEnabled(True)
 
         # construction de l'interface
         self.menu()
@@ -104,6 +108,7 @@ class Fenetre(QMainWindow):
         menu_fichiers.addAction(self.act_recup_images)
         menu_fichiers.addAction(self.act_faces)
         menu_fichiers.addAction(self.act_pdf)
+        menu_fichiers.addAction(self.act_quitter)
         #menu aide
         menu_aide = barre.addMenu("Aide")
         action_a_propos = QAction("À propos", self)
@@ -153,29 +158,36 @@ class Fenetre(QMainWindow):
         self.recup_donnees = Haut_gauche()
         self.recup_donnees.charger_depuis_fichier()
         self.liste = QListWidget()
-        self.liste.setStyleSheet("""
+        self.setStyleSheet("""
+            /* LISTE GLOBALE */
             QListWidget {
-                font-size: 16px;
-                color: #6b5e4f;
+                font-size: 16px;            
+                color: #4a4036;                 /* texte plus lisible et plus moderne */
                 margin: 15px;
-                border: 1px solid #d3d3d3;
-                background-color: white;
+                border: 1px solid #d7d7d7;      /* bordure plus élégante, moins brute */
+                background-color: #fafafa;      /* gris très clair pro */
             }
+
+            /* ITEMS */
             QListWidget::item {
                 padding: 6px 10px;
                 margin: 2px 4px;
                 border-radius: 4px;
             }
+
+            /* SÉLECTION (version assourdie, look pro) */
             QListWidget::item:selected {
-                background-color: #FE6E3E;
+                background-color: #e89b3f;      /* orange doux, moins "flashy" */
                 color: white;
                 font-weight: 600;
             }
+
+            /* HOVER (subtil, élégant) */
             QListWidget::item:hover {
-                background-color: #FFAA43;
-                color: white;
+                background-color: #f2c792;      /* beige orangé très doux */
+                color: #fff;
             }
-        """)
+    """)
         self.liste.setFocusPolicy(Qt.NoFocus)
         self.liste.setFixedWidth(300)
         self.liste.addItems(self.recup_donnees.tableau)

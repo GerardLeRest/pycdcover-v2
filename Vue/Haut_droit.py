@@ -33,7 +33,7 @@ class Haut_droit(QWidget):
         lab = QLabel(texte, self)
         lab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         lab.setFont(QFont("", 18, QFont.Bold)) # "": police par défaut du système
-        lab.setStyleSheet("color: #2c3e50; margin:0; padding:0;")
+        lab.setStyleSheet("color: #6c6c6c; margin:0; padding:0;")
         lab.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         return lab
 
@@ -45,8 +45,8 @@ class Haut_droit(QWidget):
         lab.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         lab.setStyleSheet("""
             font-size: 16px;
-            color: #4e3728;
-            border: 0.5px solid #d3d3d3;
+            color: #7C7C7C;
+            border: 0.5px solid #7C7C7C;
             padding: 4px 10px;   /* haut/bas = 4px, gauche/droite = 8px */
             border-radius: 8px;
         """)

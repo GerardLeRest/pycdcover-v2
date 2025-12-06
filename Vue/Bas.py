@@ -48,15 +48,16 @@ class Bas(QWidget):
         self.table.setStyleSheet("""
             QTableWidget::item {
                 font-size: 16px;
-                color: #4e3728;
                 padding: 6px;
             }
-            QTableWidget::item:selected {
-                background-color: #FF6633;
-                color: white;
-                font-weight: 600;
+            QTableWidget {
+                color: #7C7C7C;   /* ✔️ gris léger */
+            }
+            QTableView {
+                color: #7C7C7C;   /* ✔️ pour forcer le viewport */
             }
         """)
+
 
         # mise en page
         header = self.table.horizontalHeader() 
@@ -66,7 +67,7 @@ class Bas(QWidget):
         header.setFont(font)
         header.setStyleSheet("""
             QHeaderView::section {
-                color: #2c3e50;
+                color: #6c6c6c;
                 font-size: 16px;
                 margin: 0px;
                 padding: 4px;
