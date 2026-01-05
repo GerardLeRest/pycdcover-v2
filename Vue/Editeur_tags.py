@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, Signal
 from pathlib import Path
 from Vue.utils import centrer_fenetre
+from builtins import _
 import sys
 
 
@@ -25,7 +26,7 @@ class Editeur_tags(QWidget):
         super().__init__(parent)
         #pour pouvoir mettre à jours les donnée d'autres méthodes - voir + bas
         self.parent = parent   # référence vers la fenêtre principale
-        self.setWindowTitle("Éditeur de tags")
+        self.setWindowTitle(_("Éditeur de tags"))
         self.resize(300, 400)
         # fichier tags
         self.chemin_tags: Path = Path.home() / "PyCDCover" / "tags.txt"
@@ -45,13 +46,13 @@ class Editeur_tags(QWidget):
         # layout horizontal pour les boutons
         layout_hor = QHBoxLayout()
         # bouton valider
-        valider = QPushButton("Valider", self)
+        valider = QPushButton(_("Valider"), self)
         valider.setFixedWidth(100)
         self.habillage_bouton(valider)
         layout_hor.addWidget(valider)
         valider.clicked.connect(self.quitter_sauvegarder)
         # bouton quitter
-        abandonner = QPushButton("Quitter", self)
+        abandonner = QPushButton(_("Quitter"), self)
         abandonner.setFixedWidth(100)
         self.habillage_bouton(abandonner)
         layout_hor.addWidget(abandonner, alignment=Qt.AlignRight)

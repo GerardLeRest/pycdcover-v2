@@ -14,6 +14,7 @@ from typing import Any
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QAbstractItemView
 from PySide6.QtCore import Qt
+from builtins import _
 
 class Bas(QWidget):
     """affichage des méta-données du disque"""
@@ -34,7 +35,7 @@ class Bas(QWidget):
 
         # Création du tableau
         self.table = QTableWidget(len(self.chansons), 5)
-        self.table.setHorizontalHeaderLabels(["Titre", "Piste", "Album", "Artiste", "Année"])
+        self.table.setHorizontalHeaderLabels([_("Titre"),_("Piste"),_("Album"),_("Artiste"), _("Année")])
         self.table.verticalHeader().setVisible(False)
         # Empêche toute modification
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)

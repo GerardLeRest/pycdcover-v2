@@ -10,6 +10,7 @@ from PySide6.QtCore import Qt
 import os
 from pathlib import Path
 from Vue.utils import centrer_fenetre # fonction
+from builtins import _
 
 class FenetreAPropos(QDialog):
     """fentetre d'information sur le logiciel"""
@@ -44,7 +45,7 @@ class FenetreAPropos(QDialog):
         
     def preparation_titre(self) -> None:
         """construction du label du titre"""
-        self.titre = QLabel("PyCDCover", self)
+        self.titre = QLabel(_("PyCDCover"), self)
         self.titre.setAlignment(Qt.AlignCenter)
         self.titre.setStyleSheet("""
             QLabel {
@@ -57,7 +58,7 @@ class FenetreAPropos(QDialog):
 
     def preparation_texte_haut(self) -> None:
         """construction du label du texte du haut"""
-        self.texte_haut = QLabel("Licence : GNU GPL V2.0.0\n2015 - 2025", self)
+        self.texte_haut = QLabel(_("Licence : GNU GPL V2.0.0\n2015 - 2025"), self)
         self.texte_haut.setAlignment(Qt.AlignCenter)
         self.texte_haut.setStyleSheet("""
             QLabel {
@@ -84,7 +85,7 @@ class FenetreAPropos(QDialog):
 
     def preparation_texte_bas(self) -> None:
         """construction du label du texte du bas"""
-        self.texte_bas = QLabel(
+        self.texte_bas = QLabel(_(
             "Images : <a href='https://musicbrainz.org'>musicbrainz.org</a><br>"
             "ou : <a href='https://www.apple.com/fr/itunes/'>Itunes</a><br>"
             "Chemin des fichiers :<br>"
@@ -94,7 +95,7 @@ class FenetreAPropos(QDialog):
             "<br>"
             "Auteur : <b>Gérard LE REST </b> - "
             "Site : <a href='https://gerardlerest.github.io/pycdcover/'>PyCDCover</a><br>"
-            "Contact : <a href='mailto:ge.lerest@gmail.com'>ge.lerest@gmail.com</a><br>",
+            "Contact : <a href='mailto:ge.lerest@gmail.com'>ge.lerest@gmail.com</a><br>"),
             self
         )
         self.texte_bas.setOpenExternalLinks(True)
@@ -110,7 +111,7 @@ class FenetreAPropos(QDialog):
 
     def preparation_bouton_fermer(self) -> None:
         """construction du bouton Fermer"""
-        self.bouton_fermer = QPushButton("Fermer", self)
+        self.bouton_fermer = QPushButton(_("Fermer"), self)
         self.bouton_fermer.setFixedSize(100, 30)
         self.bouton_fermer.setStyleSheet("""
             QPushButton {

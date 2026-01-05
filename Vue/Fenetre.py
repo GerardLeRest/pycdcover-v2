@@ -18,17 +18,20 @@ from Vue.Bas import Bas
 from Vue.A_propos import FenetreAPropos
 import sys
 from Vue.utils import centrer_fenetre
+from builtins import _
 
 
 class Fenetre(QMainWindow):
     """Fenêtre principale de l'application"""
 
+    # signaux
     demande_saisie_titre = Signal()
     demande_ouvrir_recuperation_tags = Signal()
     demande_ouvrir_editeur_tags = Signal()
     demande_recuperer_images = Signal()
     demande_faces = Signal()
     demande_pdf = Signal()
+    demande_langue = Signal()
 
     def __init__(self):
         """Initialisation de la fenêtre principale."""
@@ -57,13 +60,14 @@ class Fenetre(QMainWindow):
             | Qt.WindowCloseButtonHint
         )
         # déclaration des actions
-        self.act_titre = QAction("Titre", self)
-        self.act_recup_tags = QAction("Récupérer_tags", self)
-        self.act_tags_rw = QAction("Lire/Écrire tags", self)
-        self.act_recup_images = QAction("Récupérer les images", self)
-        self.act_faces = QAction("Créer les deux faces", self)
-        self.act_pdf = QAction("Générer le pdF", self)
-        self.act_quitter = QAction("Quitter")
+        self.act_titre = QAction(_("Titre"), self)
+        self.act_recup_tags = QAction(_("Récupérer les tags"), self)
+        self.act_tags_rw = QAction(_("Lire/Écrire tags"), self)
+        self.act_recup_images = QAction(_("Récupérer les images"), self)
+        self.act_faces = QAction(_("Créer les deux faces"), self)
+        self.act_pdf = QAction(_("Générer le PDF"), self)
+        self.act_langue = QAction(_("Choisir la langue"), self)
+        self.act_quitter = QAction(_("Quitter"))
 
         # Connexions communes
         self.act_titre.triggered.connect(self.demande_saisie_titre.emit)
@@ -72,7 +76,8 @@ class Fenetre(QMainWindow):
         self.act_recup_images.triggered.connect(self.demande_recuperer_images.emit)
         self.act_faces.triggered.connect(self.demande_faces.emit)
         self.act_pdf.triggered.connect(self.demande_pdf.emit)
-        self.act_quitter = QAction(QIcon("ressources/icones/quitter.svg"), "Quitter", self)
+        self.act_langue.triggered.connect(self.demande_langue.emit)
+        self.act_quitter = QAction(QIcon("ressources/icones/quitter.svg"), _("Quitter"), self)
         self.act_quitter.triggered.connect(self.close)
 
         # État initial
@@ -82,6 +87,7 @@ class Fenetre(QMainWindow):
         self.act_recup_images.setEnabled(False)
         self.act_faces.setEnabled(False)
         self.act_pdf.setEnabled(False)
+        self.act_langue.setEnabled(True)
         self.act_quitter.setEnabled(True)
 
         # construction de l'interface
@@ -99,7 +105,7 @@ class Fenetre(QMainWindow):
         """Construit le menu principal."""
         barre = self.menuBar()
         # menu fichiers
-        menu_fichiers =barre.addMenu("Fichier")
+        menu_fichiers =barre.addMenu(_("Fichier"))
         menu_fichiers.addAction(self.act_titre)
         menu_fichiers.addAction(self.act_recup_tags)
         menu_fichiers.addSeparator()
@@ -108,10 +114,13 @@ class Fenetre(QMainWindow):
         menu_fichiers.addAction(self.act_recup_images)
         menu_fichiers.addAction(self.act_faces)
         menu_fichiers.addAction(self.act_pdf)
+        menu_fichiers.addSeparator()
+        menu_fichiers.addAction(self.act.langues)
+        menu_fichiers.addSeparator()
         menu_fichiers.addAction(self.act_quitter)
         #menu aide
-        menu_aide = barre.addMenu("Aide")
-        action_a_propos = QAction("À propos", self)
+        menu_aide = barre.addMenu(_("Aide"))
+        action_a_propos = QAction(_("À propos"), self)
         action_a_propos.triggered.connect(self.information)
         menu_aide.addAction(action_a_propos)
 
@@ -146,12 +155,12 @@ class Fenetre(QMainWindow):
         toolbar.addAction(self.act_pdf)
 
         # info-bulles
-        self.act_titre.setToolTip("Créer le titre")
-        self.act_recup_tags.setToolTip("Récupérer les tags")
-        self.act_tags_rw.setToolTip("Éditer/Modifier les tags")
-        self.act_recup_images.setToolTip("Récupérer les images")
-        self.act_faces.setToolTip("Créer les deux faces")
-        self.act_pdf.setToolTip("Créer le pdf")
+        self.act_titre.setToolTip(_("Créer le titre"))
+        self.act_recup_tags.setToolTip(_("Récupérer les tags"))
+        self.act_tags_rw.setToolTip(_("Éditer/Modifier les tags"))
+        self.act_recup_images.setToolTip(_("Récupérer les images"))
+        self.act_faces.setToolTip(_("Créer les deux faces"))
+        self.act_pdf.setToolTip(_("Générer le pdf"))
        
     def panneau_gauche(self) -> None:
         """Construit le panneau gauche (liste des albums)."""

@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
 import sys
 from PySide6.QtCore import Signal
 from Vue.utils import centrer_fenetre # fonction
+from builtins import _
 
 
 class Fen_Titre(QDialog):
@@ -25,12 +26,12 @@ class Fen_Titre(QDialog):
 
     def initialiser(self)->None:
         """construction de la fenêtre"""
-        self.setWindowTitle("Titre du CD")            
+        self.setWindowTitle(_("Titre du CD"))            
         layoutV = QVBoxLayout()
         layoutV.setContentsMargins(20, 20, 20, 20)
 
         # label
-        label = QLabel ("Saisir le titre du CD", self)
+        label = QLabel (_("Saisir le titre du CD"), self)
         label.setStyleSheet("font-size: 15px; padding: 14px 0;")
         layoutV.addWidget(label)
         
@@ -38,7 +39,7 @@ class Fen_Titre(QDialog):
         layoutH =QHBoxLayout()
         # champ
         self.champ = QLineEdit()
-        self.champ.setPlaceholderText("Titre du CD")
+        self.champ.setPlaceholderText(_("Titre du CD"))
         self.champ.setStyleSheet("""
                 border: 1px solid #6b5e4f;
                 border-radius: 8px;
@@ -47,7 +48,7 @@ class Fen_Titre(QDialog):
                              """)
         layoutH.addWidget(self.champ)
         # bouton
-        bouton = QPushButton("Ok", self)
+        bouton = QPushButton(_("Ok"), self)
         bouton.setStyleSheet("""
             QPushButton {
                 color: #4e3728;
@@ -80,10 +81,10 @@ class Fen_Titre(QDialog):
     def emission_titre (self) -> None:
         """vérifie la validité du champ"""
         if not self.champ.text():
-            QMessageBox.warning(self, "Erreur", "Le champ est vide.")
+            QMessageBox.warning(self, _("Erreur"), _("Le champ est vide."))
             return
         elif len(self.champ.text())>50:
-            QMessageBox.warning(self, "Erreur", "Le titre est trop long (> 40 car).")
+            QMessageBox.warning(self, _("Erreur"), _("Le titre est trop long (> 40 car)."))
             return
         else:
             self.titre = self.champ

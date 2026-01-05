@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSizePo
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 from typing import Any
+from builtins import _
 
 class Haut_droit(QWidget):
     """affiche les données en hat à droite"""
@@ -70,15 +71,15 @@ class Haut_droit(QWidget):
         layout_principal.setContentsMargins(8, self.TOP, 8, 8)  # TOP applique le décalage
         layout_principal.setSpacing(self.GAP)
         # blocs simples
-        layout_principal.addWidget(self.bloc("Artiste", self.nom_artiste))
-        layout_principal.addWidget(self.bloc("Album", self.album))
+        layout_principal.addWidget(self.bloc(_("Artiste"), self.nom_artiste))
+        layout_principal.addWidget(self.bloc(_("Album"), self.album))
         # bloc " Année - Genre"
         ligne = QWidget(self)
         hbox = QHBoxLayout(ligne)
         hbox.setContentsMargins(0, 0, 0, 0)
         hbox.setSpacing(16)
-        hbox.addWidget(self.bloc("Année", self.annee))
-        hbox.addWidget(self.bloc("Genre", self.genre))
+        hbox.addWidget(self.bloc(_("Année"), self.annee))
+        hbox.addWidget(self.bloc(_("Genre"), self.genre))
         layout_principal.addWidget(ligne)
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
 

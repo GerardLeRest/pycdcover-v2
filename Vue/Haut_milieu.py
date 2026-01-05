@@ -12,6 +12,8 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt, Signal, Slot
 from pathlib import Path
 from typing import Any
+from builtins import _
+
 
 
 class Haut_milieu(QWidget):
