@@ -6,24 +6,27 @@ Auteur : Gérard Le Rest (2025)
 
 from PySide6.QtWidgets import (
     QMainWindow, QToolBar, QWidget, QVBoxLayout, QHBoxLayout,
-    QListWidget, QListWidgetItem
+    QListWidget, QListWidgetItem, QMenu, QMessageBox
 )
 from PySide6.QtCore import Qt, QSize, Signal
-from PySide6.QtGui import QIcon, QAction
+from PySide6.QtGui import QIcon, QAction, QActionGroup
 from pathlib import Path
 from Vue.Haut_gauche import Haut_gauche
 from Vue.Haut_milieu import Haut_milieu
 from Vue.Haut_droit import Haut_droit
 from Vue.Bas import Bas
 from Vue.A_propos import FenetreAPropos
-import sys
+from Modele.GestionLangue import GestionLangue
+
+import sys, json
 from Vue.utils import centrer_fenetre
 from builtins import _
 
+repertoire_racine = Path(__file__).resolve().parent.parent
+configurationLangue = repertoire_racine / "configurationLangue.json"
 
 class Fenetre(QMainWindow):
     """Fenêtre principale de l'application"""
-
     # signaux
     demande_saisie_titre = Signal()
     demande_ouvrir_recuperation_tags = Signal()
@@ -31,7 +34,8 @@ class Fenetre(QMainWindow):
     demande_recuperer_images = Signal()
     demande_faces = Signal()
     demande_pdf = Signal()
-    demande_langue = Signal()
+    repertoire_racine = Path(__file__).resolve().parent
+    configurationLangue = repertoire_racine / "configurationLangue.json"
 
     def __init__(self):
         """Initialisation de la fenêtre principale."""
@@ -66,7 +70,6 @@ class Fenetre(QMainWindow):
         self.act_recup_images = QAction(_("Récupérer les images"), self)
         self.act_faces = QAction(_("Créer les deux faces"), self)
         self.act_pdf = QAction(_("Générer le PDF"), self)
-        self.act_langue = QAction(_("Choisir la langue"), self)
         self.act_quitter = QAction(_("Quitter"))
 
         # Connexions communes
@@ -76,7 +79,6 @@ class Fenetre(QMainWindow):
         self.act_recup_images.triggered.connect(self.demande_recuperer_images.emit)
         self.act_faces.triggered.connect(self.demande_faces.emit)
         self.act_pdf.triggered.connect(self.demande_pdf.emit)
-        self.act_langue.triggered.connect(self.demande_langue.emit)
         self.act_quitter = QAction(QIcon("ressources/icones/quitter.svg"), _("Quitter"), self)
         self.act_quitter.triggered.connect(self.close)
 
@@ -87,7 +89,6 @@ class Fenetre(QMainWindow):
         self.act_recup_images.setEnabled(False)
         self.act_faces.setEnabled(False)
         self.act_pdf.setEnabled(False)
-        self.act_langue.setEnabled(True)
         self.act_quitter.setEnabled(True)
 
         # construction de l'interface
@@ -105,24 +106,71 @@ class Fenetre(QMainWindow):
         """Construit le menu principal."""
         barre = self.menuBar()
         # menu fichiers
+        menu_fichiers =QMenu("fichiers", self)
         menu_fichiers =barre.addMenu(_("Fichier"))
         menu_fichiers.addAction(self.act_titre)
         menu_fichiers.addAction(self.act_recup_tags)
-        menu_fichiers.addSeparator()
         menu_fichiers.addAction(self.act_tags_rw)
-        menu_fichiers.addSeparator()
         menu_fichiers.addAction(self.act_recup_images)
         menu_fichiers.addAction(self.act_faces)
         menu_fichiers.addAction(self.act_pdf)
         menu_fichiers.addSeparator()
-        menu_fichiers.addAction(self.act.langues)
+        # action des langues
+        menu_langues = QMenu(_("Langues"), self)
+        groupe_langue = QActionGroup(self)
+        groupe_langue.setExclusive(True)
+        self.gestionLangue = GestionLangue(configurationLangue) # objet lecture/ecriture
+        self.actionBrezhoneg = QAction("Brezhoneg", self, checkable=True)
+        self.actionBrezhoneg.triggered.connect(lambda: self.changerLangue("br"))
+        self.actionEnglish = QAction("English", self, checkable=True)
+        self.actionEnglish.triggered.connect(lambda: self.changerLangue("en"))
+        self.actionEspagnol = QAction("Español", self, checkable=True)
+        self.actionEspagnol.triggered.connect(lambda: self.changerLangue("es"))
+        self.actionFrancais = QAction("Français", self, checkable=True)
+        self.actionFrancais.triggered.connect(lambda: self.changerLangue("fr"))
+        langue = self.gestionLangue.lire()
+        self.recuperation_code_langue(langue)
+        # lier acions au menu et ay groupe langue
+        for action in (self.actionBrezhoneg, self.actionEnglish, self.actionEspagnol,
+                       self.actionFrancais):
+            groupe_langue.addAction(action)
+            menu_langues.addAction(action)
+        # "sousMenuLangues" -> menu menuPrincipal
+        menu_fichiers.addMenu(menu_langues)
         menu_fichiers.addSeparator()
         menu_fichiers.addAction(self.act_quitter)
+        # lier le menu menu fichiers au menuBar
+        barre.addMenu(menu_fichiers)
         #menu aide
         menu_aide = barre.addMenu(_("Aide"))
         action_a_propos = QAction(_("À propos"), self)
         action_a_propos.triggered.connect(self.information)
         menu_aide.addAction(action_a_propos)
+
+    def recuperation_code_langue(self, langue)->None:
+        "Récupérer le code de la langue"
+        if langue == "br":
+            self.actionBrezhoneg.setChecked(True)
+        elif langue == "en":
+            self.actionEnglish.setChecked(True)
+        elif langue == "es":
+            self.actionEspagnol.setChecked(True)
+        else:
+            self.actionFrancais.setChecked(True)    
+    
+    def changerLangue(self, codeLangue)->None:
+        """changer la langue"""
+        self.gestionLangue.ecrire(codeLangue)
+        # sélection du radio
+        self.afficherMessage()
+
+    def afficherMessage(self)->None:
+        "afficher le message d'avertissement"
+        QMessageBox.warning(
+            self,
+            _("Attention"),
+            _("Les changements se feront au prochain démarrage.")
+        )
 
     def barre_d_outils(self) -> None:
         """Construit la barre d’outils principale avec ses icônes et ses actions."""
