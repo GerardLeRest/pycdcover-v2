@@ -1,0 +1,156 @@
+# English translations for pycdcover-v package.
+# Copyright (C) 2026 THE pycdcover-v'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the pycdcover-v package.
+# Gerard <ge.lerest@gmail.com>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: pycdcover-v 2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-05 15:17+0100\n"
+"PO-Revision-Date: 2026-01-05 15:30+0100\n"
+"Last-Translator: Gerard <ge.lerest@gmail.com>\n"
+"Language-Team: English <en>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Vue/A_propos.py:38
+msgid "PyCDCover"
+msgstr "PyCDCover"
+
+#: Vue/A_propos.py:51
+msgid ""
+"Licence : GNU GPL V2.0.0\n"
+"2015 - 2025"
+msgstr ""
+"License: GNU GPL V2.0.0\n"
+"2015 - 2025"
+
+#: Vue/A_propos.py:88
+msgid ""
+"Images : <a href='https://musicbrainz.org'>musicbrainz.org</a><br>ou : <a "
+"href='https://www.apple.com/fr/itunes/'>Itunes</a><br>Chemin des fichiers :"
+"<br>GNU/Linux : ~/PyCDCover/<br>macOS : ~/PyCDCover/<br>Windows : C:/Users/"
+"Nom_utilisateur/PyCDCover/<br><br>Auteur : <b>Gérard LE REST </b> - Site : "
+"<a href='https://gerardlerest.github.io/pycdcover/'>PyCDCover</"
+"a><br>Contact : <a href='mailto:ge.lerest@gmail.com'>ge.lerest@gmail.com</"
+"a><br>"
+msgstr ""
+"Images: <a href='https://musicbrainz.org'>musicbrainz.org</a><br>or: <a "
+"href='https://www.apple.com/itunes/'>iTunes</a><br>File path:"
+"<br>GNU/Linux: ~/PyCDCover/<br>macOS: ~/PyCDCover/<br>Windows: C:/Users/"
+"Username/PyCDCover/<br><br>Author: <b>Gérard LE REST </b> - Website: "
+"<a href='https://gerardlerest.github.io/pycdcover/'>PyCDCover</"
+"a><br>Contact: <a href='mailto:ge.lerest@gmail.com'>ge.lerest@gmail.com</"
+"a><br>"
+
+#: Vue/A_propos.py:108
+msgid "Fermer"
+msgstr "Close"
+
+#: Vue/Bas.py:38 Vue/Fenetre.py:53
+msgid "Titre"
+msgstr "Title"
+
+#: Vue/Bas.py:38
+msgid "Piste"
+msgstr "Track"
+
+#: Vue/Bas.py:38
+msgid "Album"
+msgstr "Album"
+
+#: Vue/Bas.py:38
+msgid "Artiste"
+msgstr "Artist"
+
+#: Vue/Bas.py:38
+msgid "Année"
+msgstr "Year"
+
+#: Vue/Editeur_tags.py:29
+msgid "Éditeur de tags"
+msgstr "Tag Editor"
+
+#: Vue/Editeur_tags.py:49
+msgid "Valider"
+msgstr "Validate"
+
+#: Vue/Editeur_tags.py:55 Vue/Fenetre.py:59
+msgid "Quitter"
+msgstr "Quit"
+
+#: Vue/Fen_Titre.py:30
+msgid "Titre du CD"
+msgstr "CD Title"
+
+#: Vue/Fen_Titre.py:35
+msgid "Saisir le titre du CD"
+msgstr "Enter the CD title"
+
+#: Vue/Fen_Titre.py:49
+msgid "Ok"
+msgstr "OK"
+
+#: Vue/Fen_Titre.py:71
+msgid "Erreur"
+msgstr "Error"
+
+#: Vue/Fen_Titre.py:71
+msgid "Le champ est vide."
+msgstr "The field is empty."
+
+#: Vue/Fen_Titre.py:74
+msgid "Le titre est trop long (> 40 car)."
+msgstr "The title is too long (> 40 characters)."
+
+#: Vue/Fenetre.py:54 Vue/Fenetre.py:137
+msgid "Récupérer les tags"
+msgstr "Retrieve tags"
+
+#: Vue/Fenetre.py:55
+msgid "Lire/Écrire tags"
+msgstr "Read/Write tags"
+
+#: Vue/Fenetre.py:56 Vue/Fenetre.py:139
+msgid "Récupérer les images"
+msgstr "Retrieve images"
+
+#: Vue/Fenetre.py:57 Vue/Fenetre.py:140
+msgid "Créer les deux faces"
+msgstr "Create both covers"
+
+#: Vue/Fenetre.py:58
+msgid "Générer le PDF"
+msgstr "Generate PDF"
+
+#: Vue/Fenetre.py:90
+msgid "Fichier"
+msgstr "File"
+
+#: Vue/Fenetre.py:101
+msgid "Aide"
+msgstr "Help"
+
+#: Vue/Fenetre.py:102
+msgid "À propos"
+msgstr "About"
+
+#: Vue/Fenetre.py:136
+msgid "Créer le titre"
+msgstr "Create title"
+
+#: Vue/Fenetre.py:138
+msgid "Éditer/Modifier les tags"
+msgstr "Edit/Modify tags"
+
+#: Vue/Fenetre.py:141
+msgid "Créer le PDF"
+msgstr "Create PDF"
+
+#: Vue/Haut_droit.py:82
+msgid "Genre"
+msgstr "Genre"
+

@@ -1,0 +1,156 @@
+# Breton translations for pycdcover-v package.
+# Copyright (C) 2026 THE pycdcover-v'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the pycdcover-v package.
+# Gerard <ge.lerest@gmail.com>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: pycdcover-v 2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-05 15:17+0100\n"
+"PO-Revision-Date: 2026-01-05 15:30+0100\n"
+"Last-Translator: Gerard <ge.lerest@gmail.com>\n"
+"Language-Team: Breton <br>\n"
+"Language: br\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Vue/A_propos.py:38
+msgid "PyCDCover"
+msgstr "PyCDCover"
+
+#: Vue/A_propos.py:51
+msgid ""
+"Licence : GNU GPL V2.0.0\n"
+"2015 - 2025"
+msgstr ""
+"Aotre-implijout : GNU GPL V2.0.0\n"
+"2015 - 2025"
+
+#: Vue/A_propos.py:88
+msgid ""
+"Images : <a href='https://musicbrainz.org'>musicbrainz.org</a><br>ou : <a "
+"href='https://www.apple.com/fr/itunes/'>Itunes</a><br>Chemin des fichiers :"
+"<br>GNU/Linux : ~/PyCDCover/<br>macOS : ~/PyCDCover/<br>Windows : C:/Users/"
+"Nom_utilisateur/PyCDCover/<br><br>Auteur : <b>Gérard LE REST </b> - Site : "
+"<a href='https://gerardlerest.github.io/pycdcover/'>PyCDCover</"
+"a><br>Contact : <a href='mailto:ge.lerest@gmail.com'>ge.lerest@gmail.com</"
+"a><br>"
+msgstr ""
+"Skeudennoù : <a href='https://musicbrainz.org'>musicbrainz.org</a><br>pe : <a "
+"href='https://www.apple.com/fr/itunes/'>iTunes</a><br>Hent ar restroù :"
+"<br>GNU/Linux : ~/PyCDCover/<br>macOS : ~/PyCDCover/<br>Windows : C:/Users/"
+"Anv_implijer/PyCDCover/<br><br>Aozer : <b>Gérard LE REST </b> - Lec'hienn : "
+"<a href='https://gerardlerest.github.io/pycdcover/'>PyCDCover</"
+"a><br>Darempred : <a href='mailto:ge.lerest@gmail.com'>ge.lerest@gmail.com</"
+"a><br>"
+
+#: Vue/A_propos.py:108
+msgid "Fermer"
+msgstr "Serriñ"
+
+#: Vue/Bas.py:38 Vue/Fenetre.py:53
+msgid "Titre"
+msgstr "Titl"
+
+#: Vue/Bas.py:38
+msgid "Piste"
+msgstr "Roudenn"
+
+#: Vue/Bas.py:38
+msgid "Album"
+msgstr "Albom"
+
+#: Vue/Bas.py:38
+msgid "Artiste"
+msgstr "Arzour"
+
+#: Vue/Bas.py:38
+msgid "Année"
+msgstr "Bloaz"
+
+#: Vue/Editeur_tags.py:29
+msgid "Éditeur de tags"
+msgstr "Embanner balizennoù"
+
+#: Vue/Editeur_tags.py:49
+msgid "Valider"
+msgstr "Kadarnaat"
+
+#: Vue/Editeur_tags.py:55 Vue/Fenetre.py:59
+msgid "Quitter"
+msgstr "Kuitaat"
+
+#: Vue/Fen_Titre.py:30
+msgid "Titre du CD"
+msgstr "Titl ar CD"
+
+#: Vue/Fen_Titre.py:35
+msgid "Saisir le titre du CD"
+msgstr "Roit titl ar CD"
+
+#: Vue/Fen_Titre.py:49
+msgid "Ok"
+msgstr "Mat eo"
+
+#: Vue/Fen_Titre.py:71
+msgid "Erreur"
+msgstr "Fazi"
+
+#: Vue/Fen_Titre.py:71
+msgid "Le champ est vide."
+msgstr "Goullo eo ar vaezienn."
+
+#: Vue/Fen_Titre.py:74
+msgid "Le titre est trop long (> 40 car)."
+msgstr "Re hir eo an titl (> 40 arouezenn)."
+
+#: Vue/Fenetre.py:54 Vue/Fenetre.py:137
+msgid "Récupérer les tags"
+msgstr "Adtapout ar balizennoù"
+
+#: Vue/Fenetre.py:55
+msgid "Lire/Écrire tags"
+msgstr "Lenn/Skrivañ balizennoù"
+
+#: Vue/Fenetre.py:56 Vue/Fenetre.py:139
+msgid "Récupérer les images"
+msgstr "Adtapout ar skeudennoù"
+
+#: Vue/Fenetre.py:57 Vue/Fenetre.py:140
+msgid "Créer les deux faces"
+msgstr "Krouiñ an daou du"
+
+#: Vue/Fenetre.py:58
+msgid "Générer le PDF"
+msgstr "Genel ar PDF"
+
+#: Vue/Fenetre.py:90
+msgid "Fichier"
+msgstr "Restr"
+
+#: Vue/Fenetre.py:101
+msgid "Aide"
+msgstr "Sikour"
+
+#: Vue/Fenetre.py:102
+msgid "À propos"
+msgstr "Diwar-benn"
+
+#: Vue/Fenetre.py:136
+msgid "Créer le titre"
+msgstr "Krouiñ an titl"
+
+#: Vue/Fenetre.py:138
+msgid "Éditer/Modifier les tags"
+msgstr "Embann/Kemmañ ar balizennoù"
+
+#: Vue/Fenetre.py:141
+msgid "Créer le PDF"
+msgstr "Krouiñ ar PDF"
+
+#: Vue/Haut_droit.py:82
+msgid "Genre"
+msgstr "Doare"
+
