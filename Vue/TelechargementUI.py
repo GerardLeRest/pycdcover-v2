@@ -16,7 +16,7 @@ from pathlib import Path
 from Modele.recup_images_avant import Image_devant
 import re
 from typing import Any
-
+from builtins import _
 
 class TelechargementUI(QWidget):
     telechargement_termine: Signal = Signal()
@@ -33,11 +33,11 @@ class TelechargementUI(QWidget):
         self.dossier.mkdir(parents=True, exist_ok=True)
 
         # --- UI -----------------------------------------------------------
-        self.setWindowTitle("Téléchargement des images")
+        self.setWindowTitle(_("Téléchargement des images"))
         self.resize(340, 120)
 
         layout = QVBoxLayout(self)
-        self.label = QLabel("Initialisation...")
+        self.label = QLabel(_("Initialisation..."))
         self.label.setAlignment(Qt.AlignCenter)
 
         self.progress = QProgressBar()
@@ -64,7 +64,7 @@ class TelechargementUI(QWidget):
     def _traiter_suivant(self) -> None:
         """Traite UN album, puis demande à Qt d'appeler la suite."""
         if self.index >= self.total:
-            self.label.setText("Téléchargement terminé")
+            self.label.setText(_("Téléchargement terminé"))
             self.telechargement_termine.emit()
             QTimer.singleShot(600, self.close)
             return
@@ -92,7 +92,12 @@ class TelechargementUI(QWidget):
         # UI update
         self.index += 1
         self.progress.setValue(self.index)
-        self.label.setText(f"Téléchargement {self.index}/{self.total}")
+        self.label.setText(
+            _("Téléchargement {current}/{total}").format(
+                current=self.index,
+                total=self.total
+            )
+)
 
         # Continue sans bloquer
         QTimer.singleShot(0, self._traiter_suivant)

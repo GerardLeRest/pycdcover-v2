@@ -17,13 +17,10 @@ from Vue.Haut_droit import Haut_droit
 from Vue.Bas import Bas
 from Vue.A_propos import FenetreAPropos
 from Modele.GestionLangue import GestionLangue
-
-import sys, json
+import sys
 from Vue.utils import centrer_fenetre
 from builtins import _
 
-repertoire_racine = Path(__file__).resolve().parent.parent
-configurationLangue = repertoire_racine / "configurationLangue.json"
 
 class Fenetre(QMainWindow):
     """Fenêtre principale de l'application"""
@@ -34,9 +31,8 @@ class Fenetre(QMainWindow):
     demande_recuperer_images = Signal()
     demande_faces = Signal()
     demande_pdf = Signal()
-    repertoire_racine = Path(__file__).resolve().parent
-    configurationLangue = repertoire_racine / "configurationLangue.json"
 
+   
     def __init__(self):
         """Initialisation de la fenêtre principale."""
         sys.path.append(str(Path(__file__).resolve().parents[1]))
@@ -53,6 +49,7 @@ class Fenetre(QMainWindow):
         self.dossier_pycdcover: Path = dossier_utilisateur / "PyCDCover"
         self.dossier_thumbnails: Path = self.dossier_pycdcover / "thumbnails"
         self.tags_txt: Path = self.dossier_pycdcover / "tags.txt"
+        self.fichierLangue: Path = dossier_utilisateur / ".config" / "pycdcover" / "configurationLangue.json"
         # tailles de la fenêtre
         self.setMinimumSize(900, 600)
         self.setMaximumSize(1000, 720)
@@ -106,8 +103,8 @@ class Fenetre(QMainWindow):
         """Construit le menu principal."""
         barre = self.menuBar()
         # menu fichiers
-        menu_fichiers =QMenu("fichiers", self)
-        menu_fichiers =barre.addMenu(_("Fichier"))
+        menu_fichiers = QMenu(_("Fichier"), self)
+        barre.addMenu(menu_fichiers)
         menu_fichiers.addAction(self.act_titre)
         menu_fichiers.addAction(self.act_recup_tags)
         menu_fichiers.addAction(self.act_tags_rw)
@@ -116,10 +113,11 @@ class Fenetre(QMainWindow):
         menu_fichiers.addAction(self.act_pdf)
         menu_fichiers.addSeparator()
         # action des langues
-        menu_langues = QMenu(_("Langues"), self)
+        menu_langues = QMenu(_("Langue"), self)
         groupe_langue = QActionGroup(self)
         groupe_langue.setExclusive(True)
-        self.gestionLangue = GestionLangue(configurationLangue) # objet lecture/ecriture
+        # récupération de la langue (voir dossier config) 
+        self.gestionLangue = GestionLangue(self.fichierLangue) 
         self.actionBrezhoneg = QAction("Brezhoneg", self, checkable=True)
         self.actionBrezhoneg.triggered.connect(lambda: self.changerLangue("br"))
         self.actionEnglish = QAction("English", self, checkable=True)
@@ -169,7 +167,7 @@ class Fenetre(QMainWindow):
         QMessageBox.warning(
             self,
             _("Attention"),
-            _("Les changements se feront au prochain démarrage.")
+            _("Les changements prendront effet au prochain démarrage.")
         )
 
     def barre_d_outils(self) -> None:
@@ -208,7 +206,7 @@ class Fenetre(QMainWindow):
         self.act_tags_rw.setToolTip(_("Éditer/Modifier les tags"))
         self.act_recup_images.setToolTip(_("Récupérer les images"))
         self.act_faces.setToolTip(_("Créer les deux faces"))
-        self.act_pdf.setToolTip(_("Générer le pdf"))
+        self.act_pdf.setToolTip(_("Générer le PDF"))
        
     def panneau_gauche(self) -> None:
         """Construit le panneau gauche (liste des albums)."""

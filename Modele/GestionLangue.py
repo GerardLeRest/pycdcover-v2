@@ -9,8 +9,11 @@ class GestionLangue:
         self.fichier_config = fichier_config
 
     def lire(self) -> str:
-        """Retourne le code langue ('fr', 'en', 'es', 'br')."""
-        if not self.fichier_config.exists():
+        """lire la langue - fichier JSON"""
+        try:
+            with open(self.fichier_config, "r", encoding="utf-8") as f:
+                return json.load(f).get("langueSelectionnee", "fr")
+        except (FileNotFoundError, json.JSONDecodeError):
             return "fr"
 
         with open(self.fichier_config, "r", encoding="utf-8") as f:
@@ -25,4 +28,3 @@ class GestionLangue:
                 indent=4,
                 ensure_ascii=False
             )
-

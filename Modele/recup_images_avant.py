@@ -350,4 +350,3 @@ class Image_devant:
 if __name__ == "__main__":
     test = Image_devant("Alt-J", "An Awesome Wave")
     test.creer()
-

@@ -13,6 +13,7 @@ from PySide6.QtCore import Signal
 from pathlib import Path
 from mutagen import File as MutaFile
 import sys, unicodedata
+from builtins import _
 
 class Tags(QMainWindow):
     """Récupérer tous les tags MP3 (artiste, album, année, genre, titres, numéros de piste)
@@ -43,7 +44,7 @@ class Tags(QMainWindow):
     def recuperer_tags(self)->None:
         """Créer la lsites des albums (dictionnaires) * artistes et albums - liste d'objets Path"""
         # fenetre du choix du dossier des albums
-        chemin = QFileDialog.getExistingDirectory(self, "Choisir le répertoire du CD", "/media")
+        chemin = QFileDialog.getExistingDirectory(self, _("Choisir le répertoire du CD"), _("/media"))
         if not chemin:
             return
         lecteur = Path(chemin)
@@ -62,11 +63,11 @@ class Tags(QMainWindow):
             albums = [lecteur]
         total = sum(len(list(a.glob("*.mp3"))) for a in albums)
         if total == 0:
-            QMessageBox.information(self, "Aucun MP3", "Aucune piste MP3 trouvée.")
+            QMessageBox.information(self, _("Aucun MP3"), _("Aucune piste MP3 trouvée."))
             return
         # barre de progressions
         self.progress.setRange(0, total)
-        self.label.setText("Extraction en cours...")
+        self.label.setText(_("Extraction en cours..."))
         QApplication.processEvents()
         # 👇 Ici on appelle directement la suite
         self.fichier_sortie(albums)
