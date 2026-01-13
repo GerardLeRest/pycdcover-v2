@@ -6,7 +6,6 @@ Auteur : Gérard Le Rest (2025)
 
 from PySide6.QtCore import QObject, Signal, Slot
 from pathlib import Path
-from Modele.recup_images_avant import nettoyer_nom
 
 class Haut_gauche(QObject):
     """affichage dans la fenêtre haut gauche"""
@@ -73,10 +72,10 @@ class Haut_gauche(QObject):
         for ligne in lignes:
             if ligne.startswith("C:"):
                 artiste = ligne[2:].strip()
+            if ligne.startswith("C:"):
+                artiste = ligne[2:].strip()
             elif ligne.startswith("A:"):
-                album = nettoyer_nom(ligne[2:].strip())
-            elif ligne.lower().endswith((".jpg", ".jpeg", ".png")):
-                couverture = nettoyer_nom(ligne)
+                album = ligne[2:].strip()
             elif " - " in ligne:
                 artiste, album, annee, genre, chansons = self.traiter_ligne_avec_tiret(
                     ligne, artiste, album, annee, genre, chansons

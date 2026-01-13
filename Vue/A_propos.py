@@ -58,7 +58,7 @@ class FenetreAPropos(QDialog):
 
     def preparation_texte_haut(self) -> None:
         """construction du label du texte du haut"""
-        self.texte_haut = QLabel(_("Licence : GNU GPL V2.0.0\n2015 - 2025"), self)
+        self.texte_haut = QLabel(_("Licence : GNU GPL V2.0.0\n2015 - 2026"), self)
         self.texte_haut.setAlignment(Qt.AlignCenter)
         self.texte_haut.setStyleSheet("""
             QLabel {
