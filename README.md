@@ -40,7 +40,7 @@ Vous pouvez remplacer cette image par celle de votre choix (cadrée de préfére
 La dernière version stable de **PyCDCover** est disponible ici :  
 👉 https://github.com/GerardLeRest/pycdcover-v2/releases
 
-Téléchargez **PyCDCover.Setup-X.X.X.exe**, puis installez-le.
+Téléchargez **PyCDCover.Setup-X.X.X.exe**,  (x.x.x 2.2.1 -> version 2.2.1 de PyCDCover
 
 Vous pouvez ensuite passer à la section **4**.
 
@@ -50,7 +50,7 @@ Vous pouvez ensuite passer à la section **4**.
 
 ➡️ **PyCDCover est disponible au format *AppImage***.
 
-Téléchargez `PyCDCover-X.X.X-x86_64.AppImage`  
+Téléchargez `PyCDCover-X.X.X-x86_64.AppImage`  ( [Releases · GerardLeRest/pycdcover-v2 · GitHub](https://github.com/GerardLeRest/pycdcover-v2/releases))
 (où *X.X.X* représente le numéro de version).
 
 Rendez le fichier exécutable :
