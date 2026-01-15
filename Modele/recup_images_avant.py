@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-# PyCDCover - Récupération des images suivant le nom de l'artiste
+# Récupération des images suivant le nom de l'artiste
 # et du titre de l'album
 """
 
@@ -9,10 +9,12 @@ import io
 import os
 import requests
 from pathlib import Path
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
+
 from typing import Optional
 from urllib.parse import quote
 
+BASE_DIR = Path(__file__).resolve().parent
 
 # -----------------------------------------------------------
 # Lecture des tags
@@ -55,12 +57,11 @@ def get_itunes_cover(artiste: str, album: str) -> Optional[str]:
         url = f"https://itunes.apple.com/search?term={term}&entity=album&limit=1"
         data = requests.get(url, timeout=5).json()
 
-        return (
-            data["results"][0]["artworkUrl100"] # results"][0]: premier album trouvé
-            .replace("100x100bb", "600x600bb") # 600x600bb : image 600x600
-            if data.get("resultCount", 0) > 0
-            else None
-        )
+        if data.get("resultCount", 0) > 0: # nombre de résultats trouvés
+            # url de la pochette du premier album (100x100 px)
+            url = data["results"][0]["artworkUrl100"]
+            return url.replace("100x100bb", "600x600bb") # agrandissement
+        return None
     except Exception:
         return None
 
@@ -103,7 +104,16 @@ class ImageDevant:
         return fond
 
     def _image_secours(self) -> Image.Image:
+        font = ImageFont.truetype(
+            BASE_DIR / "ressources" / "polices" / "FreeSerif.ttf",
+            32
+        )
         img = Image.new("RGB", (512, 512), (255, 140, 0))
         draw = ImageDraw.Draw(img)
-        draw.text((20, 240), f"{self.artiste}\n{self.album}", fill="white")
+        draw.text(
+            (20, 216),
+            f"{self.artiste}\n{self.album}",
+            fill="white",
+            font=font
+        )
         return img

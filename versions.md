@@ -6,3 +6,12 @@ version 2.1.1:
 
 - rectifications de traduction
 - rectification du placement fichier de configuration de la langue (dosssier personnel)
+
+version 2.2.0:
+
+- simplificaion des classes gérant la récupération des miniatures
+
+version 2.2.1:
+
+- simplification de get_itunes_cover et agrandissement du texte dans
+_image_secours
