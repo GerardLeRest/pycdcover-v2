@@ -1,20 +1,26 @@
 # Aperçu du logiciel
 
-![Interface](ressources/interface.png)
+<p align="center">
+  <img src="ressources/interface.png" alt="Interface">
+</p>
 
 ## Exemple de jaquette maquette (1 CD)
 
 Utilisé avec l’autorisation du groupe **CENT DÉTRESSES**  
 @CENT DÉTRESSES
 
-![Jaquette - maquette](ressources/jaquette_maquette.png) 
+<p align="center">
+  <img src="ressources/jaquette_maquette.png" alt="jaquette - maquette">
+</p>
 
 ## Exemple de jaquette multi-albums
 
 Les images ci-dessous servent uniquement de démonstration.  
 Elles sont distribuées à titre non commercial et en basse résolution.
 
-![Jaquette multi-albums](ressources/jaquette-multi-albums.png)
+<p align="center">
+  <img src="ressources/jaquette-multi-albums.png" alt="jaquette - multi-albums">
+</p>
 
 ---
 
