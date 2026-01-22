@@ -7,7 +7,7 @@
 Utilisé avec l’autorisation du groupe **CENT DÉTRESSES**  
 @CENT DÉTRESSES
 
-![Jaquette maquette](ressources/jaquette_maquette.png)
+![Jaquette - maquette](ressources/jaquette_maquette.png) 
 
 ## Exemple de jaquette multi-albums
 
