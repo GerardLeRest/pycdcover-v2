@@ -8,7 +8,6 @@ import os
 from math import ceil, sqrt
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
-import glob
 
 formats_3 = ('bmp','gif','jpg','msp','pcx','png','ppm','xbm')
 formats_4 = ('jpeg','tiff')
@@ -66,7 +65,6 @@ class Image_face_avant:
         # Dossier courant (optionnel)
         self.dossier: str = repertoire if repertoire else ""
 
-    
     def preparation_assemblage_photos(self) -> None:
         """Prépare les dimensions de la grille en fonction du nombre d’images."""
         self.fichiers = os.listdir(self.thumbnail_path) # nombre d'images
@@ -77,13 +75,17 @@ class Image_face_avant:
         self.Larg_Im_fin = self.NiL * self.largeur + (self.NiL + 1) * 10
         self.Haut_Im_fin = self.NiH * self.hauteur + (self.NiH + 1) * 10
 
-    def rendre_carre(self, img):
-        """rendre l'image carré sans transformation"""
-        w, h = img.size
-        s = min(w, h)
-        x = (w - s) // 2
-        y = (h - s) // 2
-        return img.crop((x, y, x + s, y + s))
+    def rendre_carre(self, image: Image.Image) -> Image.Image:
+        """Recadre l’image en carré, sans marge, plein cadre."""
+        largeur, hauteur = image.size
+        # dimension la plus petite
+        cote = min(largeur, hauteur)
+        # calcul du crop centré
+        gauche = (largeur - cote) // 2
+        haut = (hauteur - cote) // 2
+        droite = gauche + cote
+        bas = haut + cote
+        return image.crop((gauche, haut, droite, bas))
 
     def assemblage_photos(self) -> None:
         """Assemble les miniatures du dossier thumbnails pour l'image."""
@@ -108,18 +110,26 @@ class Image_face_avant:
         except ZeroDivisionError:
             print("Info: Aucune image trouvée")
     
+    
     def assemblage_une_image(self) -> None:
-        """Cas - 1 seule mag - maquette"""
-        # charge l'unique miniature
+        """Assemblage quand il n’y a qu’une seule image.
+        L’image remplit entièrement le gabarit, sans marge.
+        """
+        # ouverture de l’image source
         chemin_image = self.thumbnail_path / self.fichiers[0]
-        img = Image.open(chemin_image)
-        # redimensionne SANS déformer
-        img.thumbnail((self.Larg_Im_fin, self.Haut_Im_fin), Image.LANCZOS)
-        # centre l'image dans le carré
-        x = (self.Larg_Im_fin - img.width) // 2
-        y = (self.Haut_Im_fin - img.height) // 2 + 10
-        # colle sur l'image finale
-        self.fond.paste(img, (x, y))
+        into = Image.open(chemin_image)
+        # recadrage carré (indispensable pour remplir le gabarit)
+        into = self.rendre_carre(into)
+        # redimensionnement EXACT au gabarit
+        into = into.resize(
+            (self.Larg_Im_fin, self.Haut_Im_fin),
+            Image.LANCZOS
+        )
+        # collage sans marge : origine absolue
+        self.fond.paste(
+            into,
+            (0, 0, self.Larg_Im_fin, self.Haut_Im_fin)
+        )
 
     def assemblage_plusieurs_images(self) -> None:
         """Mosaïque carrée quand il y a plusieurs miniatures."""

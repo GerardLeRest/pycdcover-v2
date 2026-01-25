@@ -29,7 +29,6 @@ class Gabarit:
         # Dossier de travail de l'appli
         self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
 
-
     def compter_images_thumbnails(self) -> int:
         """Compte les images présentes dans ~/PyCDCover/thumbnails/."""
         dossier = os.path.expanduser("~/PyCDCover/thumbnails")
@@ -58,8 +57,8 @@ class Gabarit:
             xorigine,yorigine=i[0],i[1]
             self.canv.line(xorigine,yorigine,xorigine+L,yorigine)      
 
-    def face(self, image_originale, largeur, hauteur) -> ImageDraw.ImageDraw:
-        """création des images (face avant et dos sans titres verticaux) à imprimer"""
+    def face(self, image_originale, largeur, hauteur):
+        """Création des images (face avant et dos sans titres verticaux)"""
         im = Image.new("RGB", (largeur, hauteur), "white")  # création de l'image blanche
         compteur = self.compter_images_thumbnails()
         if compteur > 1:
@@ -88,13 +87,19 @@ class Gabarit:
             L, H = out.size
             marge_x = (largeur - L) / 2
             im.paste(out, (int(marge_x), 220, int(marge_x) + L, H + 220))
-        else: # maquette
-            im2 = Image.open(image_originale)
-            out = im2.resize((1200, 1200)) # l'image à placer est aussi grande que l'image blanche
-            im.paste(out, (0, 40)) # en haut à gauche
-        return im 
+        else:
+            # mode maquette
+            im = self.image_maquette(image_originale, 1200, 1200)
+        return im
 
-    
+    def image_maquette(self, image_originale, largeur, hauteur):
+        """traitement de l'image - maquette"""
+        im1 = Image.new("RGB", (largeur, hauteur), "white")  # création de l'image blanche
+        im2 = Image.open(image_originale)
+        out = im2.resize((1200, 1200)) # l'image à placer est aussi grande que l'image blanche
+        im1.paste(out, (0, 0)) # en haut à gauche
+        return im1
+
     def insertion_images(self) -> None:
         """création et insertion de toutes les images"""
         try:
@@ -106,12 +111,17 @@ class Gabarit:
             image_dos.save("Dos.png", "png")
             os.chdir(self.dossier_pycdcover)  # sécurité pour le chemin de travail
             # insertion de l'image Devant
-            xorigine, yorigine = 360 * self.coefficient, 1700 * self.coefficient
+            compteur = self.compter_images_thumbnails()
+            if compteur>1:
+                y = 1700
+            else: # image - maquette (1 thumbnails)
+                y = 1660
+            xorigine, yorigine = 360 * self.coefficient, y * self.coefficient
             self.canv.drawImage("Devant.jpeg", xorigine, yorigine,
                                 width=self.L_devant * self.coefficient,
                                 height=self.H_devant * self.coefficient, mask=None)
             # insertion de l'image Dos
-            xorigine, yorigine = 400 * self.coefficient, 520 * self.coefficient
+            xorigine, yorigine = 400 * self.coefficient, 480 * self.coefficient
             self.canv.drawImage("Dos.png", xorigine, yorigine,
                                 width=self.L_back_cover * self.coefficient,
                                 height=self.H_back_cover * self.coefficient, mask=None)
@@ -129,16 +139,17 @@ class Gabarit:
 
     def lignes_continues (self) -> None:        
         """tracé des rectangles"""
-        self.canv.setDash(1, 0)
+        self.canv.setDash()  # ligne continue
+        # rectangles
         self.canv.rect(360 * self.coefficient, 1660 * self.coefficient,
-                    self.L_devant * self.coefficient, self.H_devant * self.coefficient)
+                self.L_devant * self.coefficient, self.H_devant * self.coefficient)
         self.canv.rect(300 * self.coefficient, 480 * self.coefficient,
                     60 * self.coefficient, self.H_back_cover * self.coefficient)
         self.canv.rect(1740 * self.coefficient, 480 * self.coefficient,
                     60 * self.coefficient, self.H_back_cover * self.coefficient)
         self.canv.rect(360 * self.coefficient, 480 * self.coefficient,
                     self.L_back_cover * self.coefficient, self.H_back_cover * self.coefficient)
-            
+
     
     def sauvegarde(self) -> None:
         """sauvegarde"""

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-# Récupération des images suivant le nom de l'artiste
-# et du titre de l'album
+Récupère une image (miniature) à partir du nom de l'artiste
+et du titre de l'album.
 """
 
 import io
