@@ -80,16 +80,16 @@ class Application(QWidget):
         self.vue.act_recup_tags.setEnabled(True)
 
 
-    @Slot(str)
-    def action_recuperer_tags(self, titre_saisi: str) -> None:
-        """Reçoit le titre saisi et génère les images correspondantes."""
-        # Création de l’objet métier Titres
-        t = Titres(1200, 1380, titre_saisi)
-        t.titre_horizontal()
-        t.titre_vertical1()
-        t.titre_vertical2()
-        # 🔹 Activation du bouton suivant ("Récupérer les tags")
-        self.vue.act_recup_tags.setEnabled(True)
+    # @Slot(str)
+    # def action_recuperer_tags(self, titre_saisi: str) -> None:
+    #     """Reçoit le titre saisi et génère les images correspondantes."""
+    #     # Création de l’objet métier Titres
+    #     t = Titres(1200, 1380, titre_saisi)
+    #     t.titre_horizontal()
+    #     t.titre_vertical1()
+    #     t.titre_vertical2()
+    #     # 🔹 Activation du bouton suivant ("Récupérer les tags")
+    #     self.vue.act_recup_tags.setEnabled(True)
 
     @Slot()
     def action_recuperer_tags(self) -> None:

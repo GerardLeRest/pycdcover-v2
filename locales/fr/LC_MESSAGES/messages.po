@@ -1,22 +1,22 @@
-# Traduction française de PyCDCover
-# Copyright (C) 2026
-# This file is distributed under the same license as the PyCDCover package.
-# Gérard LE REST <ge.lerest@gmail.com>, 2026
+# French translations for pycdcover-v package.
+# Copyright (C) 2026 THE pycdcover-v'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the pycdcover-v package.
+# Gerard <ge.lerest@gmail.com>, 2026.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PyCDCover\n"
+"Project-Id-Version: pycdcover-v 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-07 15:33+0100\n"
-"PO-Revision-Date: 2026-01-07 15:40+0100\n"
-"Last-Translator: Gérard LE REST <ge.lerest@gmail.com>\n"
+"POT-Creation-Date: 2026-01-26 15:39+0100\n"
+"PO-Revision-Date: 2026-01-26 17:10+0100\n"
+"Last-Translator: Gerard <ge.lerest@gmail.com>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: Vue/Bas.py:38 Vue/Fenetre.py:67
+#: Vue/Bas.py:38 Vue/Fenetre.py:64
 msgid "Titre"
 msgstr "Titre"
 
@@ -36,78 +36,77 @@ msgstr "Artiste"
 msgid "Année"
 msgstr "Année"
 
-#: Vue/TelechargementUI.py:36
+#: Vue/TelechargementUI.py:26
 msgid "Téléchargement des images"
 msgstr "Téléchargement des images"
 
-#: Vue/TelechargementUI.py:40
-msgid "Initialisation..."
-msgstr "Initialisation..."
+#: Vue/TelechargementUI.py:29
+msgid "Téléchargement en cours..."
+msgstr "Téléchargement en cours..."
 
-#: Vue/TelechargementUI.py:67
+#: Vue/TelechargementUI.py:44
 msgid "Téléchargement terminé"
 msgstr "Téléchargement terminé"
 
-#: Vue/TelechargementUI.py:96
-#, python-brace-format
+#: Vue/TelechargementUI.py:55
 msgid "Téléchargement {current}/{total}"
 msgstr "Téléchargement {current}/{total}"
 
-#: Vue/Fenetre.py:68 Vue/Fenetre.py:207
+#: Vue/Fenetre.py:65 Vue/Fenetre.py:205
 msgid "Récupérer les tags"
 msgstr "Récupérer les tags"
 
-#: Vue/Fenetre.py:69
+#: Vue/Fenetre.py:66
 msgid "Lire/Écrire tags"
-msgstr "Lire/Écrire tags"
+msgstr "Lire / Écrire tags"
 
-#: Vue/Fenetre.py:70 Vue/Fenetre.py:209
+#: Vue/Fenetre.py:67 Vue/Fenetre.py:207
 msgid "Récupérer les images"
 msgstr "Récupérer les images"
 
-#: Vue/Fenetre.py:71 Vue/Fenetre.py:210
+#: Vue/Fenetre.py:68 Vue/Fenetre.py:208
 msgid "Créer les deux faces"
 msgstr "Créer les deux faces"
 
-#: Vue/Fenetre.py:72 Vue/Fenetre.py:211
+#: Vue/Fenetre.py:69 Vue/Fenetre.py:209
 msgid "Générer le PDF"
 msgstr "Générer le PDF"
 
-#: Vue/Fenetre.py:73 Vue/Fenetre.py:82 Vue/Editeur_tags.py:55
+#: Vue/Fenetre.py:70 Vue/Fenetre.py:79 Vue/Editeur_tags.py:55
 msgid "Quitter"
 msgstr "Quitter"
 
-#: Vue/Fenetre.py:109
+#: Vue/Fenetre.py:106
 msgid "Fichier"
 msgstr "Fichier"
 
-#: Vue/Fenetre.py:119
+#: Vue/Fenetre.py:116
 msgid "Langue"
 msgstr "Langue"
 
-#: Vue/Fenetre.py:145
+#: Vue/Fenetre.py:143
 msgid "Aide"
 msgstr "Aide"
 
-#: Vue/Fenetre.py:146
+#: Vue/Fenetre.py:144
 msgid "À propos"
 msgstr "À propos"
 
-#: Vue/Fenetre.py:171
+#: Vue/Fenetre.py:169
 msgid "Attention"
 msgstr "Attention"
 
-#: Vue/Fenetre.py:172
+#: Vue/Fenetre.py:170
 msgid "Les changements prendront effet au prochain démarrage."
 msgstr "Les changements prendront effet au prochain démarrage."
 
-#: Vue/Fenetre.py:206
+#: Vue/Fenetre.py:204
 msgid "Créer le titre"
 msgstr "Créer le titre"
 
-#: Vue/Fenetre.py:208
+#: Vue/Fenetre.py:206
 msgid "Éditer/Modifier les tags"
-msgstr "Éditer/Modifier les tags"
+msgstr "Éditer / Modifier les tags"
 
 #: Vue/A_propos.py:48
 msgid "PyCDCover"
@@ -116,25 +115,21 @@ msgstr "PyCDCover"
 #: Vue/A_propos.py:61
 msgid ""
 "Licence : GNU GPL V2.0.0\n"
-"2015 - 2025"
+"2015 - 2026"
 msgstr ""
 "Licence : GNU GPL V2.0.0\n"
-"2015 - 2025"
+"2015 - 2026"
 
 #: Vue/A_propos.py:89
 msgid ""
 "Images : <a href='https://musicbrainz.org'>musicbrainz.org</a><br>ou : <a "
 "href='https://www.apple.com/fr/itunes/'>Itunes</a><br>Chemin des fichiers :"
-"<br>GNU/Linux : ~/PyCDCover/<br>macOS : ~/PyCDCover/<br>Windows : C:/Users/"
-"Nom_utilisateur/PyCDCover/<br><br>Auteur : <b>Gérard LE REST </b> - Site : "
-"<a href='https://gerardlerest.github.io/pycdcover/'>PyCDCover</"
-"a><br>Contact : <a href='mailto:ge.lerest@gmail.com'>ge.lerest@gmail.com</"
-"a><br>"
+"<br>GNU/Linuxsñ"
 msgstr ""
 "Images : <a href='https://musicbrainz.org'>musicbrainz.org</a><br>ou : <a "
 "href='https://www.apple.com/fr/itunes/'>Itunes</a><br>Chemin des fichiers :"
 "<br>GNU/Linux : ~/PyCDCover/<br>macOS : ~/PyCDCover/<br>Windows : C:/Users/"
-"Nom_utilisateur/PyCDCover/<br><br>Auteur : <b>Gérard LE REST </b> - Site : "
+"Nom_utilisateur/PyCDCover/<br><br>Auteur : <b>Gérard LE REST</b> - Site : "
 "<a href='https://gerardlerest.github.io/pycdcover/'>PyCDCover</"
 "a><br>Contact : <a href='mailto:ge.lerest@gmail.com'>ge.lerest@gmail.com</"
 "a><br>"
@@ -179,9 +174,17 @@ msgstr "Valider"
 msgid "Genre"
 msgstr "Genre"
 
+#: Modele/Tags.py:27
+msgid "Extraction des tags MP3..."
+msgstr "Extraction des tags MP3..."
+
+#: Modele/Tags.py:31
+msgid "Prêt à extraire les tags"
+msgstr "Prêt à extraire les tags"
+
 #: Modele/Tags.py:47
-msgid "Choisir le répertoire du CD"
-msgstr "Choisir le répertoire du CD"
+msgid "Choisir le répertoire des chansons"
+msgstr "Choisir le répertoire des chansons"
 
 #: Modele/Tags.py:47
 msgid "/media"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-07 15:33+0100\n"
+"POT-Creation-Date: 2026-01-26 17:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: Vue/Bas.py:38 Vue/Fenetre.py:67
+#: Vue/Bas.py:38 Vue/Fenetre.py:64
 msgid "Titre"
 msgstr ""
 
@@ -37,76 +37,75 @@ msgstr ""
 msgid "Année"
 msgstr ""
 
-#: Vue/TelechargementUI.py:36
+#: Vue/TelechargementUI.py:26
 msgid "Téléchargement des images"
 msgstr ""
 
-#: Vue/TelechargementUI.py:40
-msgid "Initialisation..."
+#: Vue/TelechargementUI.py:29
+msgid "Téléchargement en cours..."
 msgstr ""
 
-#: Vue/TelechargementUI.py:67
+#: Vue/TelechargementUI.py:44
 msgid "Téléchargement terminé"
 msgstr ""
 
-#: Vue/TelechargementUI.py:96
-#, python-brace-format
-msgid "Téléchargement {current}/{total}"
+#: Vue/TelechargementUI.py:55
+msgid "Téléchargement {}/{}"
 msgstr ""
 
-#: Vue/Fenetre.py:68 Vue/Fenetre.py:207
+#: Vue/Fenetre.py:65 Vue/Fenetre.py:205
 msgid "Récupérer les tags"
 msgstr ""
 
-#: Vue/Fenetre.py:69
+#: Vue/Fenetre.py:66
 msgid "Lire/Écrire tags"
 msgstr ""
 
-#: Vue/Fenetre.py:70 Vue/Fenetre.py:209
+#: Vue/Fenetre.py:67 Vue/Fenetre.py:207
 msgid "Récupérer les images"
 msgstr ""
 
-#: Vue/Fenetre.py:71 Vue/Fenetre.py:210
+#: Vue/Fenetre.py:68 Vue/Fenetre.py:208
 msgid "Créer les deux faces"
 msgstr ""
 
-#: Vue/Fenetre.py:72 Vue/Fenetre.py:211
+#: Vue/Fenetre.py:69 Vue/Fenetre.py:209
 msgid "Générer le PDF"
 msgstr ""
 
-#: Vue/Fenetre.py:73 Vue/Fenetre.py:82 Vue/Editeur_tags.py:55
+#: Vue/Fenetre.py:70 Vue/Fenetre.py:79 Vue/Editeur_tags.py:55
 msgid "Quitter"
 msgstr ""
 
-#: Vue/Fenetre.py:109
+#: Vue/Fenetre.py:106
 msgid "Fichier"
 msgstr ""
 
-#: Vue/Fenetre.py:119
+#: Vue/Fenetre.py:116
 msgid "Langue"
 msgstr ""
 
-#: Vue/Fenetre.py:145
+#: Vue/Fenetre.py:143
 msgid "Aide"
 msgstr ""
 
-#: Vue/Fenetre.py:146
+#: Vue/Fenetre.py:144
 msgid "À propos"
 msgstr ""
 
-#: Vue/Fenetre.py:171
+#: Vue/Fenetre.py:169
 msgid "Attention"
 msgstr ""
 
-#: Vue/Fenetre.py:172
+#: Vue/Fenetre.py:170
 msgid "Les changements prendront effet au prochain démarrage."
 msgstr ""
 
-#: Vue/Fenetre.py:206
+#: Vue/Fenetre.py:204
 msgid "Créer le titre"
 msgstr ""
 
-#: Vue/Fenetre.py:208
+#: Vue/Fenetre.py:206
 msgid "Éditer/Modifier les tags"
 msgstr ""
 
@@ -117,7 +116,7 @@ msgstr ""
 #: Vue/A_propos.py:61
 msgid ""
 "Licence : GNU GPL V2.0.0\n"
-"2015 - 2025"
+"2015 - 2026"
 msgstr ""
 
 #: Vue/A_propos.py:89
@@ -171,8 +170,16 @@ msgstr ""
 msgid "Genre"
 msgstr ""
 
+#: Modele/Tags.py:27
+msgid "Extraction des tags MP3..."
+msgstr ""
+
+#: Modele/Tags.py:31
+msgid "Prêt à extraire les tags"
+msgstr ""
+
 #: Modele/Tags.py:47
-msgid "Choisir le répertoire du CD"
+msgid "Choisir le répertoire des chansons"
 msgstr ""
 
 #: Modele/Tags.py:47

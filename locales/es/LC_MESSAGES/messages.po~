@@ -1,21 +1,20 @@
-# Spanish translations for pycdcover-v package.
-# Copyright (C) 2026 THE pycdcover-v'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the pycdcover-v package.
-# Gerard <gerard@gerard-thinkcentre-m700.home>, 2026.
+# Traducción al español de PyCDCover
+# Copyright (C) 2026
+# This file is distributed under the same license as the PyCDCover package.
+# Gérard LE REST <ge.lerest@gmail.com>, 2026
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: pycdcover-v 2\n"
+"Project-Id-Version: PyCDCover\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 15:39+0100\n"
-"PO-Revision-Date: 2026-01-26 17:00+0100\n"
-"Last-Translator: Gerard <gerard@gerard-thinkcentre-m700.home>\n"
-"Language-Team: Spanish <es@tp.org.es>\n"
+"POT-Creation-Date: 2026-01-26 15:08+0100\n"
+"PO-Revision-Date: 2026-01-07 15:50+0100\n"
+"Last-Translator: Gérard LE REST <ge.lerest@gmail.com>\n"
+"Language-Team: Spanish\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: Vue/Bas.py:38 Vue/Fenetre.py:64
 msgid "Titre"
@@ -42,15 +41,17 @@ msgid "Téléchargement des images"
 msgstr "Descarga de imágenes"
 
 #: Vue/TelechargementUI.py:29
+#, fuzzy
 msgid "Téléchargement en cours..."
-msgstr "Descargando..."
+msgstr "Descarga de imágenes"
 
 #: Vue/TelechargementUI.py:44
 msgid "Téléchargement terminé"
 msgstr "Descarga finalizada"
 
 #: Vue/TelechargementUI.py:55
-msgid "Téléchargement {current}/{total}"
+#, fuzzy
+msgid "Téléchargement {}/{}"
 msgstr "Descarga {current}/{total}"
 
 #: Vue/Fenetre.py:65 Vue/Fenetre.py:205
@@ -59,7 +60,7 @@ msgstr "Recuperar etiquetas"
 
 #: Vue/Fenetre.py:66
 msgid "Lire/Écrire tags"
-msgstr "Leer / Escribir etiquetas"
+msgstr "Leer/Escribir etiquetas"
 
 #: Vue/Fenetre.py:67 Vue/Fenetre.py:207
 msgid "Récupérer les images"
@@ -107,19 +108,20 @@ msgstr "Crear título"
 
 #: Vue/Fenetre.py:206
 msgid "Éditer/Modifier les tags"
-msgstr "Editar / Modificar etiquetas"
+msgstr "Editar/Modificar etiquetas"
 
 #: Vue/A_propos.py:48
 msgid "PyCDCover"
 msgstr "PyCDCover"
 
 #: Vue/A_propos.py:61
+#, fuzzy
 msgid ""
 "Licence : GNU GPL V2.0.0\n"
 "2015 - 2026"
 msgstr ""
 "Licencia: GNU GPL V2.0.0\n"
-"2015 - 2026"
+"2015 - 2025"
 
 #: Vue/A_propos.py:89
 msgid ""
@@ -134,10 +136,9 @@ msgstr ""
 "Imágenes: <a href='https://musicbrainz.org'>musicbrainz.org</a><br>o: <a "
 "href='https://www.apple.com/fr/itunes/'>iTunes</a><br>Rutas de archivos:"
 "<br>GNU/Linux: ~/PyCDCover/<br>macOS: ~/PyCDCover/<br>Windows: C:/Users/"
-"Usuario/PyCDCover/<br><br>Autor: <b>Gérard LE REST</b> - Sitio web: "
-"<a href='https://gerardlerest.github.io/pycdcover/'>PyCDCover</"
-"a><br>Contacto: <a href='mailto:ge.lerest@gmail.com'>ge.lerest@gmail.com</"
-"a><br>"
+"Usuario/PyCDCover/<br><br>Autor: <b>Gérard LE REST</b> - Sitio web: <a "
+"href='https://gerardlerest.github.io/pycdcover/'>PyCDCover</a><br>Contacto: "
+"<a href='mailto:ge.lerest@gmail.com'>ge.lerest@gmail.com</a><br>"
 
 #: Vue/A_propos.py:114
 msgid "Fermer"
@@ -179,14 +180,6 @@ msgstr "Validar"
 msgid "Genre"
 msgstr "Género"
 
-#: Modele/Tags.py:27
-msgid "Extraction des tags MP3..."
-msgstr "Extracción de etiquetas MP3..."
-
-#: Modele/Tags.py:31
-msgid "Prêt à extraire les tags"
-msgstr "Listo para extraer las etiquetas"
-
 #: Modele/Tags.py:47
 msgid "Choisir le répertoire des chansons"
 msgstr "Elegir la carpeta de las canciones"
@@ -206,3 +199,6 @@ msgstr "No se encontró ninguna pista MP3."
 #: Modele/Tags.py:70
 msgid "Extraction en cours..."
 msgstr "Extracción en curso..."
+
+#~ msgid "Initialisation..."
+#~ msgstr "Inicialización..."

@@ -52,6 +52,7 @@ class TelechargementUI(QWidget):
         self.index += 1
         self.progress.setValue(self.index)
         self.label.setText(
-            _("Téléchargement {}/{}").format(self.index, self.total)
+            _("Téléchargement {current}/{total}")
+            .format(current=self.index, total=self.total)
         )
         QTimer.singleShot(0, self._suivant)

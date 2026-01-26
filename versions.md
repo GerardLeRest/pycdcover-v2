@@ -14,4 +14,12 @@ version 2.2.0:
 version 2.2.1:
 
 - simplification de get_itunes_cover et agrandissement du texte dans
-_image_secours
+  _image_secours
+
+version 2.2.2:
+
+- image de devant (mode maquette - 1 album) sans bande blanche
+
+version 2.2.3 
+
+- correction de traduction

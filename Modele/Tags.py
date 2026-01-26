@@ -24,11 +24,11 @@ class Tags(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Extraction des tags MP3")
+        self.setWindowTitle(_("Extraction des tags MP3..."))
         self.resize(300, 100)
         # interface
         layout = QVBoxLayout()
-        self.label = QLabel("Prêt à extraire les tags.")
+        self.label = QLabel(_("Prêt à extraire les tags"))
         self.fichier_tags = Path.home() / "PyCDCover" / "tags.txt" # fichier des tags
         self.progress: QProgressBar | None = None
         self.nbre_albums = 0 # nbre albums
@@ -44,7 +44,7 @@ class Tags(QMainWindow):
     def recuperer_tags(self)->None:
         """Créer la lsites des albums (dictionnaires) * artistes et albums - liste d'objets Path"""
         # fenetre du choix du dossier des albums
-        chemin = QFileDialog.getExistingDirectory(self, _("Choisir le répertoire du CD"), _("/media"))
+        chemin = QFileDialog.getExistingDirectory(self, _("Choisir le répertoire des chansons"), _("/media"))
         if not chemin:
             return
         lecteur = Path(chemin)
@@ -69,7 +69,7 @@ class Tags(QMainWindow):
         self.progress.setRange(0, total)
         self.label.setText(_("Extraction en cours..."))
         QApplication.processEvents()
-        # 👇 Ici on appelle directement la suite
+        # Ici on appelle directement la suite
         self.fichier_sortie(albums)
         
     def fichier_sortie(self, albums: list) -> None:
