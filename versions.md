@@ -20,6 +20,10 @@ version 2.2.2:
 
 - image de devant (mode maquette - 1 album) sans bande blanche
 
-version 2.2.3 
+version 2.2.3:
 
 - correction de traduction
+
+version 2.3.3
+
+- Séparation vue, modele et controleur de la classe "Tags"

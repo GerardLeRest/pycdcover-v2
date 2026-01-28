@@ -13,7 +13,7 @@ from Modele.recup_images_avant import ImageDevant
 from typing import Any
 from builtins import _
 
-class TelechargementUI(QWidget):
+class Progress_images(QWidget):
 
     telechargement_termine = Signal()
 

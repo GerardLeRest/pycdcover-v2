@@ -14,8 +14,8 @@ from PySide6.QtCore import Slot
 from Vue.Fenetre import Fenetre
 from Vue.Fen_Titre import Fen_Titre
 from Vue.Editeur_tags import Editeur_tags
-from Vue.TelechargementUI import TelechargementUI
-
+from Vue.Progress_images import Progress_images
+from Vue.Progress_tags import Progress_tags
 from Modele.Titres import Titres
 from Modele.Tags import Tags
 from Modele.recup_images_avant import lire_tags
@@ -79,27 +79,38 @@ class Application(QWidget):
         # active le bouton suivant - BP récupération de tags
         self.vue.act_recup_tags.setEnabled(True)
 
-
-    # @Slot(str)
-    # def action_recuperer_tags(self, titre_saisi: str) -> None:
-    #     """Reçoit le titre saisi et génère les images correspondantes."""
-    #     # Création de l’objet métier Titres
-    #     t = Titres(1200, 1380, titre_saisi)
-    #     t.titre_horizontal()
-    #     t.titre_vertical1()
-    #     t.titre_vertical2()
-    #     # 🔹 Activation du bouton suivant ("Récupérer les tags")
-    #     self.vue.act_recup_tags.setEnabled(True)
-
     @Slot()
     def action_recuperer_tags(self) -> None:
-        """Récupère les tags MP3 du CD et crée le fichier tags.txt."""
+        # 1. Vue de progression
+        self.progress_tags = Progress_tags()
+        self.progress_tags.show()
+        # 2. Choix du dossier via la vue
+        chemin = self.progress_tags.choisir_dossier_chansons()
+        if not chemin:
+            self.progress_tags.close()
+            return
+        chemin = Path(chemin)
+        # 3. Modèle - UI (str) ➜ logique métier (Path)
         self.tags = Tags()
-        self.tags.tags_termines.connect(lambda: self.vue.act_tags_rw.setEnabled(True))
-        self.tags.show()
-        self.tags.recuperer_tags()
+        # 4. Calcul du total et initialisation de la barre
+        total = sum(len(list(d.glob("*.mp3"))) for d in chemin.iterdir() if d.is_dir())
+        self.progress_tags.absence_mp3(total)
+        self.progress_tags.defilement(total)
+        # 5. Connexions modèle → vue (via contrôleur)
+        self.tags.progress.connect(
+            lambda count: self.progress_tags.progress.setValue(count)
+        )
+        self.tags.termine.connect(
+            self.progress_tags.fermeture_fenetre_progress
+        )
+        # 6. Activation du bouton suivant à la fin
+        self.progress_tags.tags_termines.connect(
+            lambda: self.vue.act_tags_rw.setEnabled(True)
+        )
+        # 7. Lancement du traitement
+        self.tags.extraire_tags(chemin)
+
    
-    
     @Slot()
     def action_ouvrir_editeur_tags(self) -> None:
         """Ouvre la fenêtre d'édition du fichier tags.txt."""
@@ -126,7 +137,7 @@ class Application(QWidget):
                                 "Le fichier 'tags.txt' est vide ou mal formaté.")
             return
         # Création et affichage de la fenêtre de téléchargement
-        self.telechargement_ui = TelechargementUI(albums)
+        self.telechargement_ui = Progress_images(albums)
         self.telechargement_ui.telechargement_termine.connect(
             lambda: self.vue.act_faces.setEnabled(True)
         )
