@@ -121,12 +121,11 @@ python3 pycdcover.py
 
 ## 4.1. Fonctionnement avec recherche automatique des images
 
-1. Insérez et sélectionnez le CD contenant des fichiers correctement tagués  
-   ou un dossier de musiques taguées.
+1. Préparer un dossier de musiques taguées. N'utilisez pas directement le lecteur CD.
 
 2. Créez le **titre du CD** (1ʳᵉ icône à gauche).
 
-3. **Récupérez les tags et les images** via *MusicBrainz* ou *iTunes* (2ᵉ icône).
+3. **Récupérez les tags** via *MusicBrainz* ou *iTunes* (2ᵉ icône).
 
 4. **Éditez les tags** si nécessaire (3ᵉ icône).
    
@@ -143,16 +142,25 @@ python3 pycdcover.py
 
 ## 4.2. Jaquette non référencée sur le web
 
-Si une mauvaise image apparaît :
+Une image orange (avec nom+album) apparait si l'image d'un album n'a pas été trouvé internet. Le serveur peut parfois également se tromper. Dans tous les cas en cas d'erreur sur une image, voici la démarche à suivre:
 
-1. Trouvez la bonne pochette sur Internet (512×512 recommandé).
-2. Enregistrez-la dans le dossier **thumbnails**,  
-   avec **exactement le même nom** que l’image incorrecte.
-3. Recréez la face avant et la face arrière.
-4. Générez le PDF final.
+Créer le titre → récupérer MP3 → éditer MP3 → récupérer les images dans le dossier* → créer les deux faces → changer manuellement l’image voulue → créer les deux faces → générer PDF
 
-**Remarque importante :**  
-Ne cliquez pas sur *Récupérer les images* — cela réinstallerait l’ancienne pochette.
+* ~/PyCDCover/thumbnails : dossier des miniatures
+
+Remarque importante : Respecter l'ordre ci-dessus pour ne pas se retrouver dans l'ancienne configuration
+
+---
+
+## 4.3 Albums doubles
+
+Avec un album double, si rien n'est fait, deux images en double apparaissent sur la face avant. Voici comment régler ce problème simplement:
+
+Créer le titre → récupérer MP3 → éditer MP3 → récupérer les images dans le dossier* → créer les deux faces → Effacer l'image voulue → créer les deux faces → générer PDF
+
+* ~/PyCDCover/thumbnails : dossier des miniatures
+
+Remarque importante : Respecter l'ordre ci-dessus pour ne pas se retrouver dans l'ancienne configuration
 
 ---
 

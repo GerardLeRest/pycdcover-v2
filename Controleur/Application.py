@@ -81,29 +81,32 @@ class Application(QWidget):
 
     @Slot()
     def action_recuperer_tags(self) -> None:
-        # 1. Vue de progression
-        self.progress_tags = Progress_tags()
-        self.progress_tags.show()
-        # 2. Choix du dossier via la vue
-        chemin = self.progress_tags.choisir_dossier_chansons()
+
+        # 1. Choix du dossier (sans progression)
+        progress_tmp = Progress_tags()
+        chemin = progress_tmp.choisir_dossier_chansons()
         if not chemin:
-            self.progress_tags.close()
             return
         chemin = Path(chemin)
-        # 3. Modèle - UI (str) ➜ logique métier (Path)
-        self.tags = Tags()
-        # 4. Calcul du total et initialisation de la barre
-        total = sum(len(list(d.glob("*.mp3"))) for d in chemin.iterdir() if d.is_dir())
-        self.progress_tags.absence_mp3(total)
+        # 2. Calcul réel du nombre de MP3
+        total = len(list(chemin.rglob("*.mp3")))
+        # 3. Aucun MP3 → message et stop
+        if total == 0:
+            progress_tmp.absence_mp3(0)
+            return
+        # 4. Maintenant seulement, on crée la fenêtre de progression
+        self.progress_tags = Progress_tags()
         self.progress_tags.defilement(total)
-        # 5. Connexions modèle → vue (via contrôleur)
+        self.progress_tags.show()
+        # 5. Modèle
+        self.tags = Tags()
+        # 6. Connexions
         self.tags.progress.connect(
-            lambda count: self.progress_tags.progress.setValue(count)
+            self.progress_tags.progress.setValue
         )
         self.tags.termine.connect(
             self.progress_tags.fermeture_fenetre_progress
         )
-        # 6. Activation du bouton suivant à la fin
         self.progress_tags.tags_termines.connect(
             lambda: self.vue.act_tags_rw.setEnabled(True)
         )
