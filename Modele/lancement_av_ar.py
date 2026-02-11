@@ -5,8 +5,8 @@ Lancement-av-ar.py — creation des deux faces avant et arriere
 Auteur : Gérard Le Rest (2025)
 """
 
-from Modele.Image_face_avant import Image_face_avant
-from Modele.Image_face_arriere import Image_face_arriere
+from Modele.image_face_avant import Image_face_avant
+from Modele.image_face_arriere import Image_face_arriere
 from pathlib import Path
 import os
 

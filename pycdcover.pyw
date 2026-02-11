@@ -9,7 +9,7 @@ Auteur : Gérard Le Rest (2026)
 import locale
 import gettext
 from pathlib import Path
-from Modele.GestionLangue import GestionLangue
+from Modele.gestion_langue import GestionLangue
 
 # Gestion de la langue de cette cesssion
 BASE_DIR = Path(__file__).resolve().parent
@@ -34,7 +34,7 @@ translation.install()
 
 # Démarrage de la fenêtre principale
 from PySide6.QtWidgets import QApplication
-from Controleur.Application import Application
+from Controleur.application import Application
 
 def main():
     app = QApplication([])

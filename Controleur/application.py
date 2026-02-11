@@ -14,13 +14,13 @@ from PySide6.QtCore import Slot
 from Vue.fenetre import Fenetre
 from Vue.fen_Titre import Fen_Titre
 from Vue.editeur_tags import Editeur_tags
-from Vue.Progression_images import Progress_images
-from Vue.Progression_tags import Progression_tags
-from Modele.Titres import Titres
-from Modele.Tags import Tags
+from Vue.progression_images import Progress_images
+from Vue.progression_tags import Progression_tags
+from Modele.titres import Titres
+from Modele.tags import Tags
 from Modele.recup_images_avant import lire_tags
-from Modele.Lancement_av_ar import Lancement_av_ar
-from Modele.Gabarit import Gabarit
+from Modele.lancement_av_ar import Lancement_av_ar
+from Modele.gabarit import Gabarit
 from Vue.haut_gauche import Haut_gauche
 
 import os, sys, shutil, platform, subprocess

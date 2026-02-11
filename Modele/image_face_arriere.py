@@ -8,7 +8,7 @@ Auteur : Gérard Le Rest (2025)
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 import os
-from Modele.Titres import Titres
+from Modele.titres import Titres
 
 
 class Image_face_arriere:

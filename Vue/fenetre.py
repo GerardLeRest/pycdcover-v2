@@ -16,7 +16,7 @@ from Vue.haut_milieu import Haut_milieu
 from Vue.haut_droit import Haut_droit
 from Vue.bas import Bas
 from Vue.a_propos import FenetreAPropos
-from Modele.GestionLangue import GestionLangue
+from Modele.gestion_langue import GestionLangue
 import sys
 from Vue.centrer_fenetre import CentrerFenetre
 from builtins import _
