@@ -61,12 +61,12 @@ class Bas(QWidget):
 
 
         # mise en page
-        header = self.table.horizontalHeader() 
-        header.setDefaultSectionSize(32)  # fixe la hauteur des barre entière
+        en_tete = self.table.horizontalHeader() 
+        en_tete.setDefaultSectionSize(32)  # fixe la hauteur des barre entière
         # police
         font = QFont("", 18, QFont.Bold)   # police par défaut, taille 18, en gras
-        header.setFont(font)
-        header.setStyleSheet("""
+        en_tete.setFont(font)
+        en_tete.setStyleSheet("""
             QHeaderView::section {
                 color: #6c6c6c;
                 font-size: 16px;
@@ -74,18 +74,18 @@ class Bas(QWidget):
                 padding: 4px;
             }
         """)
-        header.setSectionResizeMode(QHeaderView.Interactive)
-        header.setStretchLastSection(False)
+        en_tete.setSectionResizeMode(QHeaderView.Interactive)
+        en_tete.setStretchLastSection(False)
         # Titre
-        header.setSectionResizeMode(0, QHeaderView.Stretch)
+        en_tete.setSectionResizeMode(0, QHeaderView.Stretch)
         # Piste
-        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        en_tete.setSectionResizeMode(1, QHeaderView.ResizeToContents)
         # Album
-        header.setSectionResizeMode(2, QHeaderView.Stretch)
+        en_tete.setSectionResizeMode(2, QHeaderView.Stretch)
         # Artiste
-        header.setSectionResizeMode(3, QHeaderView.Stretch)
+        en_tete.setSectionResizeMode(3, QHeaderView.Stretch)
         # Année
-        header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        en_tete.setSectionResizeMode(4, QHeaderView.ResizeToContents)
 
         # lignes plus hautes (espace vertical)
         vh = self.table.verticalHeader()

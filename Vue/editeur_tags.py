@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, Signal
 from pathlib import Path
-from Vue.utils import centrer_fenetre
+from Vue.centrer_fenetre import CentrerFenetre
 from builtins import _
 import sys
 
@@ -30,7 +30,7 @@ class Editeur_tags(QWidget):
         self.resize(300, 400)
         # fichier tags
         self.chemin_tags: Path = Path.home() / "PyCDCover" / "tags.txt"
-        self.text_edit: QTextEdit | None = None
+        self.editer_texte: QTextEdit | None = None
         self.modifie: bool = False
         # dessiner l'interface
         self.interface()
@@ -39,8 +39,8 @@ class Editeur_tags(QWidget):
         """Interaction entre les boutons et l'éditeur"""
         layout = QVBoxLayout()
         # zone de texte
-        self.text_edit = QTextEdit()
-        layout.addWidget(self.text_edit)
+        self.editer_texte = QTextEdit()
+        layout.addWidget(self.editer_texte)
         # charger le texte au démarrage
         self.charger_tags()
         # layout horizontal pour les boutons
@@ -64,9 +64,9 @@ class Editeur_tags(QWidget):
         conteneur.setLayout(layout)
         self.setLayout(layout)
         # détection des modifications
-        self.text_edit.textChanged.connect(self.marquer_modifie)
+        self.editer_texte.textChanged.connect(self.marquer_modifie)
         self.modifie = False
-        centrer_fenetre(self)
+        CentrerFenetre(self)
 
     def habillage_bouton(self, bouton: QPushButton) -> None:
         bouton.setStyleSheet("""
@@ -89,13 +89,13 @@ class Editeur_tags(QWidget):
         """Placer les tags au démarrage dans l'éditeur"""
         if self.chemin_tags.exists():
             with open(self.chemin_tags, "r", encoding="utf-8") as f:
-                self.text_edit.setPlainText(f.read())
+                self.editer_texte.setPlainText(f.read())
 
     def quitter_sauvegarder(self) -> None:
         """Enregistrer les changements et prévenir la fenêtre principale."""
         if self.modifie:
             with open(self.chemin_tags, "w", encoding="utf-8") as f:
-                f.write(self.text_edit.toPlainText())
+                f.write(self.editer_texte.toPlainText())
 
             # prévenir la fenêtre principale que les tags ont été modifiés
             self.tags_enregistres.emit()
@@ -109,9 +109,6 @@ class Editeur_tags(QWidget):
         """Quitter sans enregistrer"""
         # prévenir la fenêtre principale que les tags ont été modifiés
         self.close()
-
-
-    
 
 
 # Programme principal de test

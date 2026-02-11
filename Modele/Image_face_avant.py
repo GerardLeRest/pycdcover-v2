@@ -51,13 +51,13 @@ class Image_face_avant:
         self.fichiers: list[Path] = []
         self.photos: list[Image.Image] = []
 
-        # Fichiers détectés dans thumbnails
+        # Fichiers détectés dans "miniatures"
         self.total: int = 0
 
         # Dossiers de travail
         dossier_utilisateur: Path = Path.home()
         self.dossier_pycdcover: Path = dossier_utilisateur / "PyCDCover"
-        self.thumbnail_path: Path = self.dossier_pycdcover / "thumbnails"
+        self.thumbnail_path: Path = self.dossier_pycdcover / "miniatures"
 
         # Se placer dans ~/PyCDCover
         os.chdir(self.dossier_pycdcover)
@@ -88,7 +88,7 @@ class Image_face_avant:
         return image.crop((gauche, haut, droite, bas))
 
     def assemblage_photos(self) -> None:
-        """Assemble les miniatures du dossier thumbnails pour l'image."""
+        """Assemble les miniatures du dossier "miniatures" pour l'image."""
         try:
             # recharge la liste des fichiers
             self.fichiers = os.listdir(self.thumbnail_path)
@@ -104,7 +104,7 @@ class Image_face_avant:
                 self.assemblage_plusieurs_images()
 
             # sauvegarde finale
-            sortie = self.dossier_pycdcover / "Image_thumbnails.jpeg"
+            sortie = self.dossier_pycdcover / "Image_miniatures.jpeg"
             self.fond.save(sortie, "jpeg")
 
         except ZeroDivisionError:
@@ -117,17 +117,17 @@ class Image_face_avant:
         """
         # ouverture de l’image source
         chemin_image = self.thumbnail_path / self.fichiers[0]
-        into = Image.open(chemin_image)
+        image = Image.open(chemin_image)
         # recadrage carré (indispensable pour remplir le gabarit)
-        into = self.rendre_carre(into)
+        image = self.rendre_carre(image)
         # redimensionnement EXACT au gabarit
-        into = into.resize(
+        image = image.resize(
             (self.Larg_Im_fin, self.Haut_Im_fin),
             Image.LANCZOS
         )
         # collage sans marge : origine absolue
         self.fond.paste(
-            into,
+            image,
             (0, 0, self.Larg_Im_fin, self.Haut_Im_fin)
         )
 
@@ -142,11 +142,11 @@ class Image_face_avant:
                     break
                 # chemin de l’image à insérer
                 chemin_image = self.thumbnail_path / self.fichiers[index]
-                into = Image.open(chemin_image)
+                image = Image.open(chemin_image)
                 # recadrage carré
-                into = self.rendre_carre(into)
+                image = self.rendre_carre(image)
                 # redimensionnement exact
-                into = into.resize((self.largeur, self.hauteur), Image.LANCZOS)
+                image = image.resize((self.largeur, self.hauteur), Image.LANCZOS)
                 # centrage dernière ligne incomplète
                 if j == self.NiH - 1 and self.NiD != 0:
                     marge = int((self.Larg_Im_fin - self.NiD * (self.largeur + 10) + 10) / 2)
@@ -156,7 +156,7 @@ class Image_face_avant:
                 # position verticale
                 y = 10 + (self.hauteur + 10) * j
                 # collage sur le fond final
-                self.fond.paste(into, (x, y, x + self.largeur, y + self.hauteur))
+                self.fond.paste(image, (x, y, x + self.largeur, y + self.hauteur))
                 index += 1
 
 

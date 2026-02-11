@@ -11,14 +11,14 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QIcon, QAction, QActionGroup
 from pathlib import Path
-from Vue.Haut_gauche import Haut_gauche
-from Vue.Haut_milieu import Haut_milieu
-from Vue.Haut_droit import Haut_droit
-from Vue.Bas import Bas
-from Vue.A_propos import FenetreAPropos
+from Vue.haut_gauche import Haut_gauche
+from Vue.haut_milieu import Haut_milieu
+from Vue.haut_droit import Haut_droit
+from Vue.bas import Bas
+from Vue.a_propos import FenetreAPropos
 from Modele.GestionLangue import GestionLangue
 import sys
-from Vue.utils import centrer_fenetre
+from Vue.centrer_fenetre import CentrerFenetre
 from builtins import _
 
 
@@ -47,7 +47,7 @@ class Fenetre(QMainWindow):
         # dossiers
         dossier_utilisateur: Path = Path.home()
         self.dossier_pycdcover: Path = dossier_utilisateur / "PyCDCover"
-        self.dossier_thumbnails: Path = self.dossier_pycdcover / "thumbnails"
+        self.dossier_miniatures: Path = self.dossier_pycdcover / "miniatures"
         self.tags_txt: Path = self.dossier_pycdcover / "tags.txt"
         self.fichierLangue: Path = dossier_utilisateur / ".config" / "pycdcover" / "configurationLangue.json"
         # tailles de la fenêtre
@@ -97,7 +97,7 @@ class Fenetre(QMainWindow):
         self.panneau_bas()
         self.connexions_donnees()
         # voir le fichier utilis.py dans Vue
-        centrer_fenetre(self) 
+        CentrerFenetre(self) 
 
     def menu(self) -> None:
         """Construit le menu principal."""
@@ -172,10 +172,10 @@ class Fenetre(QMainWindow):
 
     def barre_d_outils(self) -> None:
         """Construit la barre d’outils principale avec ses icônes et ses actions."""
-        toolbar = QToolBar("Icônes")
-        toolbar.setIconSize(QSize(32, 32))
-        self.addToolBar(toolbar)
-        toolbar.setStyleSheet("""
+        barre_outils = QToolBar("Icônes")
+        barre_outils.setIconSize(QSize(32, 32))
+        self.addToolBar(barre_outils)
+        barre_outils.setStyleSheet("""
             QToolButton:hover {
                 background-color: #ffaa43;
                 color: white;
@@ -193,12 +193,12 @@ class Fenetre(QMainWindow):
         self.act_pdf.setIcon(QIcon(str(self.dossier_icones / "pdf.svg")))
         
         # ajout des actions
-        toolbar.addAction(self.act_titre)
-        toolbar.addAction(self.act_recup_tags)
-        toolbar.addAction(self.act_tags_rw)
-        toolbar.addAction(self.act_recup_images)
-        toolbar.addAction(self.act_faces)
-        toolbar.addAction(self.act_pdf)
+        barre_outils.addAction(self.act_titre)
+        barre_outils.addAction(self.act_recup_tags)
+        barre_outils.addAction(self.act_tags_rw)
+        barre_outils.addAction(self.act_recup_images)
+        barre_outils.addAction(self.act_faces)
+        barre_outils.addAction(self.act_pdf)
 
         # info-bulles
         self.act_titre.setToolTip(_("Créer le titre"))

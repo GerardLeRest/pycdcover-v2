@@ -50,7 +50,7 @@ def lire_tags(fichier: str = "tags.txt") -> list[dict[str, str]]:
 
     return albums
 
-def get_itunes_cover(artiste: str, album: str) -> Optional[str]:
+def recup_couv_itunes(artiste: str, album: str) -> Optional[str]:
     """Retourne l'URL de la jaquette iTunes ou None."""
     try:
         term = quote(f"{artiste} {album}")
@@ -76,13 +76,13 @@ class ImageDevant:
         self.chemin = (
             Path.home()
             / "PyCDCover"
-            / "thumbnails"
+            / "miniatures"
             / f"{artiste} - {album}.jpg"
         )
         self.chemin.parent.mkdir(parents=True, exist_ok=True)
 
     def creer(self) -> Path:
-        url = get_itunes_cover(self.artiste, self.album)
+        url = recup_couv_itunes(self.artiste, self.album)
         if url:
             data = requests.get(url).content
             img = Image.open(io.BytesIO(data))

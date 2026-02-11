@@ -11,17 +11,17 @@ from PySide6.QtWidgets import QWidget, QApplication, QMessageBox, QFileDialog
 from PySide6.QtCore import Slot
 
 # Imports MVC
-from Vue.Fenetre import Fenetre
-from Vue.Fen_Titre import Fen_Titre
-from Vue.Editeur_tags import Editeur_tags
-from Vue.Progress_images import Progress_images
-from Vue.Progress_tags import Progress_tags
+from Vue.fenetre import Fenetre
+from Vue.fen_Titre import Fen_Titre
+from Vue.editeur_tags import Editeur_tags
+from Vue.Progression_images import Progress_images
+from Vue.Progression_tags import Progression_tags
 from Modele.Titres import Titres
 from Modele.Tags import Tags
 from Modele.recup_images_avant import lire_tags
 from Modele.Lancement_av_ar import Lancement_av_ar
 from Modele.Gabarit import Gabarit
-from Vue.Haut_gauche import Haut_gauche
+from Vue.haut_gauche import Haut_gauche
 
 import os, sys, shutil, platform, subprocess
 
@@ -53,8 +53,8 @@ class Application(QWidget):
         # Supprime complètement le dossier s'il existe
         if os.path.exists(dossier_principal):
             shutil.rmtree(dossier_principal)
-        # Le recrée avec le sous-dossier thumbnails
-        chemin = os.path.join(dossier_principal, "thumbnails")
+        # Le recrée avec le sous-dossier "miniatures"
+        chemin = os.path.join(dossier_principal, "miniatures")
         if not os.path.exists(chemin):
             os.makedirs(chemin)
     
@@ -83,8 +83,8 @@ class Application(QWidget):
     def action_recuperer_tags(self) -> None:
 
         # 1. Choix du dossier (sans progression)
-        progress_tmp = Progress_tags()
-        chemin = progress_tmp.choisir_dossier_chansons()
+        progression_tmp = Progression_tags()
+        chemin = progression_tmp.choisir_dossier_chansons()
         if not chemin:
             return
         chemin = Path(chemin)
@@ -92,10 +92,10 @@ class Application(QWidget):
         total = len(list(chemin.rglob("*.mp3")))
         # 3. Aucun MP3 → message et stop
         if total == 0:
-            progress_tmp.absence_mp3(0)
+            progression_tmp.absence_mp3(0)
             return
         # 4. Maintenant seulement, on crée la fenêtre de progression
-        self.progress_tags = Progress_tags()
+        self.progress_tags = Progression_tags()
         self.progress_tags.defilement(total)
         self.progress_tags.show()
         # 5. Modèle

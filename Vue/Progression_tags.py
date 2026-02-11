@@ -6,7 +6,7 @@ from PySide6.QtCore import Signal
 from pathlib import Path
 from builtins import _
 
-class Progress_tags(QMainWindow):
+class Progression_tags(QMainWindow):
 
     tags_termines = Signal()
 

@@ -9,7 +9,7 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 import os
 from pathlib import Path
-from Vue.utils import centrer_fenetre # fonction
+from Vue.centrer_fenetre import CentrerFenetre # fonction
 from builtins import _
 
 class FenetreAPropos(QDialog):
@@ -41,7 +41,7 @@ class FenetreAPropos(QDialog):
         # mise en page
         self.layouts() 
          # voir le fichier utilis.py dans Vue
-        centrer_fenetre(self) 
+        CentrerFenetre(self) 
         
     def preparation_titre(self) -> None:
         """construction du label du titre"""

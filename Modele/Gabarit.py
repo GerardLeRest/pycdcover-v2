@@ -15,12 +15,12 @@ import glob
 class Gabarit:
     """Créer un gabarit pour une jaquette CD à découper - format PDF"""
 
-    def __init__(self, coefficient: float, L_devant: float, H_devant: float, L_back_cover:float, H_back_cover: float):
+    def __init__(self, coefficient: float, L_devant: float, H_devant: float, L_arriere:float, H_arriere: float):
         """initialisation"""
         self.L_devant:float = L_devant
         self.H_devant: float = H_devant
-        self.L_back_cover:float = L_back_cover
-        self.H_back_cover:float = H_back_cover
+        self.L_arriere:float = L_arriere
+        self.H_arriere:float = H_arriere
         self.coefficient: float = coefficient
         # Canvas Reportlab
         self.canv: Canvas | None = None
@@ -29,9 +29,9 @@ class Gabarit:
         # Dossier de travail de l'appli
         self.dossier_pycdcover = dossier_utilisateur / "PyCDCover"
 
-    def compter_images_thumbnails(self) -> int:
-        """Compte les images présentes dans ~/PyCDCover/thumbnails/."""
-        dossier = os.path.expanduser("~/PyCDCover/thumbnails")
+    def compter_images_miniatures(self) -> int:
+        """Compte les images présentes dans ~/PyCDCover/"miniatures"/."""
+        dossier = os.path.expanduser("~/PyCDCover/miniatures")
         motifs = ("*.jpg", "*.jpeg", "*.png")
         fichiers = []
         for motif in motifs:
@@ -60,7 +60,7 @@ class Gabarit:
     def face(self, image_originale, largeur, hauteur):
         """Création des images (face avant et dos sans titres verticaux)"""
         im = Image.new("RGB", (largeur, hauteur), "white")  # création de l'image blanche
-        compteur = self.compter_images_thumbnails()
+        compteur = self.compter_images_miniatures()
         if compteur > 1:
             # insertion du titre horizontal
             into1 = Image.open("TitreH.png")
@@ -104,17 +104,17 @@ class Gabarit:
         """création et insertion de toutes les images"""
         try:
             # création de la face avant
-            image_titre = self.face("Image_thumbnails.jpeg", self.L_devant, self.H_devant) 
+            image_titre = self.face("Image_miniatures.jpeg", self.L_devant, self.H_devant) 
             image_titre.save("Devant.jpeg", "jpeg")
             # création de la face arrière
-            image_dos = self.face("Image_Back_Cover.png", self.L_back_cover, self.H_back_cover)
+            image_dos = self.face("Image_Back_Cover.png", self.L_arriere, self.H_arriere)
             image_dos.save("Dos.png", "png")
             os.chdir(self.dossier_pycdcover)  # sécurité pour le chemin de travail
             # insertion de l'image Devant
-            compteur = self.compter_images_thumbnails()
+            compteur = self.compter_images_miniatures()
             if compteur>1:
                 y = 1700
-            else: # image - maquette (1 thumbnails)
+            else: # image - maquette (1 "miniatures")
                 y = 1660
             xorigine, yorigine = 360 * self.coefficient, y * self.coefficient
             self.canv.drawImage("Devant.jpeg", xorigine, yorigine,
@@ -123,17 +123,17 @@ class Gabarit:
             # insertion de l'image Dos
             xorigine, yorigine = 400 * self.coefficient, 480 * self.coefficient
             self.canv.drawImage("Dos.png", xorigine, yorigine,
-                                width=self.L_back_cover * self.coefficient,
-                                height=self.H_back_cover * self.coefficient, mask=None)
+                                width=self.L_arriere * self.coefficient,
+                                height=self.H_arriere * self.coefficient, mask=None)
             # insertion des titres verticaux
             xorigine, yorigine = 300 * self.coefficient, 480 * self.coefficient
             self.canv.drawImage("TitreV1.png", xorigine, yorigine,
                                 width=60 * self.coefficient,
-                                height=self.H_back_cover * self.coefficient, mask=None)
+                                height=self.H_arriere * self.coefficient, mask=None)
             xorigine, yorigine = 1740 * self.coefficient, 480 * self.coefficient
             self.canv.drawImage("TitreV2.png", xorigine, yorigine,
                                 width=60 * self.coefficient,
-                                height=self.H_back_cover * self.coefficient, mask=None)
+                                height=self.H_arriere * self.coefficient, mask=None)
         except IOError:
             print("Toutes les images de la jaquette n'ont pas été créées")
 
@@ -144,11 +144,11 @@ class Gabarit:
         self.canv.rect(360 * self.coefficient, 1660 * self.coefficient,
                 self.L_devant * self.coefficient, self.H_devant * self.coefficient)
         self.canv.rect(300 * self.coefficient, 480 * self.coefficient,
-                    60 * self.coefficient, self.H_back_cover * self.coefficient)
+                    60 * self.coefficient, self.H_arriere * self.coefficient)
         self.canv.rect(1740 * self.coefficient, 480 * self.coefficient,
-                    60 * self.coefficient, self.H_back_cover * self.coefficient)
+                    60 * self.coefficient, self.H_arriere * self.coefficient)
         self.canv.rect(360 * self.coefficient, 480 * self.coefficient,
-                    self.L_back_cover * self.coefficient, self.H_back_cover * self.coefficient)
+                    self.L_arriere * self.coefficient, self.H_arriere * self.coefficient)
 
     
     def sauvegarde(self) -> None:
@@ -162,7 +162,7 @@ class Gabarit:
 
 if __name__ == "__main__":
     gabarit = Gabarit(0.283464567,1200,1200,1380,1180) # 72.0/254
-    nombre_images = gabarit.compter_images_thumbnails()
+    nombre_images = gabarit.compter_images_miniatures()
     gabarit.lignes_pointillees()
     gabarit.insertion_images()
     gabarit.lignes_continues()

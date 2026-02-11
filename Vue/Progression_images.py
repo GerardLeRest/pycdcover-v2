@@ -2,7 +2,7 @@
 
 """
 # PyCDCover - Récupération des images
-# Cette fenêtre gère la création des miniatures (thumbnails) utilisées
+# Cette fenêtre gère la création des miniatures ("miniatures") utilisées
 # pour composer les jaquettes.
 """
 

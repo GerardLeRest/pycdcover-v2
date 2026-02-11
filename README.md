@@ -146,7 +146,7 @@ Une image orange (avec nom+album) apparait si l'image d'un album n'a pas été t
 
 Créer le titre → récupérer MP3 → éditer MP3 → récupérer les images dans le dossier* → créer les deux faces → changer manuellement l’image voulue → créer les deux faces → générer PDF
 
-* ~/PyCDCover/thumbnails : dossier des miniatures
+* ~/PyCDCover/"miniatures" : dossier des miniatures
 
 Remarque importante : Respecter l'ordre ci-dessus pour ne pas se retrouver dans l'ancienne configuration
 
@@ -158,7 +158,7 @@ Avec un album double, si rien n'est fait, deux images en double apparaissent sur
 
 Créer le titre → récupérer MP3 → éditer MP3 → récupérer les images dans le dossier* → créer les deux faces → Effacer l'image voulue → créer les deux faces → générer PDF
 
-* ~/PyCDCover/thumbnails : dossier des miniatures
+* ~/PyCDCover/"miniatures" : dossier des miniatures
 
 Remarque importante : Respecter l'ordre ci-dessus pour ne pas se retrouver dans l'ancienne configuration
 

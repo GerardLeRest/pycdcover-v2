@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout, QLineEdit, QDialog,QMessageBox )
 import sys
 from PySide6.QtCore import Signal
-from Vue.utils import centrer_fenetre # fonction
+from Vue.centrer_fenetre import CentrerFenetre # fonction
 from builtins import _
 
 
@@ -74,7 +74,7 @@ class Fen_Titre(QDialog):
     def showEvent(self, event) -> None:
         """Centrage automatique à l'affichage du dialogue."""
         super().showEvent(event)
-        centrer_fenetre(self) # voir Vue/utils.py
+        CentrerFenetre(self) # voir Vue/utils.py
         self.champ.setFocus() # positionement du curseur dans le champ
 
 

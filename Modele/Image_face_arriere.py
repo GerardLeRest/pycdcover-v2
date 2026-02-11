@@ -20,7 +20,7 @@ class Image_face_arriere:
         self.dossier_racine: Path = Path(__file__).parent.parent
         dossier_utilisateur: Path = Path.home()
         self.dossier_pycdcover: Path = dossier_utilisateur / "PyCDCover"
-        self.dossier_thumbnails: Path = self.dossier_pycdcover / "thumbnails"
+        self.dossier_miniatures: Path = self.dossier_pycdcover / "miniatures"
         self.fichier_tags: Path = self.dossier_pycdcover / "tags.txt"
         # Polices
         self.dossier_polices: str = os.path.join(self.dossier_racine, "ressources", "polices")
@@ -44,8 +44,8 @@ class Image_face_arriere:
         # Lire les lignes du fichier
         with open(self.fichier_tags, "r", encoding='utf-8') as f:
             self.lignes = [ligne.rstrip("\n") for ligne in f.readlines()]
-        # Nombre d'images dans thumbnails
-        self.nb_fichiers = sum(1 for f in self.dossier_thumbnails.iterdir() if f.is_file())
+        # Nombre d'images dans "miniatures"
+        self.nb_fichiers = sum(1 for f in self.dossier_miniatures.iterdir() if f.is_file())
         # Deux tailles différentes
         if self.nb_fichiers > 1:
             largeur, hauteur = 1380, 930
@@ -183,7 +183,7 @@ if __name__ == "__main__":
     draw1 = face_arriere.creer_image_blanche()
     face_arriere.configuration(930)
     if draw1 is None:
-        exit("Erreur : impossible de créer l’image (vérifie tags.txt et thumbnails/)")
+        exit("Erreur : impossible de créer l’image (vérifie tags.txt et 'miniatures'/)")
     # Sélection du mode
     if face_arriere.nb_fichiers > 1:
         face_arriere.cd_multiples(draw1)

@@ -37,14 +37,14 @@ class Haut_gauche(QObject):
         return self.albums
     
     def nettoyer_photos_non_utilisees(self) -> None:
-        """Supprime les photos dans thumbnails/ qui ne sont plus dans le dictionnaire self.albums."""
-        thumbnails = Path.home() / "PyCDCover" / "thumbnails"
-        if not thumbnails.exists():
+        """Supprime les photos dans "miniatures"/ qui ne sont plus dans le dictionnaire self.albums."""
+        miniatures = Path.home() / "PyCDCover" / "miniatures"
+        if not miniatures.exists():
             return
         # Images encore utilisées d'après tags.txt
         images_valides = { album["couverture"] for album in self.albums.values() }
-        # Parcours du dossier thumbnails
-        for fichier in thumbnails.iterdir():
+        # Parcours du dossier "miniatures"
+        for fichier in miniatures.iterdir():
             if fichier.is_file() and fichier.name not in images_valides:
                 try:
                     fichier.unlink()
@@ -89,21 +89,21 @@ class Haut_gauche(QObject):
         self, ligne: str, artiste, album, annee, genre, chansons
     ):
         """Traite une ligne contenant ' - ' (année/genre ou chanson)."""
-        left, right = ligne.split(" - ", 1)
-        left, right = left.strip(), right.strip()
-        if left.isdigit() and len(left) == 4:
+        gauche, droite = ligne.split(" - ", 1)
+        gauche, droite = gauche.strip(), droite.strip()
+        if gauche.isdigit() and len(gauche) == 4:
             try:
-                annee = int(left)
+                annee = int(gauche)
             except ValueError:
                 annee = None
-            genre = right or None
+            genre = droite or None
         else:
             try:
-                num = int(left)
-                chansons.append({"numero": num, "titre": right})
+                num = int(gauche)
+                chansons.append({"numero": num, "titre": droite})
             except ValueError:
                 annee = None
-                genre = right or None
+                genre = droite or None
         return artiste, album, annee, genre, chansons
 
     def finaliser_album(self, artiste, album, annee, genre, couverture, chansons) -> None:

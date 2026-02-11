@@ -15,7 +15,6 @@ from typing import Any
 from builtins import _
 
 
-
 class Haut_milieu(QWidget):
     """Zone supérieure centrale : affiche artiste, album et image de jaquette."""
 
@@ -35,7 +34,7 @@ class Haut_milieu(QWidget):
         self.label_image: QLabel | None = None
         # Chemins
         self.dossier_pycdcover: Path = Path.home() / "PyCDCover"
-        self.dossier_thumbnails: Path | None = None
+        self.dossier_miniatures: Path | None = None
         # État interne
         self.pixmap_actuelle: QPixmap | None = None
         self.infos_album: dict[str, Any] | None = None
@@ -74,34 +73,14 @@ class Haut_milieu(QWidget):
             }
         """)
         layout.addWidget(self.label_image, alignment=Qt.AlignHCenter)
-        # Bouton "Changer"
-        # self.bouton_changer = QPushButton("Changer", self)
-        # self.bouton_changer.setFixedSize(140, 40)
-        # self.bouton_changer.setStyleSheet("""
-        #     QPushButton {
-        #         color: #4e3728;
-        #         border: 1px solid #6b5e4f;
-        #         border-radius: 8px;
-        #         padding: 6px 16px;
-        #         background-color: white;
-        #         font-weight: normal;
-        #     }
-        #     QPushButton:hover {
-        #         background-color: #ffaa43;
-        #         color: white;
-        #     }
-        # """)
-        # layout.addWidget(self.bouton_changer, alignment=Qt.AlignHCenter)
-        # self.bouton_changer.clicked.connect(self.action_changer)
-
 
     def charger_photo(self, infos_album: dict[str, Any]) -> None:
         """Charge la jaquette depuis le nom ou le dictionnaire fourni."""
         couverture = infos_album if isinstance(infos_album, str) else infos_album.get("couverture")
-        self.dossier_thumbnails = self.dossier_pycdcover / "thumbnails"
-        if not any(self.dossier_thumbnails.iterdir()):
-            self.dossier_thumbnails = Path(__file__).resolve().parent.parent / "ressources" / "PyCDCover" / "thumbnails"
-        chemin = self.dossier_thumbnails / couverture
+        self.dossier_miniatures = self.dossier_pycdcover / "miniatures"
+        if not any(self.dossier_miniatures.iterdir()):
+            self.dossier_miniatures = Path(__file__).resolve().parent.parent / "ressources" / "PyCDCover" / "miniatures"
+        chemin = self.dossier_miniatures / couverture
         if chemin.exists():
             pixmap = QPixmap(str(chemin)).scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.label_image.setPixmap(pixmap)
@@ -109,25 +88,6 @@ class Haut_milieu(QWidget):
         else:
             self.label_image.clear()
             self.pixmap_actuelle = None
-
-    # @Slot()
-    # def action_changer(self) -> None:
-    #     """Permet de choisir une nouvelle image via une boîte de dialogue."""
-    #     fichier, _ = QFileDialog.getOpenFileName(
-    #         self,
-    #         "Choisir une nouvelle jaquette",
-    #         "",
-    #         "Images (*.png *.jpg *.jpeg *.bmp *.gif)"
-    #     )
-    #     if not fichier:
-    #         return
-    #     # Charger et afficher l'image
-    #     self.couverture = Path(fichier).name
-    #     pixmap = QPixmap(fichier).scaled(200, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-    #     self.label_image.setPixmap(pixmap)
-    #     self.pixmap_actuelle = pixmap   # empêche sa suppression
-    #     # Notifier le contrôleur
-    #     self.demande_image_changee.emit(self.couverture)
 
     def MAJ_haut_milieu(self, infos: dict[str, Any]) -> None:
         """Met à jour les labels artiste et album, et recharge la jaquette."""
