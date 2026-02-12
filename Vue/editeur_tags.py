@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, Signal
 from pathlib import Path
-from Vue.centrer_fenetre import CentrerFenetre
+from Vue.centrer_fenetre import centrage_fenetre
 from builtins import _
 import sys
 
@@ -66,7 +66,7 @@ class Editeur_tags(QWidget):
         # détection des modifications
         self.editer_texte.textChanged.connect(self.marquer_modifie)
         self.modifie = False
-        CentrerFenetre(self)
+        centrage_fenetre(self)
 
     def habillage_bouton(self, bouton: QPushButton) -> None:
         bouton.setStyleSheet("""

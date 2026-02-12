@@ -12,7 +12,7 @@ from PySide6.QtCore import Slot
 
 # Imports MVC
 from Vue.fenetre import Fenetre
-from Vue.fen_Titre import Fen_Titre
+from Vue.fen_Titre import FenTitre
 from Vue.editeur_tags import Editeur_tags
 from Vue.progression_images import Progress_images
 from Vue.progression_tags import Progression_tags
@@ -65,7 +65,7 @@ class Application(QWidget):
     @Slot()
     def action_titre(self) -> None:
         """Ouvre la fenêtre de saisie du titre."""
-        self.fen_titre = Fen_Titre()
+        self.fen_titre = FenTitre()
         self.fen_titre.titre_selectionne.connect(self.action_recuperer_titre)
         self.fen_titre.exec()
 

@@ -16,9 +16,6 @@ class GestionLangue:
         except (FileNotFoundError, json.JSONDecodeError):
             return "fr"
 
-        with open(self.fichier_config, "r", encoding="utf-8") as f:
-            return json.load(f).get("langueSelectionnee", "fr")
-
     def ecrire(self, code_langue: str) -> None:
         """Écrit le code langue dans le fichier."""
         with open(self.fichier_config, "w", encoding="utf-8") as f:

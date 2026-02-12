@@ -9,11 +9,11 @@ from PySide6.QtWidgets import (
     QHBoxLayout, QLineEdit, QDialog,QMessageBox )
 import sys
 from PySide6.QtCore import Signal
-from Vue.centrer_fenetre import CentrerFenetre # fonction
+from Vue.centrer_fenetre import centrage_fenetre # fonction
 from builtins import _
 
 
-class Fen_Titre(QDialog):
+class FenTitre(QDialog):
     """fenetre de saisie du nom"""
 
     titre_selectionne = Signal(str)
@@ -71,10 +71,16 @@ class Fen_Titre(QDialog):
         self.setLayout(layoutV)
         
         
-    def showEvent(self, event) -> None:
-        """Centrage automatique à l'affichage du dialogue."""
+    def show_event(self, event) -> None:
+        """
+        Centrage automatique à l'affichage du dialogue.
+
+        showEvent() est une méthode héritée de QDialog (via QWidget).
+        Elle est appelée automatiquement par Qt lorsque la fenêtre
+        devient visible (appel de show() ou exec(), qui appelle show() en interne).
+        """
         super().showEvent(event)
-        CentrerFenetre(self) # voir Vue/utils.py
+        centrage_fenetre(self) # voir centrer_fenetre.py
         self.champ.setFocus() # positionement du curseur dans le champ
 
 
@@ -90,15 +96,15 @@ class Fen_Titre(QDialog):
             self.titre = self.champ
             # on doit émettre avant la fermeture de la fenetre
             self.titre_selectionne.emit(self.champ.text())
-            self.accept()
+            self.accept() # méthode héritée de QDialog - ferme la fenêtre
 
-    def recup_titre(self) ->str:
+    def recup_titre(self) ->str: # metode effectué avec if __name__
         """Renvoie le titre saisi"""
         return self.titre
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)
-    dialog = Fen_Titre() # dialog: convention Qt pour une fenetre
+    dialog = FenTitre() # dialog: convention Qt pour une fenetre
     if dialog.exec():  # fenêtre modale
         print("Titre saisi :", dialog.recup_titre())  # OK : maintenant ça retourne une str
     else:

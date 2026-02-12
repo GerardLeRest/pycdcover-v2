@@ -10,9 +10,10 @@ import locale
 import gettext
 from pathlib import Path
 from Modele.gestion_langue import GestionLangue
+import sys
 
 # Gestion de la langue de cette cesssion
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent # dossier du programme
 LOCALE_DIR = BASE_DIR / "locales"
 
 configDir = Path.home() / ".config" / "pycdcover"
@@ -36,11 +37,10 @@ translation.install()
 from PySide6.QtWidgets import QApplication
 from Controleur.application import Application
 
-def main():
-    app = QApplication([])
-    application = Application()
-    application.demarrer()
-    app.exec()
+# ------------------------------------- 
 
 if __name__ == "__main__":
-    main()
+    app = QApplication(sys.argv)
+    application = Application()
+    application.demarrer()
+    sys.exit(app.exec())

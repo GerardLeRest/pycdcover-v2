@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QApplication
 
-def CentrerFenetre(self):
+def centrage_fenetre(self):
     frame = self.frameGeometry()
     ecran = QApplication.primaryScreen()   # toujours valide
     point_central = ecran.availableGeometry().center()

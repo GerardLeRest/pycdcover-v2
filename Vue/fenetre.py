@@ -18,7 +18,7 @@ from Vue.bas import Bas
 from Vue.a_propos import FenetreAPropos
 from Modele.gestion_langue import GestionLangue
 import sys
-from Vue.centrer_fenetre import CentrerFenetre
+from Vue.centrer_fenetre import centrage_fenetre
 from builtins import _
 
 
@@ -97,7 +97,7 @@ class Fenetre(QMainWindow):
         self.panneau_bas()
         self.connexions_donnees()
         # voir le fichier utilis.py dans Vue
-        CentrerFenetre(self) 
+        centrage_fenetre(self) 
 
     def menu(self) -> None:
         """Construit le menu principal."""
@@ -184,7 +184,7 @@ class Fenetre(QMainWindow):
         # dossier des icones
         self.dossier_icones = Path(__file__).resolve().parent.parent / "ressources" / "icones"
 
-        # On ajoute des icônes aux **actions déjà existantes**
+        # On définit les icônes des actions
         self.act_titre.setIcon(QIcon(str(self.dossier_icones / "titre.svg")))
         self.act_recup_tags.setIcon(QIcon(str(self.dossier_icones / "recup_tags.svg")))
         self.act_tags_rw.setIcon(QIcon(str(self.dossier_icones / "tags_rw.svg")))
