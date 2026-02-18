@@ -1,4 +1,6 @@
-# Software Preview
+Documentation Française: [Doc - Français](README-fr.md)
+
+# # Software Preview
 
 <p align="center">
   <img src="ressources/interface.png" alt="Interface">
