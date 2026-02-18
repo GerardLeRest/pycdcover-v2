@@ -7,7 +7,7 @@ Auteur : Gérard Le Rest (2025)
 from PySide6.QtCore import QObject, Signal, Slot
 from pathlib import Path
 
-class Haut_gauche(QObject):
+class HautGauche(QObject):
     """affichage dans la fenêtre haut gauche"""
 
     album_selectionne = Signal(dict)
@@ -16,8 +16,11 @@ class Haut_gauche(QObject):
         """initialisation"""
         super().__init__()
          # ex: [ "Radiohead - OK Computer", "Pink Floyd - Animals"]
-        self.tableau: list[object] = [] # clé: ariste-aflbum de self.tableau
-        # ex: {"Radiohead - OK Computer": {...},"Pink Floyd - Animals": {...}}
+        self.liste_artistes_albums: list[str] = [] 
+        # Exemple : {'The Codebreakers - Best of PyCDCover': {'artiste': 'The Codebreakers',
+        # 'album': 'Best of PyCDCover', 'annee': 2023, 'genre': 'Rock',
+        # 'couverture': 'The Codebreakers - Best of PyCDCover.jpg', 
+        # 'chansons': [{'numero': 1, 'titre': 'Tonight Again'}, {'numero': 2, 'titre': 'Start Over'} ...
         self.albums: dict[str, dict] = {}
         self.fichier_tags_principal: Path = Path.home() / "PyCDCover" / "tags.txt"
         self.fichier_tags_secours: Path = (
@@ -26,32 +29,15 @@ class Haut_gauche(QObject):
 
     def charger_depuis_fichier(self) -> dict:
         """Charge tous les albums et remplit self.albums + self.tableau."""
-        self.tableau.clear()
+        self.liste_artistes_albums.clear()
         self.albums.clear()
         fichier = self.choisir_fichier_tags()
         if fichier is None:
             return {}
         lignes = self.lire_lignes(fichier)
-        self.parser_fichier(lignes)
-        self.nettoyer_photos_non_utilisees()
+        self.traiter_fichier(lignes)
         return self.albums
     
-    def nettoyer_photos_non_utilisees(self) -> None:
-        """Supprime les photos dans "miniatures"/ qui ne sont plus dans le dictionnaire self.albums."""
-        miniatures = Path.home() / "PyCDCover" / "miniatures"
-        if not miniatures.exists():
-            return
-        # Images encore utilisées d'après tags.txt
-        images_valides = { album["couverture"] for album in self.albums.values() }
-        # Parcours du dossier "miniatures"
-        for fichier in miniatures.iterdir():
-            if fichier.is_file() and fichier.name not in images_valides:
-                try:
-                    fichier.unlink()
-                    print(f"[SUPPRIMÉ] {fichier.name}")
-                except Exception as e:
-                    print(f"[ERREUR] Impossible de supprimer {fichier.name} : {e}")
-
     def choisir_fichier_tags(self) -> Path | None:
         """Choisir le fichier tags.txt (principal ou secours)."""
         if self.fichier_tags_principal.exists():
@@ -65,13 +51,11 @@ class Haut_gauche(QObject):
         with open(fichier, encoding="utf-8") as f:
             return [l.strip() for l in f.readlines()] + [""]
 
-    def parser_fichier(self, lignes: list[str]) -> None:
+    def traiter_fichier(self, lignes: list[str]) -> None:
         """Analyse toutes les lignes et construit les albums."""
         artiste = album = annee = genre = couverture = None
         chansons = []
         for ligne in lignes:
-            if ligne.startswith("C:"):
-                artiste = ligne[2:].strip()
             if ligne.startswith("C:"):
                 artiste = ligne[2:].strip()
             elif ligne.startswith("A:"):
@@ -89,7 +73,7 @@ class Haut_gauche(QObject):
         self, ligne: str, artiste, album, annee, genre, chansons
     ):
         """Traite une ligne contenant ' - ' (année/genre ou chanson)."""
-        gauche, droite = ligne.split(" - ", 1)
+        gauche, droite = ligne.split(" - ", 1) # séparation au niveau du tiret
         gauche, droite = gauche.strip(), droite.strip()
         if gauche.isdigit() and len(gauche) == 4:
             try:
@@ -113,7 +97,7 @@ class Haut_gauche(QObject):
         if not couverture:
             couverture = f"{artiste} - {album}.jpg"
         cle = f"{artiste} - {album}"
-        self.tableau.append(cle)
+        self.liste_artistes_albums.append(cle)
         self.albums[cle] = {
             "artiste": artiste,
             "album": album,
@@ -129,4 +113,3 @@ class Haut_gauche(QObject):
         infos_album = self.albums.get(cle)
         if infos_album:
             self.album_selectionne.emit(infos_album)
-

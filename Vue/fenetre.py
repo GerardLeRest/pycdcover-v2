@@ -11,9 +11,9 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QIcon, QAction, QActionGroup
 from pathlib import Path
-from Vue.haut_gauche import Haut_gauche
-from Vue.haut_milieu import Haut_milieu
-from Vue.haut_droit import Haut_droit
+from Vue.haut_gauche import HautGauche
+from Vue.haut_milieu import HautMilieu
+from Vue.haut_droit import HautDroit
 from Vue.bas import Bas
 from Vue.a_propos import FenetreAPropos
 from Modele.gestion_langue import GestionLangue
@@ -210,10 +210,10 @@ class Fenetre(QMainWindow):
        
     def panneau_gauche(self) -> None:
         """Construit le panneau gauche (liste des albums)."""
-        self.recup_donnees = Haut_gauche()
-        self.recup_donnees.charger_depuis_fichier()
+        self.haut_gauche = HautGauche()
+        self.haut_gauche.charger_depuis_fichier()
         self.liste = QListWidget()
-        self.setStyleSheet("""
+        self.setStyleSheet("""œ
             /* LISTE GLOBALE */
             QListWidget {
                 font-size: 16px;            
@@ -245,19 +245,19 @@ class Fenetre(QMainWindow):
     """)
         self.liste.setFocusPolicy(Qt.NoFocus)
         self.liste.setFixedWidth(300)
-        self.liste.addItems(self.recup_donnees.tableau)
-        self.liste.itemClicked.connect(self.on_item_clicked)
+        self.liste.addItems(self.haut_gauche.liste_artistes_albums)
+        self.liste.itemClicked.connect(self.clic_sur_element)
         self.layout_haut.addWidget(self.liste)
 
     def panneau_milieu(self) -> None:
         """Construit le panneau central (visuel de l’album)."""
-        self.haut_milieu = Haut_milieu("", "", "")
+        self.haut_milieu = HautMilieu("", "", "")
         self.layout_haut.addWidget(self.haut_milieu)
         self.haut_milieu.assembler_elements()
 
     def panneau_droit(self) -> None:
         """Construit le panneau droit (informations de l’album)."""
-        self.haut_droit = Haut_droit("", "", "", "")
+        self.haut_droit = HautDroit("", "", "", "")
         self.layout_haut.addWidget(self.haut_droit, alignment=Qt.AlignTop)
         self.layout.addLayout(self.layout_haut)
         self.layout.addSpacing(8)
@@ -270,18 +270,20 @@ class Fenetre(QMainWindow):
         self.central.setLayout(self.layout)
 
     def connexions_donnees(self) -> None:
-        """Connecte les signaux entre les différents panneaux."""
-        self.recup_donnees.album_selectionne.connect(self.haut_milieu.MAJ_haut_milieu)
-        self.recup_donnees.album_selectionne.connect(self.haut_droit.MAJ_haut_droit)
-        self.recup_donnees.album_selectionne.connect(self.bas.MAJ_bas)
+        """Connecte les signaux entre les différents panneaux.
+        Ces signaus restent actifs sauf ordre contraire (ex disconnect)"""
+        self.haut_gauche.album_selectionne.connect(self.haut_milieu.MAJ_haut_milieu)
+        self.haut_gauche.album_selectionne.connect(self.haut_droit.MAJ_haut_droit)
+        self.haut_gauche.album_selectionne.connect(self.bas.MAJ_bas)
 
-    def on_item_clicked(self, item: QListWidgetItem) -> None:
+    def clic_sur_element(self, item: QListWidgetItem) -> None:
         """Réagit au clic sur un album dans la liste."""
         cle = item.text()
-        infos = self.recup_donnees.albums.get(cle)
-        if not infos:
+        infos_album = self.haut_gauche.albums.get(cle)
+        print (infos_album)
+        if not infos_album:
             return
-        self.recup_donnees.album_selectionne.emit(infos)
+        self.haut_gauche.album_selectionne.emit(infos_album)
 
     def information(self) -> None:
         """Ouvre la fenêtre 'À propos'."""

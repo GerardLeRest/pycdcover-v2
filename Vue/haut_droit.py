@@ -11,11 +11,11 @@ from PySide6.QtGui import QFont
 from typing import Any
 from builtins import _
 
-class Haut_droit(QWidget):
+class HautDroit(QWidget):
     """affiche les données en hat à droite"""
     
-    ROW_H = 36        # hauteur uniforme des valeurs
-    GAP   = 40        # espace entre blocs
+    HAUTEUR_LIGNE = 36        # hauteur uniforme des valeurs
+    ESPACEMENT   = 40        # espace entre blocs
     TOP   = 70       # marge haute pour descendre le premier bloc
 
     def __init__(self, nom_artiste: str, album: str, annee: str, genre: str):
@@ -42,7 +42,7 @@ class Haut_droit(QWidget):
         """placer le contenu correspondant au titre"""
         lab = QLabel(texte, self)
         lab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        lab.setFixedHeight(self.ROW_H) 
+        lab.setFixedHeight(self.HAUTEUR_LIGNE) 
         lab.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         lab.setStyleSheet("""
             font-size: 16px;
@@ -69,7 +69,7 @@ class Haut_droit(QWidget):
         "assembler l'ensemble des éléments"
         layout_principal = QVBoxLayout(self)
         layout_principal.setContentsMargins(8, self.TOP, 8, 8)  # TOP applique le décalage
-        layout_principal.setSpacing(self.GAP)
+        layout_principal.setSpacing(self.ESPACEMENT)
         # blocs simples
         layout_principal.addWidget(self.bloc(_("Artiste"), self.nom_artiste))
         layout_principal.addWidget(self.bloc(_("Album"), self.album))

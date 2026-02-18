@@ -25,10 +25,14 @@ version 2.2.3:
 
 - correction de traduction
 
-version 2.3.3
+version 2.3.3 (erreur de N° -> 2.3.0)
 
 - Séparation vue, modele et controleur de la classe "Tags
 
 version 2.3.4 (release)
 
 - correction du MVC "Tags"
+
+version 2.4.0 
+
+- traduction des noms anglais -> français

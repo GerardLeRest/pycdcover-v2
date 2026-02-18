@@ -21,7 +21,7 @@ from Modele.tags import Tags
 from Modele.recup_images_avant import lire_tags
 from Modele.lancement_av_ar import Lancement_av_ar
 from Modele.gabarit import Gabarit
-from Vue.haut_gauche import Haut_gauche
+from Vue.haut_gauche import HautGauche
 
 import os, sys, shutil, platform, subprocess
 
@@ -32,7 +32,7 @@ class Application(QWidget):
         super().__init__()
         self.reinitialiser_dossier_pycdcover()
         # Toutes les méthodes et variables d’instance de Fenetre sont accessibles via :
-        self.haut_gauche = Haut_gauche()
+        self.haut_gauche = HautGauche()
         self.vue = Fenetre()
         self.dossier_pycdcover = Path.home() / "PyCDCover"
         # Connexions Vue → Contrôleur - BP menu
@@ -44,7 +44,7 @@ class Application(QWidget):
         self.vue.demande_pdf.connect(self.action_pdf)
         # ------------------------------------------#
         # Connexions Vue → Contrôleur - BP "changer"
-        self.vue.haut_milieu.demande_image_changee.connect(self.on_image_changee)
+        self.vue.haut_milieu.demande_image_changee.connect(self.changer_image)
         self.donnees = {}
       
     def reinitialiser_dossier_pycdcover(self) -> None:
@@ -149,13 +149,14 @@ class Application(QWidget):
     @Slot()
     def action_faces(self) -> None:
         """Génère les deux faces (avant et arrière) de la jaquette."""
-        # 🔹 Relire les données si besoin
-        self.vue.recup_donnees.charger_depuis_fichier()
+        # self.recup_donnees = Haut_Gauche() - voir fenetre.py
+        self.vue.haut_gauche.charger_depuis_fichier() 
         self.vue.liste.clear()
-        self.vue.liste.addItems(self.vue.recup_donnees.tableau)
-        # 🔹 Lancer la génération (indispensable)
+        # clé: artiste-album de self.tableau
+        self.vue.liste.addItems(self.vue.haut_gauche.liste_artistes_albums)
+        # Lancer la génération
         lancement_av_ar = Lancement_av_ar()
-        # 🔹 Activer le bouton PDF
+        # Activer le bouton PDF
         self.vue.act_pdf.setEnabled(True)
 
     @Slot()
@@ -180,7 +181,7 @@ class Application(QWidget):
             print(f"Erreur lors de l'ouverture du PDF : {e}")
 
     @Slot(str)
-    def on_image_changee(self, nom_image: str) -> None:
+    def changer_image(self, nom_image: str) -> None:
         """Met à jour la donnée métier (nom du fichier de jaquette)."""
         # 🔹 Relance la mise à jour de la vue
         self.donnees["couverture"] = nom_image

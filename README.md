@@ -1,71 +1,73 @@
-# Aperçu du logiciel
+# Software Preview
 
 <p align="center">
   <img src="ressources/interface.png" alt="Interface">
 </p>
 
-## Exemple de jaquette maquette (1 CD)
+## Mock-up Cover Example (1 CD)
 
-Utilisé avec l’autorisation du groupe **CENT DÉTRESSES**  
+Used with permission from the band **CENT DÉTRESSES**  
 @CENT DÉTRESSES
 
 <p align="center">
-  <img src="ressources/jaquette_maquette.png" alt="jaquette - maquette">
+  <img src="ressources/jaquette_maquette.png" alt="mock-up cover">
 </p>
 
-## Exemple de jaquette multi-albums
+## Multi-Album Cover Example
 
-Les images ci-dessous servent uniquement de démonstration.  
-Elles sont distribuées à titre non commercial et en basse résolution.
+The images below are provided for demonstration purposes only.  
+They are distributed for non-commercial use and in low resolution.
 
 <p align="center">
-  <img src="ressources/jaquette-multi-albums.png" alt="jaquette - multi-albums">
+  <img src="ressources/jaquette-multi-albums.png" alt="multi-album cover">
 </p>
 
 ---
 
-# 1. Présentation
+# 1. Overview
 
-**PyCDCover** est un logiciel permettant de créer des jaquettes de CD audio à partir des informations d’un album  
-(auteur, titre, année, genre, image).
+**PyCDCover** is a software tool for creating audio CD covers from album information  
+(author, title, year, genre, image).
 
-Le logiciel récupère automatiquement :
+The software automatically retrieves:
 
-- les **tags** depuis les fichiers audio du CD ;
-- les **images d’albums** depuis *iTunes* ou *MusicBrainz*, à partir des tags (artiste – album).
+- **tags** from the audio files on the CD  
+- **album images** from *iTunes* using the tags (artist – album)
 
-Si aucune image n’est trouvée, elle est remplacée par une **image orange** portant le nom de l’artiste et de l’album.  
-Vous pouvez remplacer cette image par celle de votre choix (cadrée de préférence).
+If no image is found, it is replaced by an **orange placeholder image** showing the artist and album name.  
+You can replace this image with one of your choice (preferably cropped).
 
 ---
 
-# 2. Installations automatiques
+# 2. Automatic Installations
 
-## 2.1. Sous Windows
+## 2.1. Windows
 
-La dernière version stable de **PyCDCover** est disponible ici :  
+The latest stable version of **PyCDCover** is available here:  
 👉 https://github.com/GerardLeRest/pycdcover-v2/releases
 
-Téléchargez **PyCDCover.Setup-X.X.X.exe**,  (x.x.x 2.2.1 -> version 2.2.1 de PyCDCover
+Download: `PyCDCover.Setup-X.X.X.exe`  
+(where X.X.X is the version number, for example 2.2.1)
 
-Vous pouvez ensuite passer à la section **4**.
+You can then proceed to section **4**.
 
 ---
 
-## 2.2. Sous GNU/Linux
+## 2.2. GNU/Linux
 
-➡️ **PyCDCover est disponible au format *AppImage***.
+➡️ **PyCDCover is available as an AppImage**
 
-Téléchargez `PyCDCover-X.X.X-x86_64.AppImage`  ( [Releases · GerardLeRest/pycdcover-v2 · GitHub](https://github.com/GerardLeRest/pycdcover-v2/releases))
-(où *X.X.X* représente le numéro de version).
+Download: `PyCDCover-X.X.X-x86_64.AppImage`  
+👉 https://github.com/GerardLeRest/pycdcover-v2/releases  
+(where X.X.X represents the version number)
 
-Rendez le fichier exécutable :
+Make the file executable:
 
 ```bash
 chmod +x PyCDCover-X.X.X-x86_64.AppImage
 ```
 
-Lancez le programme :
+Run the program:
 
 ```bash
 ./PyCDCover-X.X.X-x86_64.AppImage
@@ -73,43 +75,43 @@ Lancez le programme :
 
 ---
 
-# 3. Version Python — GNU/Linux
+# 3. Python Version — GNU/Linux
 
-*(Pour les utilisateurs souhaitant lancer PyCDCover depuis les sources.)*
+*(For users who want to run PyCDCover from source.)*
 
-## 3.1. Installer Python et les outils nécessaires
+## 3.1. Install Python and required tools
 
 ```bash
 sudo apt update
 sudo apt install python3 python3-pip python3-venv -y
 ```
 
-## 3.2. Télécharger le programme
+## 3.2. Download the program
 
 ```bash
 git clone git@github.com:GerardLeRest/pycdcover-v2.git
 cd pycdcover-v2
 ```
 
-## 3.3. Créer un environnement virtuel
+## 3.3. Create a virtual environment
 
 ```bash
 python3 -m venv mon_env
 ```
 
-### Activer l’environnement
+### Activate the environment
 
 ```bash
 source mon_env/bin/activate
 ```
 
-### Installer les dépendances
+### Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 3.4. Lancement
+## 3.4. Run
 
 ```bash
 python3 pycdcover.py
@@ -117,76 +119,78 @@ python3 pycdcover.py
 
 ---
 
-# 4. Fonctionnement du programme
+# 4. Program Usage
 
-## 4.1. Fonctionnement avec recherche automatique des images
+## 4.1. With automatic image search
 
-1. Préparer un dossier de musiques taguées. N'utilisez pas directement le lecteur CD.
+1. Prepare a folder containing your tagged music files. Do not use the CD drive directly due to possible slowdowns or bugs. Copy the CD to a folder first.
 
-2. Créez le **titre du CD** (1ʳᵉ icône à gauche).
+2. Create the **CD title** (1st icon on the left).
 
-3. **Récupérez les tags** via *MusicBrainz* ou *iTunes* (2ᵉ icône).
+3. **Retrieve tags** via *iTunes* (automatic operation — 2nd icon).
 
-4. **Éditez les tags** si nécessaire (3ᵉ icône).
+4. **Edit tags** if necessary (3rd icon).
    
-   ⚠️ **Très important** :  
-   vérifiez ici les éventuelles erreurs et corrigez les titres trop longs.
+   ⚠️ **Very important:**  
+   Check for any errors at this stage.
 
-5. **Téléchargez les images** (4ᵉ icône).
+5. **Download images** (4th icon).
 
-6. **Créez les images avant et arrière** (5ᵉ icône).
+6. **Create front and back covers** (5th icon).
 
-7. **Générez le PDF** découpable et imprimable.
-
----
-
-## 4.2. Jaquette non référencée sur le web
-
-Une image orange (avec nom+album) apparait si l'image d'un album n'a pas été trouvé internet. Le serveur peut parfois également se tromper. Dans tous les cas en cas d'erreur sur une image, voici la démarche à suivre:
-
-Créer le titre → récupérer MP3 → éditer MP3 → récupérer les images dans le dossier* → créer les deux faces → changer manuellement l’image voulue → créer les deux faces → générer PDF
-
-* ~/PyCDCover/"miniatures" : dossier des miniatures
-
-Remarque importante : Respecter l'ordre ci-dessus pour ne pas se retrouver dans l'ancienne configuration
+7. Generate the printable, cut-ready PDF.
 
 ---
 
-## 4.3 Albums doubles
+## 4.2. Cover not referenced on the web
 
-Avec un album double, si rien n'est fait, deux images en double apparaissent sur la face avant. Voici comment régler ce problème simplement:
+If an album image is not found online, an orange placeholder image (album + artist name) is used.  
+iTunes may sometimes provide incorrect images. In case of error, follow this procedure:
 
-Créer le titre → récupérer MP3 → éditer MP3 → récupérer les images dans le dossier* → créer les deux faces → Effacer l'image voulue → créer les deux faces → générer PDF
+Create title → retrieve MP3 tags → edit tags → download images → create both sides → manually replace the desired image in folder (1) → create both sides → generate PDF
 
-* ~/PyCDCover/"miniatures" : dossier des miniatures
+(1) `~/PyCDCover/miniatures` is the thumbnails folder
 
-Remarque importante : Respecter l'ordre ci-dessus pour ne pas se retrouver dans l'ancienne configuration
+Important note: Follow the order above to avoid reverting to the previous configuration.
 
 ---
 
-# 5. Informations et licences
+## 4.3. Double albums
 
-**PyCDCover – Générateur de jaquettes de CD audio**  
-Auteur : Gérard LE REST  
-Licence : GNU GPL v3  
+For double albums, duplicate images may appear on the front cover.  
+To fix this:
+
+Create title → retrieve MP3 tags → edit tags → download images → create both sides → delete the unwanted image in folder (2) → create both sides → generate PDF
+
+(2) `~/PyCDCover/miniatures` is the thumbnails folder
+
+Important note: Follow the order above to avoid reverting to the previous configuration.
+
+---
+
+# 5. Information and License
+
+**PyCDCover — Audio CD Cover Generator**  
+Author: Gérard LE REST  
+License: GNU GPL v3  
 © Gérard LE REST  
-Email : ge.lerest@gmail.com  
-Créé le : 01-04-2010  
-Dernière mise à jour : 2026-01-15  
+Email: ge.lerest@gmail.com  
+Created: 2010-04-01  
+Last update: 2026-01-15
 
-- [Page wiki Ubuntu](https://doc.ubuntu-fr.org/pycdcover#liens)  
-- [Page internet](https://gerardlerest.github.io/pycdcover/)
+- Ubuntu wiki page: https://doc.ubuntu-fr.org/pycdcover#liens  
+- Website: https://gerardlerest.github.io/pycdcover/
 
 ---
 
-# 6. Licence
+# 6. License
 
-**Licence libre : GNU GPL v3 (ou version ultérieure)**
+**Free Software License: GNU GPL v3 (or later)**
 
-Ce programme est un logiciel libre : vous pouvez le modifier et le redistribuer selon les termes de la  
-Licence publique générale GNU (GPL v3), version 3 ou toute version ultérieure.
+This program is free software: you can redistribute it and/or modify it under the terms of the  
+GNU General Public License (GPL v3), version 3 or any later version.
 
-Il est fourni **sans aucune garantie**, ni implicite ni explicite,  
-concernant une valeur commerciale ou une adéquation à un usage particulier.
+It is provided **without any warranty**, express or implied,  
+including merchantability or fitness for a particular purpose.
 
-👉 [Consulter la licence GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html)
+👉 https://www.gnu.org/licenses/gpl-3.0.html

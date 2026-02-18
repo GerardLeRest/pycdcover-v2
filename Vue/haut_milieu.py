@@ -15,7 +15,7 @@ from typing import Any
 from builtins import _
 
 
-class Haut_milieu(QWidget):
+class HautMilieu(QWidget):
     """Zone supérieure centrale : affiche artiste, album et image de jaquette."""
 
         
@@ -91,7 +91,7 @@ class Haut_milieu(QWidget):
 
     def MAJ_haut_milieu(self, infos: dict[str, Any]) -> None:
         """Met à jour les labels artiste et album, et recharge la jaquette."""
-        self.infos_album = infos  # 🔸 On garde le dictionnaire pour le bouton
+        self.infos_album = infos  # On garde le dictionnaire pour le bouton
         self.label_artiste.setText(infos.get('artiste') or "")
         self.label_album.setText(infos.get('album') or "")
         couverture = infos.get("couverture", "")
