@@ -36,6 +36,7 @@ Le logiciel récupère automatiquement :
 
 Si aucune image n’est trouvée, elle est remplacée par une **image orange** portant le nom de l’artiste et de l’album.  
 Vous pouvez remplacer cette image par celle de votre choix (cadrée de préférence).
+Langues: Français, Anglais, Espagnol, Breton
 
 ---
 

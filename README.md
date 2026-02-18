@@ -39,6 +39,8 @@ The software automatically retrieves:
 If no image is found, it is replaced by an **orange placeholder image** showing the artist and album name.  
 You can replace this image with one of your choice (preferably cropped).
 
+**Languages: French, English, Spanish, Breton**
+
 ---
 
 # 2. Automatic Installations
