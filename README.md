@@ -127,20 +127,20 @@ python3 pycdcover.py
 
 ## 4.1. With automatic image search
 
-1. Prepare a folder containing your tagged music files. Do not use the CD drive directly due to possible slowdowns or bugs. Copy the CD to a folder first.
+1. Prepare a folder containing your tagged music files. Do not use the CD drive directly, as it may cause slowdowns or bugs. Copy the CD to a folder first.  
 
-2. Create the **CD title** (1st icon on the left).
+2. Create the **CD title** (1st icon on the left).  
 
-3. **Retrieve tags** via *iTunes* (automatic operation — 2nd icon).
+3. **Retrieve the tags** (tags directory).  
 
-4. **Edit tags** if necessary (3rd icon).
-   
-   ⚠️ **Very important:**  
-   Check for any errors at this stage.
+4. **Edit the tags** (3rd icon).  
 
-5. **Download images** (4th icon).
+⚠️ **Very important:**  
+Check for any errors at this stage.  
 
-6. **Create front and back covers** (5th icon).
+5. **Download images automatically via *iTunes* (4th icon).**  
+
+6. **Create the front and back covers** (5th icon).  
 
 7. Generate the printable, cut-ready PDF.
 

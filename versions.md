@@ -36,3 +36,7 @@ version 2.3.4 (release)
 version 2.4.0 
 
 - traduction des noms anglais -> français
+
+version 2.4.1 (release)
+
+- ajout d'un README.md en plus du README.fr

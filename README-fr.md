@@ -127,14 +127,14 @@ python3 pycdcover.py
 
 2. Créez le **titre du CD** (1ʳᵉ icône à gauche).
 
-3. **Récupérez les tags** via *iTunes*. Opération automatique (2ᵉ icône).
+3. **Récupérez les tags** (dosier des tags) (2ᵉ icône).
 
 4. **Éditez les tags** si nécessaire (3ᵉ icône).
    
    ⚠️ **Très important** :  
    vérifiez ici les éventuelles erreurs.
 
-5. **Téléchargez les images** (4ᵉ icône).
+5. **Téléchargez automatiquement les images** via Itunes (4ᵉ icône).
 
 6. **Créez les faces avant et arrière** (5ᵉ icône).
 

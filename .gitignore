@@ -26,3 +26,5 @@ flatpack/
 # Divers
 *.log
 *.bak
+
+version
