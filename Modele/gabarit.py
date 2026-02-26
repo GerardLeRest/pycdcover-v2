@@ -59,7 +59,7 @@ class Gabarit:
             self.canv.line(xorigine,yorigine,xorigine+L,yorigine)      
 
     def face(self, image_originale, largeur, hauteur):
-        """Création des images (face avant et dos sans titres verticaux)"""
+        """Création des images (face avant et titre horizontale)"""
         im = Image.new("RGB", (largeur, hauteur), self.couleur)  # création de l'image blanche
         compteur = self.compter_images_miniatures()
         if compteur > 1:
@@ -87,7 +87,16 @@ class Gabarit:
             # collage de l'image dans le gabarit
             L, H = out.size
             marge_x = (largeur - L) / 2
-            im.paste(out, (int(marge_x), 220, int(marge_x) + L, H + 220))
+            top = 220 - 20  # -40 -> remonter les images des titres horizontaux
+            im.paste(
+            out,
+            (
+                int(marge_x),
+                top,
+                int(marge_x) + L,
+                top + H
+            )
+        )
         else:
             # mode maquette
             im = self.image_maquette(image_originale, 1200, 1200)

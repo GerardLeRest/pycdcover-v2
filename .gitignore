@@ -27,4 +27,6 @@ flatpack/
 *.log
 *.bak
 
-version
+versions.md
+
+.gitignore
