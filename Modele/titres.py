@@ -13,10 +13,11 @@ import os
 class Titres:
     """Crée les images des titres (horizontal et verticaux) pour la jaquette CD."""
 
-    def __init__(self, L_devant: int, H_arriere: int, titre: str) -> None:
+    def __init__(self, L_devant: int, H_arriere: int, couleur_fond:str, titre: str) -> None:
         self.titre: str = titre
         self.L_devant: int = L_devant
         self.H_arriere: int = H_arriere
+        self.couleur_fond = couleur_fond
 
         # Dossiers
         self.dossier_racine: Path = Path(__file__).parent.parent
@@ -29,7 +30,7 @@ class Titres:
 
     def titre_horizontal(self) -> None:
         """Création de l'image horizontale du titre"""
-        imageH = Image.new("RGB", (self.L_devant, 220), "white")
+        imageH = Image.new("RGB", (self.L_devant, 220), self.couleur_fond)
         dessin = ImageDraw.Draw(imageH)
         police1 = self.dossier_polices / "FreeSerif.ttf"
         try:
@@ -45,7 +46,7 @@ class Titres:
 
     def titre_vertical1(self) -> None:
         """Création du premier titre vertical"""
-        imageV = Image.new("RGB", (self.H_arriere, 60), "white")
+        imageV = Image.new("RGB", (self.H_arriere, 60), self.couleur_fond)
         dessin = ImageDraw.Draw(imageV)
         police1 = self.dossier_polices / "FreeSerif.ttf"
         try:

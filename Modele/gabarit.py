@@ -15,13 +15,14 @@ import glob
 class Gabarit:
     """Créer un gabarit pour une jaquette CD à découper - format PDF"""
 
-    def __init__(self, coefficient: float, L_devant: float, H_devant: float, L_arriere:float, H_arriere: float):
+    def __init__(self, coefficient: float, L_devant: float, H_devant: float, L_arriere:float, H_arriere: float, couleur:str):
         """initialisation"""
         self.L_devant:float = L_devant
         self.H_devant: float = H_devant
         self.L_arriere:float = L_arriere
         self.H_arriere:float = H_arriere
         self.coefficient: float = coefficient
+        self.couleur = couleur # couleur de foncd de la jaquette
         # Canvas Reportlab
         self.canv: Canvas | None = None
         # dossier utilisateur
@@ -59,7 +60,7 @@ class Gabarit:
 
     def face(self, image_originale, largeur, hauteur):
         """Création des images (face avant et dos sans titres verticaux)"""
-        im = Image.new("RGB", (largeur, hauteur), "white")  # création de l'image blanche
+        im = Image.new("RGB", (largeur, hauteur), self.couleur)  # création de l'image blanche
         compteur = self.compter_images_miniatures()
         if compteur > 1:
             # insertion du titre horizontal
@@ -94,9 +95,9 @@ class Gabarit:
 
     def image_maquette(self, image_originale, largeur, hauteur):
         """traitement de l'image - maquette"""
-        im1 = Image.new("RGB", (largeur, hauteur), "white")  # création de l'image blanche
+        im1 = Image.new("RGB", (largeur, hauteur), self.couleur)  # création de l'image colorée
         im2 = Image.open(image_originale)
-        out = im2.resize((1200, 1200)) # l'image à placer est aussi grande que l'image blanche
+        out = im2.resize((1200, 1200)) # l'image à placer est aussi grande que l'imagecolorée
         im1.paste(out, (0, 0)) # en haut à gauche
         return im1
 
@@ -113,7 +114,7 @@ class Gabarit:
             # insertion de l'image Devant
             compteur = self.compter_images_miniatures()
             if compteur>1:
-                y = 1700
+                y = 1660
             else: # image - maquette (1 "miniatures")
                 y = 1660
             xorigine, yorigine = 360 * self.coefficient, y * self.coefficient
@@ -121,7 +122,7 @@ class Gabarit:
                                 width=self.L_devant * self.coefficient,
                                 height=self.H_devant * self.coefficient, mask=None)
             # insertion de l'image Dos
-            xorigine, yorigine = 400 * self.coefficient, 480 * self.coefficient
+            xorigine, yorigine = 360 * self.coefficient, 480 * self.coefficient
             self.canv.drawImage("Dos.png", xorigine, yorigine,
                                 width=self.L_arriere * self.coefficient,
                                 height=self.H_arriere * self.coefficient, mask=None)

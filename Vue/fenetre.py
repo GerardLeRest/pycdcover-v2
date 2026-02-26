@@ -28,6 +28,7 @@ class Fenetre(QMainWindow):
     demande_saisie_titre = Signal()
     demande_ouvrir_recuperation_tags = Signal()
     demande_ouvrir_editeur_tags = Signal()
+    demande_couleur_dos = Signal()
     demande_recuperer_images = Signal()
     demande_faces = Signal()
     demande_pdf = Signal()
@@ -65,6 +66,7 @@ class Fenetre(QMainWindow):
         self.act_recup_tags = QAction(_("Récupérer les tags"), self)
         self.act_tags_rw = QAction(_("Lire/Écrire tags"), self)
         self.act_recup_images = QAction(_("Récupérer les images"), self)
+        self.act_couleur_dos = QAction(_("Donner une couleur au dos"), self)
         self.act_faces = QAction(_("Créer les deux faces"), self)
         self.act_pdf = QAction(_("Générer le PDF"), self)
         self.act_quitter = QAction(_("Quitter"))
@@ -74,9 +76,9 @@ class Fenetre(QMainWindow):
         self.act_recup_tags.triggered.connect(self.demande_ouvrir_recuperation_tags.emit)
         self.act_tags_rw.triggered.connect(self.demande_ouvrir_editeur_tags.emit)
         self.act_recup_images.triggered.connect(self.demande_recuperer_images.emit)
+        self.act_couleur_dos.triggered.connect(self.demande_couleur_dos.emit)
         self.act_faces.triggered.connect(self.demande_faces.emit)
         self.act_pdf.triggered.connect(self.demande_pdf.emit)
-        self.act_quitter = QAction(QIcon("ressources/icones/quitter.svg"), _("Quitter"), self)
         self.act_quitter.triggered.connect(self.close)
 
         # État initial
@@ -84,12 +86,15 @@ class Fenetre(QMainWindow):
         self.act_recup_tags.setEnabled(False)
         self.act_tags_rw.setEnabled(False)
         self.act_recup_images.setEnabled(False)
+        self.act_couleur_dos.setEnabled(False)
         self.act_faces.setEnabled(False)
         self.act_pdf.setEnabled(False)
         self.act_quitter.setEnabled(True)
 
         # construction de l'interface
-        self.menu()
+        self.barre = self.menuBar() # barre de menu
+        self.menu_fichiers()
+        self.menu_aide()
         self.barre_d_outils()
         self.panneau_gauche()
         self.panneau_milieu()
@@ -99,17 +104,18 @@ class Fenetre(QMainWindow):
         # voir le fichier utilis.py dans Vue
         centrage_fenetre(self) 
 
-    def menu(self) -> None:
-        """Construit le menu principal."""
-        barre = self.menuBar()
-        # menu fichiers
-        menu_fichiers = QMenu(_("Fichier"), self)
-        barre.addMenu(menu_fichiers)
+    def menu_fichiers(self) -> None:
+        """Construit le menu fichiers."""
+        menu_fichiers = self.barre.addMenu(_("Fichier"))  # self.barre: barre de menu
+        # lier le menu "fichiers" à la barre 
         menu_fichiers.addAction(self.act_titre)
         menu_fichiers.addAction(self.act_recup_tags)
         menu_fichiers.addAction(self.act_tags_rw)
+        menu_fichiers.addSeparator()
         menu_fichiers.addAction(self.act_recup_images)
+        menu_fichiers.addAction(self.act_couleur_dos)
         menu_fichiers.addAction(self.act_faces)
+        menu_fichiers.addSeparator()
         menu_fichiers.addAction(self.act_pdf)
         menu_fichiers.addSeparator()
         # action des langues
@@ -128,7 +134,7 @@ class Fenetre(QMainWindow):
         self.actionFrancais.triggered.connect(lambda: self.changerLangue("fr"))
         langue = self.gestionLangue.lire()
         self.recuperation_code_langue(langue)
-        # lier acions au menu et ay groupe langue
+        # lier actions au menu et au groupe langue
         for action in (self.actionBrezhoneg, self.actionEnglish, self.actionEspagnol,
                        self.actionFrancais):
             groupe_langue.addAction(action)
@@ -137,10 +143,10 @@ class Fenetre(QMainWindow):
         menu_fichiers.addMenu(menu_langues)
         menu_fichiers.addSeparator()
         menu_fichiers.addAction(self.act_quitter)
-        # lier le menu menu fichiers au menuBar
-        barre.addMenu(menu_fichiers)
-        #menu aide
-        menu_aide = barre.addMenu(_("Aide"))
+        
+    def menu_aide(self)->None:
+        """#menu aide"""
+        menu_aide = self.barre.addMenu(_("Aide"))
         action_a_propos = QAction(_("À propos"), self)
         action_a_propos.triggered.connect(self.information)
         menu_aide.addAction(action_a_propos)
@@ -189,6 +195,7 @@ class Fenetre(QMainWindow):
         self.act_recup_tags.setIcon(QIcon(str(self.dossier_icones / "recup_tags.svg")))
         self.act_tags_rw.setIcon(QIcon(str(self.dossier_icones / "tags_rw.svg")))
         self.act_recup_images.setIcon(QIcon(str(self.dossier_icones / "recup_images.svg")))
+        self.act_couleur_dos.setIcon(QIcon(str(self.dossier_icones / "couleur_dos.svg")))
         self.act_faces.setIcon(QIcon(str(self.dossier_icones / "deux_faces.svg")))
         self.act_pdf.setIcon(QIcon(str(self.dossier_icones / "pdf.svg")))
         
@@ -197,6 +204,7 @@ class Fenetre(QMainWindow):
         barre_outils.addAction(self.act_recup_tags)
         barre_outils.addAction(self.act_tags_rw)
         barre_outils.addAction(self.act_recup_images)
+        barre_outils.addAction(self.act_couleur_dos)
         barre_outils.addAction(self.act_faces)
         barre_outils.addAction(self.act_pdf)
 
@@ -205,6 +213,7 @@ class Fenetre(QMainWindow):
         self.act_recup_tags.setToolTip(_("Récupérer les tags"))
         self.act_tags_rw.setToolTip(_("Éditer/Modifier les tags"))
         self.act_recup_images.setToolTip(_("Récupérer les images"))
+        self.act_couleur_dos.setToolTip(_("Couleur du dos"))
         self.act_faces.setToolTip(_("Créer les deux faces"))
         self.act_pdf.setToolTip(_("Générer le PDF"))
        
@@ -280,7 +289,6 @@ class Fenetre(QMainWindow):
         """Réagit au clic sur un album dans la liste."""
         cle = item.text()
         infos_album = self.haut_gauche.albums.get(cle)
-        print (infos_album)
         if not infos_album:
             return
         self.haut_gauche.album_selectionne.emit(infos_album)

@@ -40,3 +40,7 @@ version 2.4.0
 version 2.4.1 (release)
 
 - ajout d'un README.md en plus du README.fr
+
+version 2.5.1
+
+- sélection de couleur pour le dos de la pochette

@@ -16,16 +16,18 @@ formats_4 = ('jpeg','tiff')
 class Image_face_avant:
     """créer l'image avant de la jaquette"""
     
-    def __init__(
-        self,
-        largeur: int = 300,
-        hauteur: int = 300,
-        env_home: str | None = None,
-        repertoire: str | None = None
-    ):
+    def __init__(self, couleur_fond:str):
+    #     self,
+        self.largeur: int = 300
+        self.hauteur: int = 300
+    #     env_home: str | None = None,
+    #     repertoire: str | None = None,
+    #     couleur:str = ""
+    # ):
+        self.couleur_fond = couleur_fond
         # Dimensions de l'image finale
-        self.largeur: int = largeur
-        self.hauteur: int = hauteur
+        # self.largeur: int = largeur
+        # self.hauteur: int = hauteur
         # Données et résultats
         self.nb_fichiers: int = 0
         self.lignes: list[str] = []
@@ -63,7 +65,7 @@ class Image_face_avant:
         os.chdir(self.dossier_pycdcover)
 
         # Dossier courant (optionnel)
-        self.dossier: str = repertoire if repertoire else ""
+        #self.dossier: str = repertoire if repertoire else ""
 
     def preparation_assemblage_photos(self) -> None:
         """Prépare les dimensions de la grille en fonction du nombre d’images."""
@@ -95,8 +97,9 @@ class Image_face_avant:
             self.total = len(self.fichiers)
 
             # création d'une image blanche finale (ex : 320x320)
-            self.fond = Image.new("RGB", (self.Larg_Im_fin, self.Haut_Im_fin), "white")
-        
+            #self.fond = Image.new("RGB", (self.Larg_Im_fin, self.Haut_Im_fin, self.couleur))
+            self.fond = Image.new("RGB", (self.Larg_Im_fin, self.Haut_Im_fin), self.couleur_fond) 
+            self.draw = ImageDraw.Draw(self.fond)
             # un ou plusieurs fichiers ?
             if self.total == 1:
                 self.assemblage_une_image()

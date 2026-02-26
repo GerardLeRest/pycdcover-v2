@@ -13,16 +13,18 @@ import os
 class Lancement_av_ar:
     """creation des deux faces avant et arriere"""
     
-    def __init__(self):
+    def __init__(self, couleur_fond):
         """initialisation"""
         os.chdir(Path.home() / "PyCDCover")
         # lancement de la création de l'image de la face avant
-        image_face_avant = Image_face_avant()
+        self.couleur_fond = couleur_fond
+        image_face_avant = Image_face_avant(self.couleur_fond)
         image_face_avant.preparation_assemblage_photos()
         image_face_avant.assemblage_photos()
         # lancement de la création de l'image de la face aarrière
-        face_arriere = Image_face_arriere()
-        draw1 = face_arriere.creer_image_blanche()
+        self.couleur_fond = couleur_fond
+        face_arriere = Image_face_arriere(self.couleur_fond)
+        draw1 = face_arriere.creer_image_colorée()
         face_arriere.configuration(930)
         if draw1 is None:
             return

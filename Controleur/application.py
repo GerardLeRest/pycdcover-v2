@@ -12,14 +12,15 @@ from PySide6.QtCore import Slot
 
 # Imports MVC
 from Vue.fenetre import Fenetre
-from Vue.fen_Titre import FenTitre
+from Vue.fen_titre import FenTitre
 from Vue.editeur_tags import Editeur_tags
 from Vue.progression_images import Progress_images
 from Vue.progression_tags import Progression_tags
+from Vue.fen_couleur import FenCouleur
 from Modele.titres import Titres
 from Modele.tags import Tags
 from Modele.recup_images_avant import lire_tags
-from Modele.lancement_av_ar import Lancement_av_ar
+from Modele.construire_faces import Lancement_av_ar
 from Modele.gabarit import Gabarit
 from Vue.haut_gauche import HautGauche
 
@@ -40,12 +41,15 @@ class Application(QWidget):
         self.vue.demande_ouvrir_recuperation_tags.connect(self.action_recuperer_tags)
         self.vue.demande_ouvrir_editeur_tags.connect(self.action_ouvrir_editeur_tags)
         self.vue.demande_recuperer_images.connect(self.action_recuperer_images)
+        self.vue.demande_couleur_dos.connect(self.action_couleur_dos)
         self.vue.demande_faces.connect(self.action_faces)
         self.vue.demande_pdf.connect(self.action_pdf)
         # ------------------------------------------#
         # Connexions Vue → Contrôleur - BP "changer"
         self.vue.haut_milieu.demande_image_changee.connect(self.changer_image)
         self.donnees = {}
+        self.titre="" # titre du CD
+        self.couleur ="#ffffff" # couleur de fond des deux faces des pochettes
       
     def reinitialiser_dossier_pycdcover(self) -> None:
         """vider le dossier PyCDCover"""
@@ -72,7 +76,8 @@ class Application(QWidget):
     @Slot(str)
     def action_recuperer_titre(self, titre_saisi: str) -> None:
         """Reçoit le titre saisi et génère les images correspondantes."""
-        titres = Titres(1200, 1380, titre_saisi)
+        self.titre_saisi = titre_saisi # mémorisation du titre
+        titres = Titres(1200, 1380, "#F5F5F0", titre_saisi)
         titres.titre_horizontal()
         titres.titre_vertical1()
         titres.titre_vertical2()
@@ -81,7 +86,7 @@ class Application(QWidget):
 
     @Slot()
     def action_recuperer_tags(self) -> None:
-
+        """Récupérer les tags"""
         # 1. Choix du dossier (sans progression)
         progression_tmp = Progression_tags()
         chemin = progression_tmp.choisir_dossier_chansons()
@@ -112,7 +117,6 @@ class Application(QWidget):
         )
         # 7. Lancement du traitement
         self.tags.extraire_tags(chemin)
-
    
     @Slot()
     def action_ouvrir_editeur_tags(self) -> None:
@@ -124,7 +128,25 @@ class Application(QWidget):
         self.editeur_tags.show()
         # Bouton suivant activé
         self.vue.act_recup_images.setEnabled(True)
-        
+
+    @Slot()
+    def action_couleur_dos(self)->None: 
+        """sélectionner la couleur du dos de la pochette"""
+        self.fen_couleur = FenCouleur()
+        self.fen_couleur.couleur_selectionnee.connect(self.action_recuperer_couleur)
+        self.fen_couleur.exec()
+        self.vue.act_faces.setEnabled(True)
+
+    @Slot(str)
+    def action_recuperer_couleur(self, couleur: str) -> None:
+        """ajouter la couleur aux fonds des titres"""
+        self.couleur = couleur # mémorisation de la couleur pour la suite
+        titres = Titres(1200, 1380, self.couleur, self.titre_saisi)  # ✅ titre ajouté
+        titres.titre_horizontal()
+        titres.titre_vertical1()
+        titres.titre_vertical2()
+        self.vue.act_recup_tags.setEnabled(True)
+
     @Slot()
     def action_recuperer_images(self) -> None:
         """Récupère les images à partir du fichier tags.txt."""
@@ -142,7 +164,7 @@ class Application(QWidget):
         # Création et affichage de la fenêtre de téléchargement
         self.telechargement_ui = Progress_images(albums)
         self.telechargement_ui.telechargement_termine.connect(
-            lambda: self.vue.act_faces.setEnabled(True)
+            lambda:self.vue.act_couleur_dos.setEnabled(True)
         )
         self.telechargement_ui.show()
   
@@ -155,14 +177,14 @@ class Application(QWidget):
         # clé: artiste-album de self.tableau
         self.vue.liste.addItems(self.vue.haut_gauche.liste_artistes_albums)
         # Lancer la génération
-        lancement_av_ar = Lancement_av_ar()
+        lancement_av_ar = Lancement_av_ar(self.couleur)
         # Activer le bouton PDF
         self.vue.act_pdf.setEnabled(True)
 
     @Slot()
     def action_pdf(self) -> None:
         """générer Pdf"""
-        gabarit = Gabarit(0.283464567,1200,1200,1380,1180) # 72.0/254
+        gabarit = Gabarit(0.283464567,1200,1200,1380,1180, self.couleur) # 72.0/254
         gabarit.lignes_pointillees()
         gabarit.insertion_images()
         gabarit.lignes_continues()

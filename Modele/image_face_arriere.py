@@ -14,7 +14,7 @@ from Modele.titres import Titres
 class Image_face_arriere:
     """Crée la face arrière d'une jaquette à partir du fichier tags.txt."""
 
-    def __init__(self):
+    def __init__(self, couleur_fond):
         '''initialisation'''
         # Dossiers principaux
         self.dossier_racine: Path = Path(__file__).parent.parent
@@ -37,9 +37,10 @@ class Image_face_arriere:
         self.taille: int = 0
         self.x: int = 0
         self.y: int = 0
-            
+        self.couleur_fond = couleur_fond
 
-    def creer_image_blanche(self):
+
+    def creer_image_colorée(self):
         """Lit tags.txt, choisit la taille, crée l'image blanche et renvoie draw."""
         # Lire les lignes du fichier
         with open(self.fichier_tags, "r", encoding='utf-8') as f:
@@ -52,7 +53,7 @@ class Image_face_arriere:
         else:
             largeur, hauteur = 460, 460
         # Image blanche
-        self.image = Image.new("RGB", (largeur, hauteur), "white")
+        self.image = Image.new("RGB", (largeur, hauteur), self.couleur_fond) 
         self.draw = ImageDraw.Draw(self.image)
         return self.draw
 
@@ -73,12 +74,13 @@ class Image_face_arriere:
         self.font_police = ImageFont.truetype(self.police_normale, int(self.taille))
         self.font_police_grasse = ImageFont.truetype(self.police_grasse, int(self.taille))
         # Position de départ et limites
-        self.x, self.y = 20, 20
+        self.x, self.y = 40, 20
         self.ligne_max = hauteur - 5
         self.largeur_colonne = 1340 / nbre_colonnes - 10
 
     def cd_maquette(self, draw: ImageDraw.ImageDraw) -> None:
         """Affiche un album unique centré avec ajustement automatique entre les lignes."""
+        self.draw = draw
         self.y = 30
         # On compte le nombre de chansons
         chansons = []
@@ -120,20 +122,19 @@ class Image_face_arriere:
                 self.y += espace
         self.changer_titres_verticaux()
 
-    def dessiner(self, taille: int, texte: str, couleur: str, font: ImageFont.FreeTypeFont) -> None:
+    def dessiner(self, taille: int, texte: str, couleur_texte:str, font: ImageFont.FreeTypeFont) -> None:
         """Dessine une ligne avec une taille ajustée sans modifier les polices originales."""
         # Crée une police temporaire avec la même famille et la taille demandée
         police_temp = ImageFont.truetype(font.path, taille)
         # Centrage horizontal
         largeur_texte = self.draw.textlength(texte, font=police_temp)
-        x = (self.image.width - largeur_texte) // 2
-        # Dessin
-        self.draw.text((x, self.y), texte, fill=couleur, font=police_temp)
+        x = (self.image.width - largeur_texte) // 2 
+        self.draw.text((x, self.y), texte, fill=couleur_texte, font=police_temp)
 
     def changer_titres_verticaux(self) -> None:
         "Changer les titres verticaux : artiste - album"
         texte_titre = f"{self.artiste} - {self.album}"
-        titres = Titres(1200, 1380, texte_titre)
+        titres = Titres(1200, 1380, self.couleur_fond, texte_titre)
         titres.titre_vertical1()
         titres.titre_vertical2()
 
@@ -148,6 +149,7 @@ class Image_face_arriere:
                 self.y += espace_inter_album
                 continue
             # Type de ligne 
+            texte = ""   # valeur par défaut de texte_coupe
             if ligne.startswith("C:"):   # artiste
                 texte = ligne[3:]
                 font = self.font_police_grasse
@@ -158,6 +160,7 @@ class Image_face_arriere:
                 couleur = "darkblue"
             else:  # chanson
                 texte = ligne
+                texte = self.couper_texte(texte)
                 font = self.font_police
                 couleur = "gray"
             draw.text((self.x, self.y), texte, fill=couleur, font=font)
@@ -168,7 +171,15 @@ class Image_face_arriere:
                 self.y = 20
                 self.x += self.largeur_colonne + 10
 
-        
+    def couper_texte(self, texte: str)->str:
+        """couper les titres trop longs"""
+        texte_traite = ""
+        if len(texte)>30:
+            texte_traite = texte[:30]
+        else:
+            texte_traite = texte
+        return texte_traite
+    
     def sauvegarde_image(self) -> None:
         """Sauvegarde de l'image générée."""
         chemin_sortie = self.dossier_pycdcover / "Image_Back_Cover.png"
@@ -180,7 +191,7 @@ class Image_face_arriere:
 
 if __name__ == "__main__":
     face_arriere = Image_face_arriere()
-    draw1 = face_arriere.creer_image_blanche()
+    draw1 = face_arriere.creer_image_colorée()
     face_arriere.configuration(930)
     if draw1 is None:
         exit("Erreur : impossible de créer l’image (vérifie tags.txt et 'miniatures'/)")
