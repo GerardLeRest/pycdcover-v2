@@ -1,4 +1,4 @@
-Documentation Française: [Doc - Français](README-fr.md)
+=> Documentation Française: [Doc - Français](README-fr.md)
 
 # # Software Preview
 
