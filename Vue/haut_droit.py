@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""
+Haut_droit.py: gestion de la partie haute droite de l'interface
+Auteur : Gérard Le Rest (2025)
+"""
+
+
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSizePolicy
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QFont
+from typing import Any
+from builtins import _
+
+class HautDroit(QWidget):
+    """affiche les données en hat à droite"""
+    
+    HAUTEUR_LIGNE = 36 # hauteur uniforme des valeurs
+    ESPACEMENT = 40 # espace entre blocs
+    TOP = 70 # marge haute pour descendre le premier bloc
+
+    def __init__(self, nom_artiste: str, album: str, annee: str, genre: str):
+        super().__init__()
+        # chaines de caractère
+        self.nom_artiste: str = nom_artiste
+        self.album: str = album
+        self.annee: str = annee
+        self.genre: str = genre  
+        self.tableau: list[object] = []
+        # construire l'UI
+        self.assembler_elements()
+
+    def label_titre(self, texte: str) -> QLabel:
+        """placer le titre"""
+        lab = QLabel(texte, self)
+        lab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        lab.setFont(QFont("", 18, QFont.Bold)) # "": police par défaut du système
+        lab.setStyleSheet("color: #6c6c6c; margin:0; padding:0;")
+        lab.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        return lab
+
+    def label_valeur(self, texte: str) -> QLabel:
+        """placer le contenu correspondant au titre"""
+        lab = QLabel(texte, self)
+        lab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        lab.setFixedHeight(self.HAUTEUR_LIGNE) 
+        lab.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        lab.setStyleSheet("""
+            font-size: 16px;
+            color: #7C7C7C;
+            border: 0.5px solid #7C7C7C;
+            padding: 4px 10px;   /* haut/bas = 4px, gauche/droite = 8px */
+            border-radius: 8px;
+        """)
+        # on mémorise ce label pour pouvoir le mettre à jour
+        self.tableau.append(lab)
+        return lab
+
+    def bloc(self, titre: str, valeur: str) -> QWidget:
+        """création du bloc"""
+        w = QWidget(self)   # bloc vide
+        vbox = QVBoxLayout(w) # dans ce bloc, les élémnets seront empilés verticalment
+        vbox.setContentsMargins(0, 0, 0, 0)
+        vbox.setSpacing(10)   # espace entre le titre et la valeur
+        vbox.addWidget(self.label_titre(titre))
+        vbox.addWidget(self.label_valeur(valeur))
+        return w
+
+    def assembler_elements(self) -> None:
+        "assembler l'ensemble des éléments"
+        layout_principal = QVBoxLayout(self)
+        layout_principal.setContentsMargins(8, self.TOP, 8, 8)  # TOP applique le décalage
+        layout_principal.setSpacing(self.ESPACEMENT)
+        # blocs simples
+        layout_principal.addWidget(self.bloc(_("Artiste"), self.nom_artiste))
+        layout_principal.addWidget(self.bloc(_("Album"), self.album))
+        # bloc " Année - Genre"
+        ligne = QWidget(self)
+        hbox = QHBoxLayout(ligne)
+        hbox.setContentsMargins(0, 0, 0, 0)
+        hbox.setSpacing(16)
+        hbox.addWidget(self.bloc(_("Année"), self.annee))
+        hbox.addWidget(self.bloc(_("Genre"), self.genre))
+        layout_principal.addWidget(ligne)
+        self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+
+    def MAJ_haut_droit(self, infos:dict[str, Any]) -> None:
+        """Mise à jour les labels"""
+        # ordre des labels dans self.tableau :
+        # [0] = artiste, [1] = album, [2] = annee, [3] = genre
+        if len(self.tableau) >= 4:
+            self.tableau[0].setText(infos.get('artiste', ""))
+            self.tableau[1].setText(infos.get('album', ""))
+            self.tableau[2].setText(str(infos.get('annee') or ""))
+            self.tableau[3].setText(infos.get('genre', ""))
