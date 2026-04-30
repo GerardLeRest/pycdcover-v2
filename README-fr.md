@@ -108,7 +108,7 @@ source mon_env/bin/activate
 ### Installer les dépendances
 
 ```bash
-pip install -r requirements.txt
+pip install reportlab PySide6 pillow requests mutagen music-tag
 ```
 
 ## 3.4. Lancement
@@ -146,7 +146,7 @@ python3 pycdcover.py
 
 ## 4.2. Jaquette non référencée sur le web
 
-Une image orange (avec nom+album) apparaît si l'image d'un album n'a pas été trouvée internet. Itunes peuvent parfois fournir des images incorrectes.. Dans tous les cas en cas d'erreur concernant une image, voici la démarche à suivre:
+Une image orange (avec nom+album) apparaît si l'image d'un album n'a pas été trouvée internet. iTunes peuvent parfois fournir des images incorrectes.. Dans tous les cas en cas d'erreur concernant une image, voici la démarche à suivre:
 
 Créer le titre → récupérer les tags MP3 → éditer MP3 → Télécharger les images → créer les deux faces → changer manuellement l’image voulue dans le dossier (1) → créer les deux faces → générer PDF
 
@@ -183,12 +183,26 @@ Dernière mise à jour : 2026-01-15
 
 ---
 
-# 6. Licence
+# 6. Licences
+
+**Droits d'images**
+
+PyCDCover peut récupérer automatiquement des pochettes d’albums via l’API de iTunes.
+Le taux de récupération est estimé entre 75 % et 85 %, selon les albums.
+
+Les images récupérées restent la propriété exclusive de leurs ayants droit respectifs. Le logiciel permet de les remplacer si nécessaire.
+
+Les images sont stockées localement sur la machine de l’utilisateur afin d’être réutilisées d’une session à l’autre. Elles ne sont ni redistribuées ni transmises à des tiers.
+
+Ces images sont utilisées uniquement dans le cadre d’un usage strictement personnel (création de jaquettes privées).
+
+Ce projet n’est affilié ni à Apple, ni à iTunes, ni à aucun service tiers.
+
+L’utilisateur est seul responsable de l’usage qu’il fait des images récupérées.
 
 **Licence libre : GNU GPL v3 (ou version ultérieure)**
 
-Ce programme est un logiciel libre : vous pouvez le modifier et le redistribuer selon les termes de la  
-Licence publique générale GNU (GPL v3), version 3 ou toute version ultérieure.
+Ce programme est un logiciel libre : vous pouvez le modifier et le redistribuer selon les termes de la Licence publique générale GNU (GPL v3), version 3 ou toute version ultérieure.
 
 Il est fourni **sans aucune garantie**, ni implicite ni explicite,  
 concernant une valeur commerciale ou une adéquation à un usage particulier.

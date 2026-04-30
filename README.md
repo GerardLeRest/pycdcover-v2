@@ -112,7 +112,7 @@ source mon_env/bin/activate
 ### Install dependencies
 
 ```bash
-pip install -r requirements.txt
+pip install reportlab PySide6 pillow requests mutagen music-tag
 ```
 
 ## 3.4. Run
@@ -174,7 +174,7 @@ Important note: Follow the order above to avoid reverting to the previous config
 
 ---
 
-# 5. Information and License
+# 5. Information
 
 **PyCDCover — Audio CD Cover Generator**  
 Author: Gérard LE REST  
@@ -189,12 +189,26 @@ Last update: 2026-01-15
 
 ---
 
-# 6. License
+# 6. Licenses
+
+**Image Rights**
+
+PyCDCover can automatically retrieve album covers via the iTunes API.
+The retrieval success rate is estimated between 75% and 85%, depending on the albums.
+
+The retrieved images remain the exclusive property of their respective rights holders. The software allows users to replace them if necessary.
+
+Images are stored locally on the user’s machine in order to be reused across sessions. They are neither redistributed nor transmitted to third parties.
+
+These images are used solely for personal use (creation of private CD covers).
+
+This project is not affiliated with Apple, iTunes, or any third-party service.
+
+The user is solely responsible for how the retrieved images are used.
 
 **Free Software License: GNU GPL v3 (or later)**
 
-This program is free software: you can redistribute it and/or modify it under the terms of the  
-GNU General Public License (GPL v3), version 3 or any later version.
+This program is free software: you can redistribute it and/or modify it under the terms of the  GNU General Public License (GPL v3), version 3 or any later version.
 
 It is provided **without any warranty**, express or implied,  
 including merchantability or fitness for a particular purpose.
