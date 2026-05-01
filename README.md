@@ -191,19 +191,14 @@ Last update: 2026-01-15
 
 # 6. Licenses
 
-**Image Rights**
+Image Rights
 
-PyCDCover can automatically retrieve album covers via the iTunes API.
-The retrieval success rate is estimated between 75% and 85%, depending on the albums.
+PyCDCover uses the public API of Apple Inc. (iTunes Search API) to automatically retrieve album artwork.
 
-The retrieved images remain the exclusive property of their respective rights holders. The software allows users to replace them if necessary.
+These images remain the property of their respective rights holders.
+They are stored locally and used for private purposes only.
 
-Images are stored locally on the user’s machine in order to be reused across sessions. They are neither redistributed nor transmitted to third parties.
-
-These images are used solely for personal use (creation of private CD covers).
-
-This project is not affiliated with Apple, iTunes, or any third-party service.
-
+This project is independent and is neither affiliated with nor endorsed by Apple Inc..
 The user is solely responsible for how the retrieved images are used.
 
 **Free Software License: GNU GPL v3 (or later)**

@@ -187,17 +187,12 @@ Dernière mise à jour : 2026-01-15
 
 **Droits d'images**
 
-PyCDCover peut récupérer automatiquement des pochettes d’albums via l’API de iTunes.
-Le taux de récupération est estimé entre 75 % et 85 %, selon les albums.
+PyCDCover utilise l’API publique de Apple Inc. (iTunes Search API) pour récupérer automatiquement des images d’albums.
 
-Les images récupérées restent la propriété exclusive de leurs ayants droit respectifs. Le logiciel permet de les remplacer si nécessaire.
+Ces images restent la propriété de leurs ayants droit.
+Elles sont stockées localement et utilisées uniquement dans un cadre privé.
 
-Les images sont stockées localement sur la machine de l’utilisateur afin d’être réutilisées d’une session à l’autre. Elles ne sont ni redistribuées ni transmises à des tiers.
-
-Ces images sont utilisées uniquement dans le cadre d’un usage strictement personnel (création de jaquettes privées).
-
-Ce projet n’est affilié ni à Apple, ni à iTunes, ni à aucun service tiers.
-
+Ce projet est indépendant et n’est ni affilié, ni approuvé par Apple Inc..
 L’utilisateur est seul responsable de l’usage qu’il fait des images récupérées.
 
 **Licence libre : GNU GPL v3 (ou version ultérieure)**
