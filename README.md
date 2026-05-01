@@ -191,12 +191,12 @@ Last update: 2026-01-15
 
 # 6. Licenses
 
-Image Rights
+**Image Rights**
 
-PyCDCover uses the public API of Apple Inc. (iTunes Search API) to automatically retrieve album artwork.
+PPyCDCover uses the public API of Apple Inc. (iTunes Search API) to automatically retrieve album artwork.
 
 These images remain the property of their respective rights holders.
-They are stored locally and used for private purposes only.
+They are stored locally across sessions and used for private purposes only.
 
 This project is independent and is neither affiliated with nor endorsed by Apple Inc..
 The user is solely responsible for how the retrieved images are used.

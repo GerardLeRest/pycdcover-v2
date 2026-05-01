@@ -190,7 +190,7 @@ Dernière mise à jour : 2026-01-15
 PyCDCover utilise l’API publique de Apple Inc. (iTunes Search API) pour récupérer automatiquement des images d’albums.
 
 Ces images restent la propriété de leurs ayants droit.
-Elles sont stockées localement et utilisées uniquement dans un cadre privé.
+Elles sont stockées localement d'une session à l'autre, utilisées uniquement dans un cadre privé.
 
 Ce projet est indépendant et n’est ni affilié, ni approuvé par Apple Inc..
 L’utilisateur est seul responsable de l’usage qu’il fait des images récupérées.
