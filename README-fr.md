@@ -53,7 +53,7 @@ La dernière version stable de **PyCDCover** est disponible ici :
 Téléchargez PyCDCover.Setup-X.X.X.exe  
 (où X.X.X correspond au numéro de version, par exemple 2.2.1)
 
-Vous pouvez ensuite passer à la section **4**.
+Vous pouvez ensuite passer à la section **5**.
 
 ---
 
@@ -75,6 +75,8 @@ Lancez le programme :
 ```bash
 ./PyCDCover-X.X.X-x86_64.AppImage
 ```
+
+Vous pouvez ensuite passer à la section **5**.
 
 ---
 
