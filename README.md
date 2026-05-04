@@ -1,69 +1,74 @@
-=> Documentation Française: [Doc - Français](README-fr.md)
-
-# # Software Preview
-
 <p align="center">
-  <img src="ressources/interface.png" alt="Interface">
+  🇬🇧 English | <a href="README.fr.md">🇫🇷 Français</a>
 </p>
 
-## Mock-up Cover Example (1 CD)
+# PyCDCover
+
+# 1. Presentation
+
+**PyCDCover** is a software tool designed to create audio CD covers (sleeves) from album information (artist, title, year, genre, image).
+
+The software automatically retrieves:
+
+- **tags** from audio files;
+- **album artworks** from *iTunes* based on tags (artist – album).
+
+If no image is found, it is replaced with an **orange placeholder image** displaying the artist and album name.  
+You can replace this image with one of your choice (preferably cropped).
+
+Languages: French, English, Spanish, Breton
+
+--- 
+
+# 2. Illustrations
+
+## 2.1 Example of a mock cover (1 CD)
 
 Used with permission from the band **CENT DÉTRESSES**  
 @CENT DÉTRESSES
 
 <p align="center">
-  <img src="ressources/jaquette_maquette.png" alt="mock-up cover">
+  <img src="ressources/jaquette_maquette.png" alt="mock cover">
 </p>
 
-## Multi-Album Cover Example
+## 2.2 Example of a multi-album cover
 
-The images below are provided for demonstration purposes only.  
-They are distributed for non-commercial use and in low resolution.
+The images are sourced from Pixabay (Pixabay license).  
+These are fictional albums.
 
 <p align="center">
   <img src="ressources/jaquette-multi-albums.png" alt="multi-album cover">
 </p>
 
----
+## 2.3 Software preview
 
-# 1. Overview
-
-**PyCDCover** is a software tool for creating audio CD covers from album information  
-(author, title, year, genre, image).
-
-The software automatically retrieves:
-
-- **tags** from the audio files on the CD  
-- **album images** from *iTunes* using the tags (artist – album)
-
-If no image is found, it is replaced by an **orange placeholder image** showing the artist and album name.  
-You can replace this image with one of your choice (preferably cropped).
-
-**Languages: French, English, Spanish, Breton**
+<p align="center">
+  <img src="ressources/interface.png" alt="Interface">
+</p>
 
 ---
 
-# 2. Automatic Installations
+# 3. Automatic Installation
 
-## 2.1. Windows
+## 3.1. Windows
 
 The latest stable version of **PyCDCover** is available here:  
 👉 https://github.com/GerardLeRest/pycdcover-v2/releases
 
-Download: `PyCDCover.Setup-X.X.X.exe`  
-(where X.X.X is the version number, for example 2.2.1)
+Download PyCDCover.Setup-X.X.X.exe  
+(where X.X.X corresponds to the version number, for example 2.2.1)
 
 You can then proceed to section **4**.
 
 ---
 
-## 2.2. GNU/Linux
+## 3.2. GNU/Linux
 
-➡️ **PyCDCover is available as an AppImage**
+➡️ **PyCDCover is available as an *AppImage***.
 
-Download: `PyCDCover-X.X.X-x86_64.AppImage`  
-👉 https://github.com/GerardLeRest/pycdcover-v2/releases  
-(where X.X.X represents the version number)
+Download `PyCDCover-X.X.X-x86_64.AppImage`  
+([Releases · GerardLeRest/pycdcover-v2 · GitHub](https://github.com/GerardLeRest/pycdcover-v2/releases))  
+(where *X.X.X* represents the version number).
 
 Make the file executable:
 
@@ -79,34 +84,34 @@ Run the program:
 
 ---
 
-# 3. Python Version — GNU/Linux
+# 4. Python Version — GNU/Linux
 
-*(For users who want to run PyCDCover from source.)*
+*(For users who want to run PyCDCover from the source code.)*
 
-## 3.1. Install Python and required tools
+## 4.1 Install Python and required tools
 
 ```bash
 sudo apt update
 sudo apt install python3 python3-pip python3-venv -y
 ```
 
-## 3.2. Download the program
+## 4.2 Download the project
 
 ```bash
 git clone git@github.com:GerardLeRest/pycdcover-v2.git
 cd pycdcover-v2
 ```
 
-## 3.3. Create a virtual environment
+## 4.3 Create a virtual environment
 
 ```bash
-python3 -m venv mon_env
+python3 -m venv my_env
 ```
 
 ### Activate the environment
 
 ```bash
-source mon_env/bin/activate
+source my_env/bin/activate
 ```
 
 ### Install dependencies
@@ -115,7 +120,7 @@ source mon_env/bin/activate
 pip install reportlab PySide6 pillow requests mutagen music-tag
 ```
 
-## 3.4. Run
+## 4.4 Run the application
 
 ```bash
 python3 pycdcover.py
@@ -123,89 +128,97 @@ python3 pycdcover.py
 
 ---
 
-# 4. Program Usage
+# 5. How the program works
 
-## 4.1. With automatic image search
+## 5.1 Workflow with automatic image retrieval
 
-1. Prepare a folder containing your tagged music files. Do not use the CD drive directly, as it may cause slowdowns or bugs. Copy the CD to a folder first.
+1. Prepare a folder with your tagged music files. Do not use the CD drive directly as it may cause slowdowns or bugs. Copy your CD into a folder.
 
-2. Create the **CD title** (1st icon on the left).  
+2. Create the **CD title** (first icon on the left).
 
-3. **Retrieve the tags** (tags directory).  
+3. **Retrieve tags** (second icon).
 
-4. **Edit the tags** (3rd icon).  
+4. **Edit tags** if necessary (third icon).
+   
+   **Very important:**  
+   check for any errors here.
 
-⚠️ **Very important:**  
-Check for any errors at this stage.  
+5. **Download images automatically** via iTunes (fourth icon).
 
-5. **Download images automatically via *iTunes* (4th icon).**  
+6. **Choose the cover color**
 
-6. **Choose your color cover**.
+7. **Create front and back covers** (fifth icon).
 
-7. **Create the front and back covers** (5th icon).  
-
-8. Generate the printable, cut-ready PDF.
-
----
-
-## 4.2. Cover not referenced on the web
-
-If an album image is not found online, an orange placeholder image (album + artist name) is used.  
-iTunes may sometimes provide incorrect images. In case of error, follow this procedure:
-
-Create title → retrieve MP3 tags → edit tags → download images → create both sides → manually replace the desired image in folder (1) → create both sides → generate PDF
-
-(1) `~/PyCDCover/miniatures` is the thumbnails folder
-
-Important note: Follow the order above to avoid reverting to the previous configuration.
+8. **Generate the printable PDF**
 
 ---
 
-## 4.3. Double albums
+## 5.2 Cover not found online
 
-For double albums, duplicate images may appear on the front cover.  
-To fix this:
+An orange placeholder image appears if an album image is not found online. iTunes may sometimes provide incorrect images. In case of an issue, follow this process:
 
-Create title → retrieve MP3 tags → edit tags → download images → create both sides → delete the unwanted image in folder (2) → create both sides → generate PDF
+Create title → retrieve MP3 tags → edit tags → download images → create covers → manually replace the image in folder (1) → create covers again → generate PDF
 
-(2) `~/PyCDCover/miniatures` is the thumbnails folder
+(1) ~/PyCDCover/miniatures is the thumbnails folder
 
-Important note: Follow the order above to avoid reverting to the previous configuration.
+Important note: follow this order to avoid returning to the previous configuration
 
 ---
 
-# 5. Information
+## 5.3 Double albums
 
-**PyCDCover — Audio CD Cover Generator**  
+With a double album, duplicate images may appear on the front cover. To fix this:
+
+Create title → retrieve MP3 → edit MP3 → download images → create covers → delete the unwanted image in folder (2) → create covers again → generate PDF
+
+(2) ~/PyCDCover/miniatures is the thumbnails folder
+
+Important note: follow this order to avoid returning to the previous configuration
+
+---
+
+# 6. Information and licenses
+
+**PyCDCover – Audio CD Cover Generator**  
 Author: Gérard LE REST  
 License: GNU GPL v3  
 © Gérard LE REST  
 Email: ge.lerest@gmail.com  
-Created: 2010-04-01  
-Last update: 2026-01-15
+Created: 01-04-2010  
+Last update: 2026-01-15  
 
-- Ubuntu wiki page: https://doc.ubuntu-fr.org/pycdcover#liens  
-- Website: https://gerardlerest.github.io/pycdcover/
+- [Official page](https://github.com/GerardLeRest/pycdcover-v2)
+- [Documentation](https://doc.ubuntu-fr.org/pycdcover#liens)  
+- [Website](https://gerardlerest.github.io/pycdcover/)
 
 ---
 
-# 6. Licenses
+# 7. Licenses
 
-**Image Rights**
+## Image rights
 
-PPyCDCover uses the public API of Apple Inc. (iTunes Search API) to automatically retrieve album artwork.
+PyCDCover uses Apple Inc.'s public API (iTunes Search API) to retrieve album artworks.
 
-These images remain the property of their respective rights holders.
-They are stored locally across sessions and used for private purposes only.
+These images remain the property of their respective rights holders.  
+They are stored locally and used for private purposes only.
 
-This project is independent and is neither affiliated with nor endorsed by Apple Inc..
-The user is solely responsible for how the retrieved images are used.
+This project is independent and not affiliated with or endorsed by Apple Inc.  
+The user is solely responsible for the use of retrieved images.
 
-**Free Software License: GNU GPL v3 (or later)**
+## Free software license: GNU GPL v3 (or later)
 
-This program is free software: you can redistribute it and/or modify it under the terms of the  GNU General Public License (GPL v3), version 3 or any later version.
+This program is free software: you can modify and redistribute it under the terms of the GNU General Public License (GPL v3), or any later version.
 
-It is provided **without any warranty**, express or implied,  
-including merchantability or fitness for a particular purpose.
+It is provided **without any warranty**, express or implied.
 
 👉 https://www.gnu.org/licenses/gpl-3.0.html
+
+---
+
+# 8. Project architecture
+
+- PySide6: graphical user interface  
+- ReportLab: PDF generation  
+- Mutagen: MP3 tag reading  
+- Requests: iTunes API  
+- MVC architecture

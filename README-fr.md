@@ -1,33 +1,8 @@
-# Aperçu du logiciel
-
-<p align="center">
-  <img src="ressources/interface.png" alt="Interface">
-</p>
-
-## Exemple de jaquette maquette (1 CD)
-
-Utilisé avec l’autorisation du groupe **CENT DÉTRESSES**  
-@CENT DÉTRESSES
-
-<p align="center">
-  <img src="ressources/jaquette_maquette.png" alt="jaquette - maquette">
-</p>
-
-## Exemple de jaquette multi-albums
-
-Les images ci-dessous servent uniquement de démonstration.  
-Elles sont distribuées à titre non commercial et en basse résolution.
-
-<p align="center">
-  <img src="ressources/jaquette-multi-albums.png" alt="jaquette - multi-albums">
-</p>
-
----
+# PyCDCover
 
 # 1. Présentation
 
-**PyCDCover** est un logiciel permettant de créer des jaquettes de CD audio à partir des informations d’un album  
-(auteur, titre, année, genre, image).
+**PyCDCover** est un logiciel permettant de créer des jaquettes (pochettes) de CD audio à partir des informations d’un album  (auteur, titre, année, genre, image).
 
 Le logiciel récupère automatiquement :
 
@@ -38,11 +13,39 @@ Si aucune image n’est trouvée, elle est remplacée par une **image orange** p
 Vous pouvez remplacer cette image par celle de votre choix (cadrée de préférence).
 Langues: Français, Anglais, Espagnol, Breton
 
+--- 
+
+# 2. Illustrations
+
+## 2.1 Exemple de jaquette maquette (1 CD)
+
+Utilisé avec l’autorisation du groupe **CENT DÉTRESSES**  
+@CENT DÉTRESSES
+
+<p align="center">
+  <img src="ressources/jaquette_maquette.png" alt="jaquette - maquette">
+</p>
+
+## 2.2 Exemple de jaquette multi-albums
+
+Les images sont extraites de Pixabay (licence Pixabay)
+Ce sont donc des albums fictifs.
+
+<p align="center">
+  <img src="ressources/jaquette-multi-albums.png" alt="jaquette - multi-albums">
+</p>
+
+## 2.3 Aperçu du logiciel
+
+<p align="center">
+  <img src="ressources/interface.png" alt="Interface">
+</p>
+
 ---
 
-# 2. Installations automatiques
+# 3. Installations automatiques
 
-## 2.1. Sous Windows
+## 3.1. Sous Windows
 
 La dernière version stable de **PyCDCover** est disponible ici :  
 👉 https://github.com/GerardLeRest/pycdcover-v2/releases
@@ -54,7 +57,7 @@ Vous pouvez ensuite passer à la section **4**.
 
 ---
 
-## 2.2. Sous GNU/Linux
+## 3.2. Sous GNU/Linux
 
 ➡️ **PyCDCover est disponible au format *AppImage***.
 
@@ -75,25 +78,25 @@ Lancez le programme :
 
 ---
 
-# 3. Version Python — GNU/Linux
+# 4. Version Python — GNU/Linux
 
 *(Pour les utilisateurs souhaitant lancer PyCDCover depuis les sources.)*
 
-## 3.1. Installer Python et les outils nécessaires
+## 4.1. Installer Python et les outils nécessaires
 
 ```bash
 sudo apt update
 sudo apt install python3 python3-pip python3-venv -y
 ```
 
-## 3.2. Télécharger le programme
+## 4.2. Télécharger le programme
 
 ```bash
 git clone git@github.com:GerardLeRest/pycdcover-v2.git
 cd pycdcover-v2
 ```
 
-## 3.3. Créer un environnement virtuel
+## 4.3. Créer un environnement virtuel
 
 ```bash
 python3 -m venv mon_env
@@ -111,7 +114,7 @@ source mon_env/bin/activate
 pip install reportlab PySide6 pillow requests mutagen music-tag
 ```
 
-## 3.4. Lancement
+## 4.4. Lancement
 
 ```bash
 python3 pycdcover.py
@@ -119,22 +122,22 @@ python3 pycdcover.py
 
 ---
 
-# 4. Fonctionnement du programme
+# 5. Fonctionnement du programme
 
-## 4.1. Fonctionnement avec recherche automatique des images
+## 5.1. Fonctionnement avec recherche automatique des images
 
-1. Préparer votre dossier avec vos musiques taguées. N'utilisez pas directement le lecteur CD à cause de ralentissement ou de bugs. Copier alors votre CD dans un dossier.
+1. Préparer votre dossier avec vos musiques taguées. N'utilisez pas directement le lecteur CD à cause de ralentissement ou de bugs. Copiez alors votre CD dans un dossier.
 
 2. Créez le **titre du CD** (1ʳᵉ icône à gauche).
 
-3. **Récupérez les tags** (dosier des tags) (2ᵉ icône).
+3. **Récupérez les tags** (2ᵉ icône).
 
 4. **Éditez les tags** si nécessaire (3ᵉ icône).
    
-   ⚠️ **Très important** :  
+   **Très important** :  
    vérifiez ici les éventuelles erreurs.
 
-5. **Téléchargez automatiquement les images** via Itunes (4ᵉ icône).
+5. **Téléchargez automatiquement les images** via iTunes (4ᵉ icône).
 
 6. **Choisir la couleur de la pochette**
 
@@ -144,9 +147,9 @@ python3 pycdcover.py
 
 ---
 
-## 4.2. Jaquette non référencée sur le web
+## 5.2. Jaquette non référencée sur le web
 
-Une image orange (avec nom+album) apparaît si l'image d'un album n'a pas été trouvée internet. iTunes peuvent parfois fournir des images incorrectes.. Dans tous les cas en cas d'erreur concernant une image, voici la démarche à suivre:
+Une image orange (avec nom+album) apparaît si l'image d'un album n'a pas été trouvée internet. iTunes peut parfois fournir des images incorrectes.. Dans tous les cas en cas d'erreur concernant une image, voici la démarche à suivre:
 
 Créer le titre → récupérer les tags MP3 → éditer MP3 → Télécharger les images → créer les deux faces → changer manuellement l’image voulue dans le dossier (1) → créer les deux faces → générer PDF
 
@@ -156,9 +159,9 @@ Remarque importante : Respecter l'ordre ci-dessus pour ne pas se retrouver dans 
 
 ---
 
-## 4.3 Albums doubles
+## 5.3 Albums doubles
 
-Avec un album double, si rien n'est fait, deux images en double apparaissent sur la face avant. Voici comment régler ce problème simplement:
+Avec un album double, si aucune action n’est effectuée, deux images identiques apparaîtront sur la face avant. sur la face avant. Voici comment régler ce problème simplement:
 
 Créer le titre → récupérer MP3 → éditer MP3 → Télécharger les images → créer les deux faces → Effacer l'image voulue dans le dossier (2)→ créer les deux faces → générer PDF
 
@@ -168,7 +171,7 @@ Remarque importante : Respectez l'ordre ci-dessus pour ne pas se retrouver dans 
 
 ---
 
-# 5. Informations et licences
+# 6. Informations et licences
 
 **PyCDCover – Générateur de jaquettes de CD audio**  
 Auteur : Gérard LE REST  
@@ -178,12 +181,13 @@ Email : ge.lerest@gmail.com
 Créé le : 01-04-2010  
 Dernière mise à jour : 2026-01-15  
 
-- [Page wiki Ubuntu](https://doc.ubuntu-fr.org/pycdcover#liens)  
-- [Page internet](https://gerardlerest.github.io/pycdcover/)
+- [Page officiel](https://github.com/GerardLeRest/pycdcover-v2)
+- [Documentation](https://doc.ubuntu-fr.org/pycdcover#liens)  
+- [Page Internet](https://gerardlerest.github.io/pycdcover/)
 
 ---
 
-# 6. Licences
+# 7. Licences
 
 **Droits d'images**
 
@@ -192,7 +196,7 @@ PyCDCover utilise l’API publique de Apple Inc. (iTunes Search API) pour récup
 Ces images restent la propriété de leurs ayants droit.
 Elles sont stockées localement d'une session à l'autre, utilisées uniquement dans un cadre privé.
 
-Ce projet est indépendant et n’est ni affilié, ni approuvé par Apple Inc..
+Ce projet est indépendant et n’est ni affilié, ni approuvé par Apple Inc.
 L’utilisateur est seul responsable de l’usage qu’il fait des images récupérées.
 
 **Licence libre : GNU GPL v3 (ou version ultérieure)**
@@ -203,3 +207,11 @@ Il est fourni **sans aucune garantie**, ni implicite ni explicite,
 concernant une valeur commerciale ou une adéquation à un usage particulier.
 
 👉 [Consulter la licence GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html)
+
+# 8. Architecture du projet
+
+- PySide6 : interface graphique
+- ReportLab : génération PDF
+- Mutagen : lecture des tags MP3
+- Requests : API iTunes
+- Architecture : modèle MVC (séparation logique métier / interface / contrôle)
