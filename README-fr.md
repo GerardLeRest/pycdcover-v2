@@ -1,5 +1,5 @@
 <p align="center">
-   | 🇫🇷 Français<a href="README.md">🇬🇧 English</a>🇫🇷 Français
+  Français | <a href="README.md">🇬🇧 English</a>
 </p>
 
 # PyCDCover
