@@ -1,3 +1,7 @@
+<p align="center">
+   | 🇫🇷 Français<a href="README.md">🇬🇧 English</a>🇫🇷 Français
+</p>
+
 # PyCDCover
 
 # 1. Présentation
@@ -147,8 +151,6 @@ python3 pycdcover.py
 
 8. **Générez le PDF** découpable et imprimable.
 
----
-
 ## 5.2. Jaquette non référencée sur le web
 
 Une image orange (avec nom+album) apparaît si l'image d'un album n'a pas été trouvée internet. iTunes peut parfois fournir des images incorrectes.. Dans tous les cas en cas d'erreur concernant une image, voici la démarche à suivre:
@@ -158,8 +160,6 @@ Créer le titre → récupérer les tags MP3 → éditer MP3 → Télécharger l
  (1) ~/PyCDCover/miniatures est le dossier des miniatures
 
 Remarque importante : Respecter l'ordre ci-dessus pour ne pas se retrouver dans l'ancienne configuration
-
----
 
 ## 5.3 Albums doubles
 
@@ -209,6 +209,8 @@ Il est fourni **sans aucune garantie**, ni implicite ni explicite,
 concernant une valeur commerciale ou une adéquation à un usage particulier.
 
 👉 [Consulter la licence GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html)
+
+---
 
 # 8. Architecture du projet
 
