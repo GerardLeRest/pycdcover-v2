@@ -153,8 +153,6 @@ python3 pycdcover.py
 
 8. **Generate the printable PDF**
 
----
-
 ## 5.2 Cover not found online
 
 An orange placeholder image appears if an album image is not found online. iTunes may sometimes provide incorrect images. In case of an issue, follow this process:
@@ -164,8 +162,6 @@ Create title → retrieve MP3 tags → edit tags → download images → create 
 (1) ~/PyCDCover/miniatures is the thumbnails folder
 
 Important note: follow this order to avoid returning to the previous configuration
-
----
 
 ## 5.3 Double albums
 
