@@ -4,7 +4,7 @@
 
 # PyCDCover
 
-## Automatically creates single-CD or multi-CD covers (booklets).
+## Crée automatiquement des jaquettes (pochettes) de CD simples ou multi-CD.
 
 # 1. Présentation
 

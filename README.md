@@ -1,10 +1,11 @@
 <p align="center">
   🇬🇧 English | <a href="README-fr.md">🇫🇷 Français</a>
+
 </p>
 
 # PyCDCover
 
-## Crée automatiquement des jaquettes (pochettes) de CD simples ou multi-CD.
+## Automatically creates single-CD or multi-CD covers (booklets).
 
 # 1. Presentation
 
