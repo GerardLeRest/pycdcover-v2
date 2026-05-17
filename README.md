@@ -4,6 +4,8 @@
 
 # PyCDCover
 
+## Crée automatiquement des jaquettes (pochettes) de CD simples ou multi-CD.
+
 # 1. Presentation
 
 **PyCDCover** is a software tool designed to create audio CD covers (sleeves) from album information (artist, title, year, genre, image).
