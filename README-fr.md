@@ -4,7 +4,7 @@
 
 # PyCDCover
 
-## Crée automatiquement des jaquettes (pochettes) de CD simples ou multi-CD.
+## Logiciel libre et gratuit créant automatiquement des jaquettes (pochettes) de CD simples ou multi-CD.
 
 # 1. Présentation
 

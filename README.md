@@ -5,7 +5,7 @@
 
 # PyCDCover
 
-## Automatically creates single-CD or multi-CD covers (booklets).
+## Free and open-source software that automatically creates CD covers (sleeves) for single or multi-CD albums.
 
 # 1. Presentation
 
