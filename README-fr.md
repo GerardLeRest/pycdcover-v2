@@ -2,22 +2,20 @@
   Français | <a href="README.md">🇬🇧 English</a>
 </p>
 
-# PyCDCover
+# PyCDCover : Créateur automatique de pochettes et jaquettes de CD
 
-## Logiciel libre et gratuit créant automatiquement des jaquettes (pochettes) de CD simples ou multi-CD.
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 
-# 1. Présentation
+**PyCDCover** est un logiciel libre et gratuit conçu pour générer automatiquement des jaquettes et pochettes de CD audio (simples ou multi-albums) à partir des informations de vos fichiers musicaux.
 
-**PyCDCover** est un logiciel permettant de créer des jaquettes (pochettes) de CD audio à partir des informations d’un album  (auteur, titre, année, genre, image).
+Le logiciel automatise l'ensemble du processus :
+- **Extraction des tags** directement depuis les fichiers audio du CD (artiste, titre, année, genre) ;
+- **Téléchargement automatique des images d'albums** depuis l'API *iTunes* en se basant sur le couple Artiste - Album.
 
-Le logiciel récupère automatiquement :
+Si aucune image n'est trouvée sur Internet, elle est automatiquement remplacée par une pochette générique orange contenant le nom de l'artiste et de l'album. Le serveur pouvant parfois se tromper, vous conservez la liberté de remplacer manuellement l'image par celle de votre choix.
 
-- les **tags** depuis les fichiers audio du CD ;
-- les **images d’albums** depuis *iTunes* à partir des tags (artiste – album).
-
-Si aucune image n’est trouvée, elle est remplacée par une **image orange** portant le nom de l’artiste et de l’album.  
-Vous pouvez remplacer cette image par celle de votre choix (cadrée de préférence).
-Langues: Français, Anglais, Espagnol, Breton
+**Langues :** Français, Anglais, Espagnol, Breton  
+**Systèmes d'exploitation :** GNU/Linux, Windows
 
 --- 
 
@@ -29,7 +27,7 @@ Utilisé avec l’autorisation du groupe **CENT DÉTRESSES**
 @CENT DÉTRESSES
 
 <p align="center">
-  <img src="ressources/jaquette_maquette.png" alt="jaquette - maquette">
+  <img src="ressources/jaquette_maquette.png" alt="jaquette d'une maquette - simple CD">
 </p>
 
 ## 2.2 Exemple de jaquette multi-albums
@@ -38,13 +36,13 @@ Les images sont extraites de Pixabay (licence Pixabay)
 Ce sont donc des albums fictifs.
 
 <p align="center">
-  <img src="ressources/jaquette-multi-albums.png" alt="jaquette - multi-albums">
+  <img src="ressources/jaquette-multi-albums.png" alt="jaquette dans le cas d'un CD multi-albums">
 </p>
 
 ## 2.3 Aperçu du logiciel
 
 <p align="center">
-  <img src="ressources/interface.png" alt="Interface">
+  <img src="ressources/interface.png" alt="Interface du logiciel PyCDCover">
 </p>
 
 ---
@@ -145,7 +143,7 @@ python3 pycdcover.py
    **Très important** :  
    vérifiez ici les éventuelles erreurs.
 
-5. **Téléchargez automatiquement les images** via iTunes (4ᵉ icône).
+5. **Téléchargez automatiquement les images** via iTunes (4ᵉ icône). Les images fournies par le serveur peuvent être fausses pour diverses raisons.
 
 6. **Choisir la couleur de la pochette**
 
@@ -153,9 +151,9 @@ python3 pycdcover.py
 
 8. **Générez le PDF** découpable et imprimable.
 
-## 5.2. Jaquette non référencée sur le web
+## 5.2. Jaquette non ou mal référencée sur le web
 
-Une image orange (avec nom+album) apparaît si l'image d'un album n'a pas été trouvée internet. iTunes peut parfois fournir des images incorrectes.. Dans tous les cas en cas d'erreur concernant une image, voici la démarche à suivre:
+Une image orange (avec nom+album) apparaît si l'image d'un album n'a pas été trouvée internet. iTunes peut parfois fournir des images incorrectes. Dans tous les cas en cas d'erreur concernant une image, voici la démarche à suivre:
 
 Créer le titre → récupérer les tags MP3 → éditer MP3 → Télécharger les images → créer les deux faces → changer manuellement l’image voulue dans le dossier (1) → créer les deux faces → générer PDF
 
@@ -165,7 +163,7 @@ Remarque importante : Respecter l'ordre ci-dessus pour ne pas se retrouver dans 
 
 ## 5.3 Albums doubles
 
-Avec un album double, si aucune action n’est effectuée, deux images identiques apparaîtront sur la face avant. sur la face avant. Voici comment régler ce problème simplement:
+Avec un album double, si aucune action n’est effectuée, deux images identiques apparaîtront sur la face avant. Voici comment régler ce problème simplement:
 
 Créer le titre → récupérer MP3 → éditer MP3 → Télécharger les images → créer les deux faces → Effacer l'image voulue dans le dossier (2)→ créer les deux faces → générer PDF
 
@@ -185,10 +183,10 @@ Email : ge.lerest@gmail.com
 Créé le : 01-04-2010  
 Dernière mise à jour : 2026-01-15  
 
-- [Page officiel](https://github.com/GerardLeRest/pycdcover-v2)
+- [Page officielle](https://github.com/GerardLeRest/pycdcover-v2)
 - [Documentation](https://doc.ubuntu-fr.org/pycdcover#liens)  
 - [Page Internet](https://gerardlerest.github.io/pycdcover/)
-
+- [journal](https://linuxfr.org/users/clisam/journaux/pycdcover-createur-automatique-de-jaquettes-pochettes-cd)
 ---
 
 # 7. Licences
