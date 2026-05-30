@@ -6,7 +6,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 
-**PyCDCover** est un logiciel **libre et gratuit** conçu pour générer automatiquement des jaquettes et pochettes de CD audio (simples ou multi-albums) à partir des informations de vos fichiers musicaux.
+**PyCDCover** est un logiciel **libre et gratuit** conçu pour **générer automatiquement des jaquettes et pochettes** de CD audio (simples ou multi-albums) à partir des informations de vos fichiers musicaux.
 
 Le logiciel automatise l'ensemble du processus :
 
