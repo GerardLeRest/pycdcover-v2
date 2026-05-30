@@ -6,9 +6,10 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 
-**PyCDCover** is a free and open-source software designed to automatically generate audio CD covers and booklets (single or multi-album) from the information contained in your music files.
+**PyCDCover** is a **free and open-source software** designed to automatically generate audio CD covers and booklets (single or multi-album) from the information contained in your music files.
 
 The software automates the entire process:
+
 - **Tag extraction** directly from audio files (artist, title, year, genre);
 - **Automatic album artwork download** from the *iTunes* API based on the Artist - Album pair.
 
@@ -141,7 +142,7 @@ python3 pycdcover.py
 3. **Retrieve the tags** (2nd icon).
 
 4. **Edit the tags** if necessary (3rd icon).
-
+   
    **Very important:**  
    Check for possible errors here.
 
