@@ -16,7 +16,7 @@ The software automates the entire process:
 If no image is found online, it is automatically replaced with a generic orange cover containing the artist and album name. Since the server may sometimes return incorrect images, you are always free to manually replace any image with one of your choice.
 
 **Languages:** French, English, Spanish, Breton  
-**Operating Systems:** GNU/Linux, Windows
+**Operating Systems:** GNU/Linux (tested on Ubuntu 24.04 LTS), Windows
 
 ---
 

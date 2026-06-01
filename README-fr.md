@@ -16,7 +16,7 @@ Le logiciel automatise l'ensemble du processus :
 Si aucune image n'est trouvée sur Internet, elle est automatiquement remplacée par une pochette générique orange contenant le nom de l'artiste et de l'album. Le serveur pouvant parfois se tromper, vous conservez la liberté de remplacer manuellement l'image par celle de votre choix.
 
 **Langues :** Français, Anglais, Espagnol, Breton  
-**Systèmes d'exploitation :** GNU/Linux, Windows
+**Systèmes d'exploitation :** GNU/Linux (testé sur ubuntu 24.04),  Windows
 
 --- 
 
