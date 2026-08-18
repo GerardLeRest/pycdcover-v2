@@ -14,7 +14,6 @@ from Vue.fenetre import Fenetre
 from Vue.fen_titre import FenTitre
 from Vue.editeur_tags import Editeur_tags
 from Vue.progression_images import Progress_images
-from Vue.progression_tags import Progression_tags
 from Vue.fen_couleur import FenCouleur
 from Modele.titres import Titres
 from Modele.tags import Tags
@@ -85,37 +84,30 @@ class Application(QWidget):
 
     @Slot()
     def action_recuperer_tags(self) -> None:
-        """Récupérer les tags"""
-        # 1. Choix du dossier (sans progression)
-        progression_tmp = Progression_tags()
-        chemin = progression_tmp.choisir_dossier_chansons()
+        """Choisir le dossier des MP3 et récupérer les tags."""
+        # Choix du dossier contenant les albums
+        chemin = QFileDialog.getExistingDirectory(
+            self,
+            _("Choisir le répertoire des chansons"),
+            str(Path.home())
+        )
         if not chemin:
             return
         chemin = Path(chemin)
-        # 2. Calcul réel du nombre de MP3
-        total = len(list(chemin.rglob("*.mp3")))
-        # 3. Aucun MP3 → message et stop
-        if total == 0:
-            progression_tmp.absence_mp3(0)
+        # Vérifier la présence de MP3
+        if not any(chemin.rglob("*.mp3")):
+            QMessageBox.information(
+                self,
+                _("Aucun MP3"),
+                _("Aucune piste MP3 trouvée.")
+            )
             return
-        # 4. Maintenant seulement, on crée la fenêtre de progression
-        self.progress_tags = Progression_tags()
-        self.progress_tags.defilement(total)
-        self.progress_tags.show()
-        # 5. Modèle
+        # Extraction des tags
         self.tags = Tags()
-        # 6. Connexions
-        self.tags.progress.connect(
-            self.progress_tags.progress.setValue
-        )
-        self.tags.termine.connect(
-            self.progress_tags.fermeture_fenetre_progress
-        )
-        self.progress_tags.tags_termines.connect(
-            lambda: self.vue.act_tags_rw.setEnabled(True)
-        )
-        # 7. Lancement du traitement
         self.tags.extraire_tags(chemin)
+
+        # Autoriser l'étape suivante
+        self.vue.act_tags_rw.setEnabled(True)
    
     @Slot()
     def action_ouvrir_editeur_tags(self) -> None:

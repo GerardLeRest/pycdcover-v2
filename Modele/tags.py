@@ -76,11 +76,10 @@ class Tags(QObject):
                     count += 1
                     #########################
                     self.progress.emit(count) #  le modèle doit signaler qu’il a avancé
-
-                   
                 f.write("\n")
         # couper les lignes rop longues
         self.couper_texte(self.nbre_albums)
+        self.termine.emit()
         ################################################
         self.termine.emit() # le modèle dit qu'il a fini
         
