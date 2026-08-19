@@ -50,37 +50,42 @@ These are fictional albums.
 
 # 3. Installation
 
-## 3.1. Windows
+## 3.1. On Windows
 
 The latest stable version of **PyCDCover** is available here:  
 👉 https://github.com/GerardLeRest/pycdcover-v2/releases
 
-Download `PyCDCover.Setup-X.X.X.exe`  
-(where X.X.X corresponds to the version number, for example 2.2.1)
+Download `PyCDCover.Setup-X.X.X.exe` and run it  
+(where `X.X.X` corresponds to the version number, for example `2.2.1`).
 
 You can then proceed to section **5**.
 
 ---
 
-## 3.2. GNU/Linux
+## 3.2. On GNU/Linux
 
-➡️ **PyCDCover is available as an AppImage package**.
+➡️ **PyCDCover is available as a `.deb` package.**
 
-Download `PyCDCover-X.X.X-x86_64.AppImage`  
-([Releases · GerardLeRest/pycdcover-v2 · GitHub](https://github.com/GerardLeRest/pycdcover-v2/releases))
+Download `pycdcover_X.X.X-Y_amd64.deb` from the PyCDCover releases page  
+(where `X.X.X` represents the software version number and `Y` the Debian package version):  
+👉 https://github.com/GerardLeRest/pycdcover-v2/releases
 
-(where *X.X.X* represents the version number).
-
-Make the file executable:
+Install the software:
 
 ```bash
-chmod +x PyCDCover-X.X.X-x86_64.AppImage
+sudo apt install ./pycdcover_X.X.X-Y_amd64.deb
 ```
 
-Launch the program:
+To launch the program from a terminal:
 
 ```bash
-./PyCDCover-X.X.X-x86_64.AppImage
+pycdcover
+```
+
+To uninstall the software:
+
+```bash
+sudo apt remove pycdcover
 ```
 
 You can then proceed to section **5**.
